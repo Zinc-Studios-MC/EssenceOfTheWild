@@ -1,6 +1,9 @@
 package net.mrmisc.essenceofthewild;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -12,6 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
@@ -52,6 +56,7 @@ public class EssenceOfTheWildMod
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             EntityRenderers.register(EOTWEntities.SHEEP.get(), SheepRenderer::new);
+            EntityRenderers.register(EOTWEntities.PIG.get(), PigRenderer::new);
         }
     }
 }

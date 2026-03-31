@@ -7,5 +7,7 @@
   "item.essenceofthewild.speed_icecream" : "Speed Ice Cream",
   "item.essenceofthewild.cone" : "Cone",
   "item.essenceofthewild.sheep_spawn_egg" : "Sheep Spawn Egg",
-  "entity.essenceofthewild.sheep" : "Sheep"
+  "entity.essenceofthewild.sheep" : "Sheep",
+  "item.essenceofthewild.pig_spawn_egg" : "Pig Spawn Egg",
+  "entity.essenceofthewild.pig" : "Pig"
 }

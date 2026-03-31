@@ -12,15 +12,18 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.item.DyeColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class WoolLayer extends RenderLayer<SheepEntity, SheepModel<SheepEntity>> {
 
     private static final ResourceLocation SHEEP_FUR_LOCATION = ResourceLocation.fromNamespaceAndPath("essenceofthewild", "textures/entity/sheep/sheep_wool.png");
-    private final WoolModel<SheepEntity> model;
+    private final WoolModel model;
 
     public WoolLayer(RenderLayerParent<SheepEntity, SheepModel<SheepEntity>> pRenderer, EntityModelSet pModelSet) {
         super(pRenderer);
-        this.model = new WoolModel<>(pModelSet.bakeLayer(WoolModel.LAYER_LOCATION));
+        this.model = new WoolModel(pModelSet.bakeLayer(WoolModel.LAYER_LOCATION));
     }
 
     @Override
@@ -42,7 +45,6 @@ public class WoolLayer extends RenderLayer<SheepEntity, SheepModel<SheepEntity>>
                 float f1;
                 float f2;
                 if (pLivingEntity.hasCustomName() && "jeb_".equals(pLivingEntity.getName().getString())) {
-                    int i1 = 25;
                     int i = pLivingEntity.tickCount / 25 + pLivingEntity.getId();
                     int j = DyeColor.values().length;
                     int k = i % j;
@@ -55,12 +57,6 @@ public class WoolLayer extends RenderLayer<SheepEntity, SheepModel<SheepEntity>>
                     f2 = afloat1[2] * (1.0F - f3) + afloat2[2] * f3;
                 } else {
                     float[] afloat = Sheep.getColorArray(pLivingEntity.getColor());
-//                    float gray = (afloat[0] + afloat[1] + afloat[2]) / 3.0F;
-//                    float saturation = 0.7F;
-//
-//                    f = gray + (afloat[0] - gray) * saturation;
-//                    f1 = gray + (afloat[1] - gray) * saturation;
-//                    f2 = gray + (afloat[2] - gray) * saturation;
                     float saturation = 0.9F;
                     float brightness = 1.1F;
 
@@ -69,8 +65,6 @@ public class WoolLayer extends RenderLayer<SheepEntity, SheepModel<SheepEntity>>
                     f = (gray + (afloat[0] - gray) * saturation) * brightness;
                     f1 = (gray + (afloat[1] - gray) * saturation) * brightness;
                     f2 = (gray + (afloat[2] - gray) * saturation) * brightness;
-
-// clamp
                     f = Math.min(f, 1.0F);
                     f1 = Math.min(f1, 1.0F);
                     f2 = Math.min(f2, 1.0F);

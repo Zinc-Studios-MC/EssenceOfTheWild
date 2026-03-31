@@ -6,21 +6,27 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
+import net.mrmisc.essenceofthewild.entity.custom.pig.PigModel;
+import net.mrmisc.essenceofthewild.entity.custom.pig.PigSaddleModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.WoolModel;
 
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class RegisterAttributesEvent {
+public class EntityRegistrationsEvent {
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(SheepModel.LAYER_LOCATION, SheepModel::createBodyLayer);
         event.registerLayerDefinition(WoolModel.LAYER_LOCATION, WoolModel::createBodyLayer);
+        event.registerLayerDefinition(PigModel.LAYER_LOCATION, PigModel::createBodyLayer);
+        event.registerLayerDefinition(PigSaddleModel.LAYER_LOCATION, PigSaddleModel::createBodyLayer);
     }
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(EOTWEntities.SHEEP.get(), SheepEntity.createAttributes().build());
+        event.put(EOTWEntities.PIG.get(), PigEntity.createAttributes().build());
     }
 }
