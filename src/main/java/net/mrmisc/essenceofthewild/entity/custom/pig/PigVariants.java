@@ -13,17 +13,17 @@ public class PigVariants {
                             "textures/entity/pig/pig.png"),
                     false, false);
     public static final MobVariant BASIC_GREY =
-            new MobVariant("basic",
+            new MobVariant("basic_grey",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/pig/pig_grey.png"),
                     false, false);
     public static final MobVariant COLD =
-            new MobVariant("basic",
+            new MobVariant("cold",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/pig/cold_pig.png"),
                     true, false);
     public static final MobVariant WARM =
-            new MobVariant("basic",
+            new MobVariant("warm",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/pig/warm_pig.png"),
                     false, true);

@@ -12,6 +12,8 @@
   "entity.essenceofthewild.pig" : "Pig",
   "item.essenceofthewild.cow_spawn_egg" : "Cow Spawn Egg",
   "entity.essenceofthewild.cow" : "Cow",
+  "item.essenceofthewild.chicken_spawn_egg" : "Chicken Spawn Egg",
+  "entity.essenceofthewild.chicken" : "Chicken",
   "item.essenceofthewild.mooshroom_spawn_egg" : "Mooshroom Spawn Egg",
   "entity.essenceofthewild.mooshroom" : "Mooshroom"
 }

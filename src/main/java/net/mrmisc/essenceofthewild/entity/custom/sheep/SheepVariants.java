@@ -13,17 +13,17 @@ public class SheepVariants {
                             "textures/entity/sheep/sheep.png"),
                     false, false);
     public static final MobVariant BASIC_GREY =
-            new MobVariant("basic",
+            new MobVariant("basic_grey",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/sheep/sheep_grey.png"),
                     false, false);
     public static final MobVariant COLD =
-            new MobVariant("basic",
+            new MobVariant("cold",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/sheep/cold_sheep.png"),
                     true, false);
     public static final MobVariant WARM =
-            new MobVariant("basic",
+            new MobVariant("warm",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/sheep/warm_sheep.png"),
                     false, true);

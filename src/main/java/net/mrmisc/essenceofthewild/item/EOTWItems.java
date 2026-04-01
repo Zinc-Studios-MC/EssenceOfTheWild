@@ -33,6 +33,8 @@ public class EOTWItems {
             ()-> new ForgeSpawnEggItem(EOTWEntities.COW,4470310, 10592673, new Item.Properties()));
     public static RegistryObject<Item> MOOSHROOM_SPAWN_EGG = ITEMS.register("mooshroom_spawn_egg",
             ()-> new ForgeSpawnEggItem(EOTWEntities.MOOSHROOM,10489616, 12040119, new Item.Properties()));
+    public static RegistryObject<Item> CHICKEN_SPAWN_EGG = ITEMS.register("chicken_spawn_egg",
+            ()-> new ForgeSpawnEggItem(EOTWEntities.CHICKEN,10592673, 16711680, new Item.Properties()));
     public static RegistryObject<Item> createIceCream(String name){
         return ITEMS.register(name + "_icecream", IceCream::new);
     }

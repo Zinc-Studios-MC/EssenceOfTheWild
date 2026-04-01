@@ -1,4 +1,4 @@
-package net.mrmisc.essenceofthewild.entity.custom.cow;
+package net.mrmisc.essenceofthewild.entity.custom.chicken;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,7 +10,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.Cow;
+import net.minecraft.world.entity.animal.Chicken;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.common.Tags;
@@ -19,23 +19,34 @@ import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CowEntity extends Cow {
-    public CowEntity(EntityType<? extends Cow> pEntityType, Level pLevel) {
+public class ChickenEntity extends Chicken {
+    public ChickenEntity(EntityType<? extends Chicken> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setVariantById(tag.getString("Variant"));
+    }
+
+    @Override
+    public @Nullable ChickenEntity getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
+        return new ChickenEntity(EOTWEntities.CHICKEN.get(), pLevel);
+    }
+
     private static final EntityDataAccessor<Integer> VARIANT =
-            SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.INT);
+            SynchedEntityData.defineId(ChickenEntity.class, EntityDataSerializers.INT);
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, (double)0.2F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.25D);
     }
 
     public MobVariant getVariant() {
         int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < CowVariants.ALL.size())
-                ? CowVariants.ALL.get(i)
-                : CowVariants.ALL.get(0);
+        return (i >= 0 && i < ChickenVariants.ALL.size())
+                ? ChickenVariants.ALL.get(i)
+                : ChickenVariants.ALL.get(0);
     }
 
     @Override
@@ -51,16 +62,16 @@ public class CowEntity extends Cow {
     }
 
     public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, CowVariants.ALL.indexOf(variant));
+        this.entityData.set(VARIANT, ChickenVariants.ALL.indexOf(variant));
     }
 
     public MobVariant pickVariant(Level level, BlockPos pos) {
         if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
-            return CowVariants.COLD;
+            return level().random.nextBoolean() ? ChickenVariants.COLD : ChickenVariants.COLD_BROWN;
         } else if (level.getBiome(pos).is(Tags.Biomes.IS_HOT)) {
-            return CowVariants.WARM;
+            return level().random.nextBoolean() ? ChickenVariants.WARM : ChickenVariants.WARM_BLACK;
         }
-        return level.random.nextBoolean() ? CowVariants.BASIC : CowVariants.BASIC_BROWN;
+        return level.random.nextBoolean() ? ChickenVariants.BASIC : ChickenVariants.BASIC_GREY;
     }
 
     @Override
@@ -72,23 +83,12 @@ public class CowEntity extends Cow {
     }
 
     private void setVariantById(String id) {
-        for (int i = 0; i < CowVariants.ALL.size(); i++) {
-            if (CowVariants.ALL.get(i).id().equals(id)) {
+        for (int i = 0; i < ChickenVariants.ALL.size(); i++) {
+            if (ChickenVariants.ALL.get(i).id().equals(id)) {
                 this.entityData.set(VARIANT, i);
                 return;
             }
         }
         this.entityData.set(VARIANT, 0);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.setVariantById(tag.getString("Variant"));
-    }
-
-    @Override
-    public @Nullable CowEntity getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        return new CowEntity(EOTWEntities.COW.get(), pLevel);
     }
 }

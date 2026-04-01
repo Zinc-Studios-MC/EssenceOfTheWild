@@ -43,5 +43,12 @@ public class RegisterSpawnEvent {
                 Animal::checkAnimalSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE
         );
+        event.register(
+                EOTWEntities.CHICKEN.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
     }
 }

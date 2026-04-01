@@ -1,20 +1,18 @@
-package net.mrmisc.essenceofthewild.entity.custom.sheep;// Made with Blockbench 5.1.1
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
-
+package net.mrmisc.essenceofthewild.entity.custom.sheep;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
-public class SheepModel<T extends Entity> extends HierarchicalModel<T> {
+import net.minecraft.client.model.HierarchicalModel;
+
+public class SheepModel extends HierarchicalModel<SheepEntity> {
+	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "sheep"), "main");
 	private final ModelPart Root;
 	private final ModelPart body;
@@ -81,11 +79,18 @@ public class SheepModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount,
-						  float ageInTicks, float netHeadYaw, float headPitch) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
+	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		Root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+	}
 
-		SheepEntity sheep = (SheepEntity) entity;
+	@Override
+	public ModelPart root() {
+		return this.Root;
+	}
+
+	@Override
+	public void setupAnim(SheepEntity sheep, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
 
 		if (sheep.isEating()) {
 			this.animate(sheep.eatAnimationState, SheepAnimations.sheep_eat, ageInTicks);
@@ -95,23 +100,13 @@ public class SheepModel<T extends Entity> extends HierarchicalModel<T> {
 		if (limbSwingAmount < 0.01F) {
 			this.animate(sheep.idleAnimationState, SheepAnimations.sheep_idle, ageInTicks);
 		} else {
-			double speed = entity.getDeltaMovement().horizontalDistance();
+			double speed = sheep.getDeltaMovement().horizontalDistance();
 
-			if (speed > 0.2F) {
+			if (speed > 0.2D) {
 				this.animateWalk(SheepAnimations.sheep_run, limbSwing, limbSwingAmount, 3.5F, 2.5F);
 			} else {
 				this.animateWalk(SheepAnimations.sheep_walk, limbSwing, limbSwingAmount, 1.6F, 1.3F);
 			}
 		}
-	}
-
-	@Override
-	public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
-		Root.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);
-	}
-
-	@Override
-	public ModelPart root() {
-		return this.Root;
 	}
 }

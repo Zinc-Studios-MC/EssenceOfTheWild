@@ -6,6 +6,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
+import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowModel;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
@@ -28,6 +30,7 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(PigSaddleModel.LAYER_LOCATION, PigSaddleModel::createBodyLayer);
         event.registerLayerDefinition(CowModel.LAYER_LOCATION, CowModel::createBodyLayer);
         event.registerLayerDefinition(MooshroomModel.LAYER_LOCATION, MooshroomModel::createBodyLayer);
+        event.registerLayerDefinition(ChickenModel.LAYER_LOCATION, ChickenModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -36,5 +39,6 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.PIG.get(), PigEntity.createAttributes().build());
         event.put(EOTWEntities.COW.get(), CowEntity.createAttributes().build());
         event.put(EOTWEntities.MOOSHROOM.get(), MooshroomEntity.createAttributes().build());
+        event.put(EOTWEntities.CHICKEN.get(), ChickenEntity.createAttributes().build());
     }
 }

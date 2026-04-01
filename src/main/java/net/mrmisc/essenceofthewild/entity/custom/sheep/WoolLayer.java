@@ -16,12 +16,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class WoolLayer extends RenderLayer<SheepEntity, SheepModel<SheepEntity>> {
+public class WoolLayer extends RenderLayer<SheepEntity, SheepModel> {
 
     private static final ResourceLocation SHEEP_FUR_LOCATION = ResourceLocation.fromNamespaceAndPath("essenceofthewild", "textures/entity/sheep/sheep_wool.png");
     private final WoolModel model;
 
-    public WoolLayer(RenderLayerParent<SheepEntity, SheepModel<SheepEntity>> pRenderer, EntityModelSet pModelSet) {
+    public WoolLayer(RenderLayerParent<SheepEntity, SheepModel> pRenderer, EntityModelSet pModelSet) {
         super(pRenderer);
         this.model = new WoolModel(pModelSet.bakeLayer(WoolModel.LAYER_LOCATION));
     }

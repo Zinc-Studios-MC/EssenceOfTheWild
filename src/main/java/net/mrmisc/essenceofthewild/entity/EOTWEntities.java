@@ -6,6 +6,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomVariants;
@@ -22,7 +23,8 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(CowEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("cow"));
     public static RegistryObject<EntityType<MooshroomEntity>> MOOSHROOM = ENTITIES.register("mooshroom",
             ()-> EntityType.Builder.of(MooshroomEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("mooshroom"));
-
+    public static RegistryObject<EntityType<ChickenEntity>> CHICKEN = ENTITIES.register("chicken",
+            ()-> EntityType.Builder.of(ChickenEntity::new, MobCategory.AMBIENT).sized(0.7f, 0.5f).build("chicken"));
     public static RegistryObject<EntityType<PigEntity>> PIG = ENTITIES.register("pig",
             ()-> EntityType.Builder.of(PigEntity::new, MobCategory.AMBIENT).sized(0.6f, 1.2f).build("pig"));
 }
