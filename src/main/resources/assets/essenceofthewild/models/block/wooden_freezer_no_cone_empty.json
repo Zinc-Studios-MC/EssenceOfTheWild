@@ -5,6 +5,7 @@
     64,
     64
   ],
+  "render_type": "cutout",
   "textures": {
     "1": "essenceofthewild:block/wooden_freezer_no_cone_empty"
   },

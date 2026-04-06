@@ -8,6 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.block.custom.cheesemaker.CheeseMakerBlock;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 
@@ -18,7 +19,10 @@ public class EOTWBlocks {
         DeferredRegister.create(ForgeRegistries.BLOCKS, EssenceOfTheWildMod.MOD_ID);
 
     public static RegistryObject<Block> WOODEN_FREEZER = registerBlock("wooden_freezer",
-            ()-> new WoodenFreezerBlock(BlockBehaviour.Properties.of().noOcclusion()));
+            ()-> new WoodenFreezerBlock(BlockBehaviour.Properties.of().noOcclusion().noParticlesOnBreak()));
+
+    public static RegistryObject<Block> CHEESE_MAKER = registerBlock("cheese_maker",
+            ()-> new CheeseMakerBlock(BlockBehaviour.Properties.of().noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

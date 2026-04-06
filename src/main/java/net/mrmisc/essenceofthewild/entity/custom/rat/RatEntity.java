@@ -8,7 +8,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 public class RatEntity extends Animal {
-    protected RatEntity(EntityType<? extends Animal> pEntityType, Level pLevel) {
+    public RatEntity(EntityType<? extends Animal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 

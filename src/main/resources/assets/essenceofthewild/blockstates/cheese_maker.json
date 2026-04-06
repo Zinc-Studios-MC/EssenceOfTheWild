@@ -1,0 +1,13 @@
+{
+  "variants" : {
+    "state=0" : {
+      "model" : "essenceofthewild:block/cheese_maker"
+    },
+    "state=1" : {
+      "model" : "essenceofthewild:block/cheese_maker_milk"
+    },
+    "state=2" : {
+      "model" : "essenceofthewild:block/cheese_maker_cheese"
+    }
+  }
+}

@@ -16,6 +16,7 @@ public class EOTWItemModelProvider extends ItemModelProvider {
         basicItem(EOTWItems.CONE.get());
         basicItem(EOTWItems.SHEEP_CHEESE.get());
         basicItem(EOTWItems.SHEEP_CHEESE_WEDGE.get());
+        basicItem(EOTWItems.SHEEP_MILK_BUCKET.get());
         basicItem(EOTWItems.VANILLA_ICECREAM.get());
         basicItem(EOTWItems.STRAWBERRY_ICECREAM.get());
         basicItem(EOTWItems.CHOCOLATE_ICECREAM.get());

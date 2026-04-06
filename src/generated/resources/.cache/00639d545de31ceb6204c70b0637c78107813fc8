@@ -1,10 +1,11 @@
-// 1.20.1	2026-04-03T20:32:46.4095036	Item Models: essenceofthewild
+// 1.20.1	2026-04-05T22:51:49.8179218	Item Models: essenceofthewild
 28ad0e8c9f5d7548ae6588510a45fd82135f4f90 assets/essenceofthewild/models/item/chocolate_icecream.json
 9a99d132db65592cbd8a95b4abbfb1464a7dcab7 assets/essenceofthewild/models/item/cone.json
 7376755f8d2e85c1831f8e2684123659074d3f43 assets/essenceofthewild/models/item/fire_resistance_icecream.json
 9b85cf07a85b8deb1c60418689f5ac1022b40978 assets/essenceofthewild/models/item/jump_boost_icecream.json
 51a78e99c64478781648b2968a62f371b679bfcf assets/essenceofthewild/models/item/sheep_cheese.json
 e3d31bb6a8e2ff1e29438db3cc672bcdcde6b0d3 assets/essenceofthewild/models/item/sheep_cheese_wedge.json
+79aeddda83885abc6c5fc1bddab08ee90480075e assets/essenceofthewild/models/item/sheep_milk_bucket.json
 39e95bf9466fe633274d442305b6db211330b1e7 assets/essenceofthewild/models/item/speed_icecream.json
 7e662480e8465ff2351b58681ea3e434d25f3d8f assets/essenceofthewild/models/item/strawberry_icecream.json
 1d060c662f0761d28524bb02fc7f9e5f69d7939c assets/essenceofthewild/models/item/vanilla_icecream.json

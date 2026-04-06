@@ -23,6 +23,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.CONE.get());
                 pOutput.accept(EOTWItems.SHEEP_CHEESE.get());
                 pOutput.accept(EOTWItems.SHEEP_CHEESE_WEDGE.get());
+                pOutput.accept(EOTWItems.SHEEP_MILK_BUCKET.get());
                 pOutput.accept(EOTWItems.VANILLA_ICECREAM.get());
                 pOutput.accept(EOTWItems.STRAWBERRY_ICECREAM.get());
                 pOutput.accept(EOTWItems.CHOCOLATE_ICECREAM.get());
@@ -30,6 +31,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.JUMP_BOOST_ICECREAM.get());
                 pOutput.accept(EOTWItems.SPEED_ICECREAM.get());
                 pOutput.accept(EOTWBlocks.WOODEN_FREEZER.get());
+                pOutput.accept(EOTWBlocks.CHEESE_MAKER.get());
             });
 
     public static RegistryObject<CreativeModeTab> SPAWN_EGG_TAB =

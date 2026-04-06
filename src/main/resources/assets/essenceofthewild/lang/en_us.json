@@ -12,6 +12,7 @@
   "item.essenceofthewild.chicken_spawn_egg" : "Chicken Spawn Egg",
   "item.essenceofthewild.sheep_cheese" : "Sheep Cheese",
   "item.essenceofthewild.sheep_cheese_wedge" : "Sheep Cheese Wedge",
+  "item.essenceofthewild.sheep_milk_bucket" : "Bucket of Sheep Milk ",
 
   "item.essenceofthewild.mooshroom_spawn_egg" : "Mooshroom Spawn Egg",
   "entity.essenceofthewild.sheep" : "Sheep",
@@ -20,5 +21,6 @@
   "entity.essenceofthewild.chicken" : "Chicken",
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
 
-  "block.essenceofthewild.wooden_freezer" : "Wooden Freezer"
+  "block.essenceofthewild.wooden_freezer" : "Wooden Freezer",
+  "block.essenceofthewild.cheese_maker" : "Cheese Maker"
 }

@@ -5,6 +5,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.MilkBucketItem;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,6 +33,7 @@ public class EOTWItems {
     public static RegistryObject<Item> CONE = ITEMS.register("cone", ()-> new Item(new Item.Properties().stacksTo(8)));
     public static RegistryObject<Item> SHEEP_CHEESE = ITEMS.register("sheep_cheese", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties()));
 
     //Spawn Eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 15198183, 16758197);

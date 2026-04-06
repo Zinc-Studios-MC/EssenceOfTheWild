@@ -6,12 +6,18 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -19,6 +25,7 @@ import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -52,7 +59,18 @@ public class SheepEntity extends Sheep implements IForgeShearable {
         this.entityData.define(EATING, false);
     }
 
-
+    @Override
+    public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
+        ItemStack itemstack = pPlayer.getItemInHand(pHand);
+        if (itemstack.is(Items.BUCKET) && !this.isBaby()) {
+            pPlayer.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+            ItemStack filledResult = ItemUtils.createFilledResult(itemstack, pPlayer, EOTWItems.SHEEP_MILK_BUCKET.get().getDefaultInstance());
+            pPlayer.setItemInHand(pHand, filledResult);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
+        } else {
+            return super.mobInteract(pPlayer, pHand);
+        }
+    }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
         if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
