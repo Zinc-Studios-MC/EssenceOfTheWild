@@ -1,0 +1,7 @@
+{
+  "message_id": "essenceofthewild.rabies_water",
+  "scaling": "always",
+  "exhaustion": 0.3,
+  "effects": "hurt",
+  "death_message_type": "default"
+}

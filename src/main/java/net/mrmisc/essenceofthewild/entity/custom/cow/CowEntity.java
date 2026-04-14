@@ -32,7 +32,7 @@ public class CowEntity extends Cow {
             SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.INT);
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, (double)0.2F);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
     }
 
     public MobVariant getVariant() {

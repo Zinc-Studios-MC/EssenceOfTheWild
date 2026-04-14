@@ -22,5 +22,10 @@
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
 
   "block.essenceofthewild.wooden_freezer" : "Wooden Freezer",
-  "block.essenceofthewild.cheese_maker" : "Cheese Maker"
+  "block.essenceofthewild.cheese_maker" : "Cheese Maker",
+
+  "death.attack.essenceofthewild.rabies_water": "%1$s couldn't handle the existence of water",
+  "death.attack.essenceofthewild.rabies_final": "%1$s pet death a bit too much",
+
+  "effect.essenceofthewild.rabies" : "Rabies"
 }
