@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "essenceofthewild:block/stripped_mango_log_top",
+    "side": "essenceofthewild:block/stripped_mango_log"
+  }
+}
