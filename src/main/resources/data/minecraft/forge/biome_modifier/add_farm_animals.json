@@ -25,6 +25,12 @@
       "weight": 12,
       "minCount": 4,
       "maxCount": 4
+    },
+    {
+      "type": "essenceofthewild:rabbit",
+      "weight": 12,
+      "minCount": 4,
+      "maxCount": 4
     }
   ]
 }

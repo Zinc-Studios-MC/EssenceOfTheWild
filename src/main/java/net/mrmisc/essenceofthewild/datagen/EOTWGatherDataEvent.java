@@ -3,6 +3,7 @@ package net.mrmisc.essenceofthewild.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +20,12 @@ public class EOTWGatherDataEvent {
         PackOutput packOutput = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+
         generator.addProvider(event.includeClient(), new EOTWItemModelProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new EOTWBlockModelProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeServer(), new EOTWWorldGenProvider(packOutput, lookupProvider));
+
+        BlockTagsProvider blockTagsProvider = new EOTWBlockTagsProvider(packOutput, lookupProvider, existingFileHelper);
+        generator.addProvider(event.includeServer(), blockTagsProvider);
     }
 }

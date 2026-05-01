@@ -17,8 +17,10 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.hare.HareRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
@@ -63,6 +65,8 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.COW.get(), CowRenderer::new);
             EntityRenderers.register(EOTWEntities.MOOSHROOM.get(), MooshroomRenderer::new);
             EntityRenderers.register(EOTWEntities.CHICKEN.get(), ChickenRenderer::new);
+            EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
+            EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
         }
     }
 }

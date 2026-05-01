@@ -1,4 +1,4 @@
-package net.mrmisc.essenceofthewild.event;
+package net.mrmisc.essenceofthewild.event.client.entity;
 
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
@@ -45,6 +45,13 @@ public class RegisterSpawnEvent {
         );
         event.register(
                 EOTWEntities.CHICKEN.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+                EOTWEntities.RABBIT.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules,

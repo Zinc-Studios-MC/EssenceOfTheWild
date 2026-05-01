@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.MilkBucketItem;
+import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -41,6 +42,12 @@ public class EOTWItems {
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 4470310, 10592673);
     public static RegistryObject<Item> MOOSHROOM_SPAWN_EGG = createSpawnEgg(EOTWEntities.MOOSHROOM, 10489616, 12040119);
     public static RegistryObject<Item> CHICKEN_SPAWN_EGG = createSpawnEgg(EOTWEntities.CHICKEN, 10592673, 16711680);
+    public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 10051392, 7555121);
+    public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 14551392, 7545129);
+
+    //Tree
+    public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> VANILLA_STICK = ITEMS.register("vanilla_stick", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> createIceCream(String name){
         return ITEMS.register(name + "_icecream", IceCream::new);
     }

@@ -1,0 +1,4 @@
+// 1.20.1	2026-05-01T16:07:42.7892432	Registries
+d00374cc0fd2831654b6465f746961d9d8d208ef data/essenceofthewild/forge/biome_modifier/add_mango_trees.json
+bcc61788800027c343ecd65d048322826b86d0c9 data/essenceofthewild/worldgen/configured_feature/mango.json
+0d1399d31d152dd8850c4b752ac6655dfb9caff0 data/essenceofthewild/worldgen/placed_feature/mango_placed.json

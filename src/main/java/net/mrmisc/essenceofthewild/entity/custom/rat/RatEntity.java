@@ -1,19 +1,22 @@
 package net.mrmisc.essenceofthewild.entity.custom.rat;
 
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
-public class RatEntity extends Animal {
+public class RatEntity extends PathfinderMob {
     public RatEntity(EntityType<? extends Animal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     @Override
-    public @Nullable AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        return null;
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1.25f));
     }
+
+
 }

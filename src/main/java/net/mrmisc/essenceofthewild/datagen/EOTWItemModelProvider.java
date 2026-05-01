@@ -23,5 +23,8 @@ public class EOTWItemModelProvider extends ItemModelProvider {
         basicItem(EOTWItems.FIRE_RESISTANCE_ICECREAM.get());
         basicItem(EOTWItems.SPEED_ICECREAM.get());
         basicItem(EOTWItems.JUMP_BOOST_ICECREAM.get());
+
+        basicItem(EOTWItems.VANILLA_STICK.get());
+        basicItem(EOTWItems.VANILLA_FLOWER.get());
     }
 }
