@@ -42,7 +42,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
     ) {
         List<FoliagePlacer.FoliageAttachment> attachments = new ArrayList<>();
 
-        // ===== 1. Place 2x2 trunk =====
         for (int y = 0; y < height; y++) {
             BlockPos base = pos.above(y);
 
@@ -52,13 +51,10 @@ public class MangoTrunkPlacer extends TrunkPlacer {
             placeLog(level, placer, random, base.east().south(), config);
         }
 
-        // Top center of trunk
         BlockPos top = pos.above(height - 1).east().south();
 
-        // Add main top foliage
         attachments.add(new FoliagePlacer.FoliageAttachment(top.above(), 0, false));
 
-        // ===== 2. Generate branches =====
         int branchCount = 3 + random.nextInt(3); // 3–5 main branches
 
         for (int i = 0; i < branchCount; i++) {
@@ -83,11 +79,10 @@ public class MangoTrunkPlacer extends TrunkPlacer {
             TreeConfiguration config,
             List<FoliagePlacer.FoliageAttachment> attachments
     ) {
-        int mainLength = 2 + random.nextInt(2); // short base
+        int mainLength = 2 + random.nextInt(2);
 
         BlockPos current = start;
 
-        // ===== main stem =====
         for (int i = 0; i < mainLength; i++) {
             current = current.relative(dir);
 
@@ -98,7 +93,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
             placeLog(level, placer, random, current, config);
         }
 
-        // ===== split into 2–3 sub-branches =====
         int splits = 2 + random.nextInt(2);
 
         for (int s = 0; s < splits; s++) {
@@ -107,7 +101,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
                     ? dir.getClockWise()
                     : dir.getCounterClockWise();
 
-            // sometimes keep same direction for variation
             if (random.nextInt(3) == 0) {
                 newDir = dir;
             }
@@ -127,7 +120,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
                 placeThickLog(level, placer, random, branchPos, newDir, thickness, config);
             }
 
-            // foliage at each small branch end
             attachments.add(new FoliagePlacer.FoliageAttachment(branchPos.above(), 0, false));
         }
     }
@@ -152,26 +144,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
             if (random.nextBoolean()) {
                 placeLog(level, placer, random, pos.relative(side.getOpposite()), config);
             }
-        }
-    }
-
-    // ===== Helper: place branch logs =====
-    private void placeBranch(
-            LevelSimulatedReader level,
-            BiConsumer<BlockPos, BlockState> placer,
-            RandomSource random,
-            BlockPos pos,
-            Direction dir,
-            int thickness,
-            TreeConfiguration config
-    ) {
-        placeLog(level, placer, random, pos, config);
-
-        if (thickness == 2) {
-            Direction side = dir.getClockWise();
-
-            placeLog(level, placer, random, pos.relative(side), config);
-            placeLog(level, placer, random, pos.relative(side.getOpposite()), config);
         }
     }
 }
