@@ -1,0 +1,96 @@
+package net.mrmisc.essenceofthewild.block.entity.custom.nest;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.BlockRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraftforge.client.event.ModelEvent;
+import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+
+public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEntity> {
+    private static final ResourceLocation[] EGG_MODELS = {
+            model("block/eggs_1"),
+            model("block/eggs_2"),
+            model("block/eggs_3")
+    };
+
+    private final BlockRenderDispatcher blockRenderer;
+
+    public NestBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
+        blockRenderer = context.getBlockRenderDispatcher();
+    }
+
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        for (ResourceLocation model : EGG_MODELS) {
+            event.register(model);
+        }
+    }
+
+    @Override
+    public void render(NestBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+        int eggCount = blockEntity.getEggCount();
+        if (eggCount <= 0) {
+            return;
+        }
+
+        float progress = blockEntity.getHatchProgressRatio();
+        float ticks = blockEntity.getAnimationTicks() + partialTick;
+        float shake = getShakeAmount(progress, ticks);
+        float bob = progress > 0.9F ? Mth.sin(ticks * 0.35F) * 0.018F : 0.0F;
+        float scale = 1.0F + progress * 0.05F + (progress > 0.95F ? Mth.sin(ticks * 0.55F) * 0.035F : 0.0F);
+
+        BakedModel model = blockRenderer.getBlockModelShaper()
+                .getModelManager()
+                .getModel(EGG_MODELS[Mth.clamp(eggCount, 1, EGG_MODELS.length) - 1]);
+
+        if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
+            return;
+        }
+
+        poseStack.pushPose();
+        poseStack.translate(0.5F, 0.29F + bob, 0.5F);
+        poseStack.mulPose(Axis.YP.rotationDegrees(Mth.sin(ticks * 0.12F) * 5.0F * progress));
+        poseStack.mulPose(Axis.ZP.rotationDegrees(shake));
+        poseStack.mulPose(Axis.XP.rotationDegrees(-shake * 0.45F));
+        poseStack.scale(scale, scale, scale);
+        poseStack.translate(-0.5F, -0.31F, -0.5F);
+
+        RenderType renderType = RenderType.cutout();
+        blockRenderer.getModelRenderer().renderModel(
+                poseStack.last(),
+                buffer.getBuffer(renderType),
+                null,
+                model,
+                1.0F,
+                1.0F,
+                1.0F,
+                packedLight,
+                packedOverlay
+        );
+        poseStack.popPose();
+    }
+
+    private static float getShakeAmount(float progress, float ticks) {
+        int interval = Math.max(6, (int) Mth.lerp(progress, 84.0F, 8.0F));
+        boolean constantShake = progress > 0.88F;
+        boolean activeShake = constantShake || ((int) ticks % interval) < Mth.lerp(progress, 7.0F, 15.0F);
+
+        if (!activeShake) {
+            return 0.0F;
+        }
+
+        float strength = Mth.lerp(progress, 2.0F, 12.0F);
+        return Mth.sin(ticks * Mth.lerp(progress, 0.55F, 1.7F)) * strength;
+    }
+
+    private static ResourceLocation model(String path) {
+        return ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, path);
+    }
+}

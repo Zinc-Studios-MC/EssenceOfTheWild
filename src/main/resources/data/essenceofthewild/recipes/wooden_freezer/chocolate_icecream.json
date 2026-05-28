@@ -1,0 +1,9 @@
+{
+  "type": "essenceofthewild:wooden_freezer",
+  "ingredient": {
+    "item": "minecraft:cocoa_beans"
+  },
+  "result": {
+    "item": "essenceofthewild:chocolate_icecream"
+  }
+}

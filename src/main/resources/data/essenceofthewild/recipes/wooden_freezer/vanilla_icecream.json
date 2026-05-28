@@ -1,0 +1,9 @@
+{
+  "type": "essenceofthewild:wooden_freezer",
+  "ingredient": {
+    "item": "essenceofthewild:vanilla_flower"
+  },
+  "result": {
+    "item": "essenceofthewild:vanilla_icecream"
+  }
+}

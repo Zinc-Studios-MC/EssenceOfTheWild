@@ -25,6 +25,7 @@ import net.mrmisc.essenceofthewild.block.custom.crops.RedOnionCropBlock;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
 import net.mrmisc.essenceofthewild.block.custom.misc.MangoBlock;
 import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryCropBlock;
+import net.mrmisc.essenceofthewild.block.custom.nest.NestBlock;
 import net.mrmisc.essenceofthewild.block.custom.wood.*;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
@@ -41,6 +42,9 @@ public class EOTWBlocks {
 
     public static RegistryObject<Block> CHEESE_MAKER = registerBlock("cheese_maker",
             ()-> new CheeseMakerBlock(BlockBehaviour.Properties.of().noOcclusion()));
+
+    public static RegistryObject<Block> NEST = registerBlock("nest",
+            ()-> new NestBlock(BlockBehaviour.Properties.copy(Blocks.HAY_BLOCK).noOcclusion()));
 
     public static RegistryObject<Block> MANGO = BLOCKS.register("mango",
             ()-> new MangoBlock(BlockBehaviour.Properties.copy(Blocks.COCOA).noOcclusion()));

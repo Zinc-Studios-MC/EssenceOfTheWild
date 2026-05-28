@@ -1,0 +1,23 @@
+{
+  "format_version": "1.9.0",
+  "credit": "Made with Blockbench",
+  "texture_size": [32, 32],
+  "textures": {
+    "0": "essenceofthewild:block/chicken_egg",
+    "particle": "essenceofthewild:block/chicken_egg"
+  },
+  "elements": [
+    {
+      "from": [6.5, 4, 6.5],
+      "to": [9.5, 9, 9.5],
+      "faces": {
+        "north": {"uv": [0, 0, 1.5, 2.5], "texture": "#0"},
+        "east": {"uv": [1.5, 0, 3, 2.5], "texture": "#0"},
+        "south": {"uv": [0, 2.5, 1.5, 5], "texture": "#0"},
+        "west": {"uv": [1.5, 2.5, 3, 5], "texture": "#0"},
+        "up": {"uv": [7.5, 1.5, 6, 0], "texture": "#0"},
+        "down": {"uv": [7.5, 1.5, 6, 3], "texture": "#0"}
+      }
+    }
+  ]
+}

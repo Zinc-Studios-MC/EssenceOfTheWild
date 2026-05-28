@@ -1,0 +1,9 @@
+{
+  "type": "essenceofthewild:wooden_freezer",
+  "ingredient": {
+    "item": "minecraft:rabbit_foot"
+  },
+  "result": {
+    "item": "essenceofthewild:jump_boost_icecream"
+  }
+}

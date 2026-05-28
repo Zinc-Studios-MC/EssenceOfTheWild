@@ -1,0 +1,12 @@
+{
+  "type": "essenceofthewild:cheese_maker",
+  "ingredient": {
+    "item": "essenceofthewild:sheep_milk_bucket"
+  },
+  "container": {
+    "item": "minecraft:bucket"
+  },
+  "result": {
+    "item": "essenceofthewild:sheep_cheese"
+  }
+}

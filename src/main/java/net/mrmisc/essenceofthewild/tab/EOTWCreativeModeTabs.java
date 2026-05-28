@@ -53,6 +53,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWBlocks.STRIPPED_MANGO_LOG.get());
                 pOutput.accept(EOTWBlocks.MANGO_LEAVES.get());
                 pOutput.accept(EOTWBlocks.VANILLA_LEAVES.get());
+                pOutput.accept(EOTWBlocks.NEST.get());
                 pOutput.accept(EOTWItems.VANILLA_FLOWER.get());
                 pOutput.accept(EOTWItems.VANILLA_STICK.get());
             });

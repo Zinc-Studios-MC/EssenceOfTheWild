@@ -8,9 +8,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -18,11 +23,19 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.mrmisc.essenceofthewild.item.EOTWItems;
+import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
+import net.mrmisc.essenceofthewild.block.entity.custom.cheesemaker.CheeseMakerBlockEntity;
+import org.jetbrains.annotations.Nullable;
+import java.util.Optional;
+import net.mrmisc.essenceofthewild.recipe.cheesemaker.CheeseMakerRecipe;
 
-public class CheeseMakerBlock extends Block {
+public class CheeseMakerBlock extends BaseEntityBlock {
 
-    private static final IntegerProperty CONTENT = IntegerProperty.create("state", 0, 2);
+    public static final int EMPTY = 0;
+    public static final int MILK = 1;
+    public static final int CHEESE = 2;
+
+    public static final IntegerProperty CONTENT = IntegerProperty.create("state", EMPTY, CHEESE);
 
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(0, 4, 0, 16, 6, 16),      // Base Plate
@@ -39,29 +52,75 @@ public class CheeseMakerBlock extends Block {
 
     public CheeseMakerBlock(Properties pProperties) {
         super(pProperties);
-        this.registerDefaultState(this.getStateDefinition().any().setValue(CONTENT, 0));
+        this.registerDefaultState(this.getStateDefinition().any().setValue(CONTENT, EMPTY));
     }
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if(!pLevel.isClientSide()){
-            ItemStack stack = pPlayer.getItemInHand(pHand);
-            if(stack.is(EOTWItems.SHEEP_MILK_BUCKET.get()) && pState.getValue(CONTENT) == 0){
-                pLevel.setBlockAndUpdate(pPos, pState.setValue(CONTENT, 1));
-                pPlayer.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
-                ItemStack filledResult = ItemUtils.createFilledResult(stack, pPlayer, Items.BUCKET.getDefaultInstance());
-                pPlayer.setItemInHand(pHand, filledResult);
-                return InteractionResult.SUCCESS;
-            }
-            if(stack.is(Items.BUCKET) && pState.getValue(CONTENT) == 1){
-                pLevel.setBlockAndUpdate(pPos, pState.setValue(CONTENT, 0));
-                pPlayer.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
-                ItemStack filledResult = ItemUtils.createFilledResult(stack, pPlayer, EOTWItems.SHEEP_MILK_BUCKET.get().getDefaultInstance());
-                pPlayer.setItemInHand(pHand, filledResult);
-                return InteractionResult.SUCCESS;
+        if (pLevel.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+
+        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+        if (!(blockEntity instanceof CheeseMakerBlockEntity cheeseMakerBlockEntity)) {
+            return InteractionResult.PASS;
+        }
+
+        ItemStack stack = pPlayer.getItemInHand(pHand);
+
+        if (cheeseMakerBlockEntity.hasCheese()) {
+            cheeseMakerBlockEntity.giveCheese(pPlayer);
+            return InteractionResult.CONSUME;
+        }
+
+        Optional<CheeseMakerRecipe> recipe = cheeseMakerBlockEntity.getRecipeFor(stack);
+        if (recipe.isPresent() && cheeseMakerBlockEntity.isEmpty()) {
+            cheeseMakerBlockEntity.startCheese(recipe.get(), stack);
+            pPlayer.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+            ItemStack filledResult = ItemUtils.createFilledResult(stack, pPlayer, recipe.get().getContainer());
+            pPlayer.setItemInHand(pHand, filledResult);
+            return InteractionResult.CONSUME;
+        }
+
+        if (stack.is(Items.BUCKET) && cheeseMakerBlockEntity.hasMilk() && cheeseMakerBlockEntity.getContainerStack().is(Items.BUCKET)) {
+            ItemStack input = cheeseMakerBlockEntity.getInputStack();
+            cheeseMakerBlockEntity.empty();
+            pPlayer.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
+            ItemStack filledResult = ItemUtils.createFilledResult(stack, pPlayer, input);
+            pPlayer.setItemInHand(pHand, filledResult);
+            return InteractionResult.CONSUME;
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new CheeseMakerBlockEntity(pPos, pState);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide ? null : createTickerHelper(pBlockEntityType, EOTWBlockEntities.CHEESE_MAKER.get(), CheeseMakerBlockEntity::tick);
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        if (pState.getBlock() != pNewState.getBlock()) {
+            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            if (blockEntity instanceof CheeseMakerBlockEntity cheeseMakerBlockEntity) {
+                cheeseMakerBlockEntity.drops();
             }
         }
-        return InteractionResult.FAIL;
+
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState pState) {
+        return RenderShape.MODEL;
     }
 
     @Override

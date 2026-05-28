@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild;
 
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -7,9 +10,12 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.mrmisc.essenceofthewild.block.EOTWBlocks;
+import net.mrmisc.essenceofthewild.config.EOTWConfig;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowRenderer;
@@ -18,6 +24,8 @@ import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
+import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
+import net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -31,6 +39,7 @@ public class EssenceOfTheWildMod
     public EssenceOfTheWildMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
+        context.registerConfig(ModConfig.Type.COMMON, EOTWConfig.COMMON_SPEC);
         EOTWUtils.modInit(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -64,6 +73,8 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.CHICKEN.get(), ChickenRenderer::new);
             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
+            MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
+            ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
         }
     }
 }

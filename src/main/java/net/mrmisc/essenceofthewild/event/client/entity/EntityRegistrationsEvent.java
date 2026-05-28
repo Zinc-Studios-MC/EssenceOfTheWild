@@ -1,10 +1,13 @@
 package net.mrmisc.essenceofthewild.event.client.entity;
 
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
+import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntityRenderer;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
@@ -52,5 +55,15 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.CHICKEN.get(), ChickenEntity.createAttributes().build());
         event.put(EOTWEntities.RABBIT.get(), RabbitEntity.createAttributes().build());
         event.put(EOTWEntities.HARE.get(), HareEntity.createAttributes().build());
+    }
+
+    @SubscribeEvent
+    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(EOTWBlockEntities.NEST.get(), NestBlockEntityRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
+        NestBlockEntityRenderer.registerAdditionalModels(event);
     }
 }

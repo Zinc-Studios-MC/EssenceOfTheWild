@@ -15,6 +15,9 @@ import net.minecraft.world.entity.Entity;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEntity> {
+	private static final float DEG_TO_RAD = ((float) Math.PI / 180F);
+	private static final double RUN_SPEED_THRESHOLD = 0.22D;
+
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "chicken"), "main");
 	private final ModelPart body;
@@ -84,6 +87,52 @@ public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEnt
 
 	@Override
 	public void setupAnim(ChickenEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
 
+		this.head.yRot = pNetHeadYaw * DEG_TO_RAD;
+		this.head.xRot += pHeadPitch * DEG_TO_RAD;
+
+		if (pEntity.isSittingOnNestDelivery()) {
+			this.animate(pEntity.idleAnimationState, ChickenAnimations.chicken_idle, pAgeInTicks);
+			applyNestSittingPose();
+			return;
+		}
+
+		if (isFlapping(pEntity)) {
+			this.animate(pEntity.flapAnimationState, ChickenAnimations.chicken_flap, pAgeInTicks);
+			return;
+		}
+
+		if (pEntity.isCenteringOnNestDelivery()) {
+			this.animateWalk(ChickenAnimations.chicken_walk, pAgeInTicks, 0.7F, 1.6F, 1.1F);
+			return;
+		}
+
+		if (pLimbSwingAmount < 0.01F) {
+			this.animate(pEntity.idleAnimationState, ChickenAnimations.chicken_idle, pAgeInTicks);
+		} else {
+			double speed = pEntity.getDeltaMovement().horizontalDistance();
+
+			if (speed > RUN_SPEED_THRESHOLD) {
+				this.animateWalk(ChickenAnimations.chicken_run, pLimbSwing, pLimbSwingAmount, 3.2F, 2.2F);
+			} else {
+				this.animateWalk(ChickenAnimations.chicken_walk, pLimbSwing, pLimbSwingAmount, 1.8F, 1.4F);
+			}
+		}
+	}
+
+	private boolean isFlapping(ChickenEntity entity) {
+		return !entity.onGround() && Math.abs(entity.getDeltaMovement().y) > 0.02D;
+	}
+
+	private void applyNestSittingPose() {
+		this.body.y += 2.0F;
+		this.body.xRot -= 4.0F * DEG_TO_RAD;
+		this.head.xRot += 5.0F * DEG_TO_RAD;
+		this.left_wing.xRot += 5.0F * DEG_TO_RAD;
+		this.right_wing.xRot += 5.0F * DEG_TO_RAD;
+		this.left_leg.xRot -= 18.0F * DEG_TO_RAD;
+		this.right_leg.xRot -= 18.0F * DEG_TO_RAD;
+		this.tail.xRot += 6.0F * DEG_TO_RAD;
 	}
 }

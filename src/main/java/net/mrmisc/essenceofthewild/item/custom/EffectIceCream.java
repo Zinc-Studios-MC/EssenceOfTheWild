@@ -3,22 +3,20 @@ package net.mrmisc.essenceofthewild.item.custom;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class EffectIceCream extends Item {
+public class EffectIceCream extends IceCream {
 
     MobEffect mobEffect;
 
     public EffectIceCream(MobEffect effect) {
-        super(new Properties().stacksTo(8).food(new FoodProperties.Builder()
-                .nutrition(1)
-                .saturationMod(0.2f)
-                .fast()
-                .build()));
+        super();
         this.mobEffect = effect;
+    }
+
+    public MobEffect getMobEffect() {
+        return mobEffect;
     }
 
     @Override
