@@ -8,6 +8,9 @@
   "item.essenceofthewild.cone" : "Cone",
   "item.essenceofthewild.vanilla_flower" : "Vanilla Flower",
   "item.essenceofthewild.vanilla_stick" : "Vanilla Stick",
+  "item.essenceofthewild.mango" : "Mango",
+  "item.essenceofthewild.strawberry" : "Strawberry",
+  "item.essenceofthewild.red_onion" : "Red Onion",
 
   "item.essenceofthewild.sheep_spawn_egg" : "Sheep Spawn Egg",
   "item.essenceofthewild.pig_spawn_egg" : "Pig Spawn Egg",
@@ -30,6 +33,8 @@
 
   "block.essenceofthewild.wooden_freezer" : "Wooden Freezer",
   "block.essenceofthewild.cheese_maker" : "Cheese Maker",
+  "block.essenceofthewild.strawberry_crop" : "Strawberry Bush",
+
   "block.essenceofthewild.mango" : "Mango",
   "block.essenceofthewild.mango_sapling" : "Mango Sapling",
   "block.essenceofthewild.mango_leaves" : "Mango Leaves",
@@ -37,7 +42,17 @@
   "block.essenceofthewild.mango_log" : "Mango Log",
   "block.essenceofthewild.mango_wood" : "Mango Wood",
   "block.essenceofthewild.stripped_mango_wood" : "Stripped Mango Wood",
-  "block.essenceofthewild.stripped_mango_log" : "Stripped Mango Log",
+  "block.essenceofthewild.mango_planks" : "Mango Planks",
+  "block.essenceofthewild.mango_slab" : "Mango Slabs",
+  "block.essenceofthewild.mango_stairs" : "Mango Stairs",
+  "block.essenceofthewild.mango_fence" : "Mango Fence",
+  "block.essenceofthewild.mango_fence_gate" : "Mango Fence Gate",
+  "block.essenceofthewild.mango_pressure_plate" : "Mango Pressure Plate",
+  "block.essenceofthewild.mango_button" : "Mango Button",
+  "block.essenceofthewild.mango_door" : "Mango Door",
+  "block.essenceofthewild.mango_trapdoor" : "Mango Trapdoor",
+  "block.essenceofthewild.mango_sign" : "Mango Sign",
+  "block.essenceofthewild.mango_hanging_sign" : "Mango Hanging Sign",
 
   "death.attack.essenceofthewild.rabies_water": "%1$s couldn't handle the existence of water",
   "death.attack.essenceofthewild.rabies_final": "%1$s pet death a bit too much",

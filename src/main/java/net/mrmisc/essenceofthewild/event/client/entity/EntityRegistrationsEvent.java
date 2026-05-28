@@ -14,6 +14,7 @@ import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareModel;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomModel;
+import net.mrmisc.essenceofthewild.entity.custom.pig.BabyPigModel;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigModel;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigSaddleModel;
@@ -33,6 +34,7 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(WoolModel.LAYER_LOCATION, WoolModel::createBodyLayer);
         event.registerLayerDefinition(ShearedSheepModel.LAYER_LOCATION, ShearedSheepModel::createBodyLayer);
         event.registerLayerDefinition(PigModel.LAYER_LOCATION, PigModel::createBodyLayer);
+        event.registerLayerDefinition(BabyPigModel.LAYER_LOCATION, BabyPigModel::createBodyLayer);
         event.registerLayerDefinition(PigSaddleModel.LAYER_LOCATION, PigSaddleModel::createBodyLayer);
         event.registerLayerDefinition(CowModel.LAYER_LOCATION, CowModel::createBodyLayer);
         event.registerLayerDefinition(MooshroomModel.LAYER_LOCATION, MooshroomModel::createBodyLayer);

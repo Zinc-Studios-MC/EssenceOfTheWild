@@ -1,0 +1,10 @@
+{
+  "type": "forge:remove_features",
+  "biomes": "#essenceofthewild:mango_tree_biomes",
+  "features": [
+    "minecraft:fancy_oak_checked"
+  ],
+  "steps": [
+    "vegetal_decoration"
+  ]
+}

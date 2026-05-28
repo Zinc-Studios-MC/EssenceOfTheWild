@@ -42,7 +42,9 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.SHEEP_MILK_BUCKET.get());
                 pOutput.accept(EOTWItems.SHEEP_CHEESE.get());
                 pOutput.accept(EOTWItems.SHEEP_CHEESE_WEDGE.get());
-                pOutput.accept(EOTWBlocks.MANGO.get());
+                pOutput.accept(EOTWItems.MANGO.get());
+                pOutput.accept(EOTWItems.STRAWBERRY.get());
+                pOutput.accept(EOTWItems.RED_ONION.get());
             });
     public static RegistryObject<CreativeModeTab> NATURAL_TAB =
             createNewTabWithBlockIcon("natural_tab", "Essence Of The Wild Natural Stuff", ()-> EOTWBlocks.MANGO_LOG.get(), (pParameters, pOutput) -> {
@@ -58,6 +60,17 @@ public class EOTWCreativeModeTabs {
             createNewTabWithBlockIcon("manmade_tab", "Essence Of The Wild Blocks And Items", ()-> EOTWBlocks.WOODEN_FREEZER.get(), (pParameters, pOutput) -> {
                 pOutput.accept(EOTWBlocks.MANGO_WOOD.get());
                 pOutput.accept(EOTWBlocks.STRIPPED_MANGO_WOOD.get());
+                pOutput.accept(EOTWBlocks.MANGO_PLANKS.get());
+                pOutput.accept(EOTWBlocks.MANGO_SLAB.get());
+                pOutput.accept(EOTWBlocks.MANGO_STAIRS.get());
+                pOutput.accept(EOTWBlocks.MANGO_TRAPDOOR.get());
+                pOutput.accept(EOTWBlocks.MANGO_DOOR.get());
+                pOutput.accept(EOTWBlocks.MANGO_FENCE.get());
+                pOutput.accept(EOTWBlocks.MANGO_FENCE_GATE.get());
+                pOutput.accept(EOTWBlocks.MANGO_BUTTON.get());
+                pOutput.accept(EOTWBlocks.MANGO_PRESURE_PLATE.get());
+                pOutput.accept(EOTWBlocks.MANGO_SIGN.get());
+                pOutput.accept(EOTWBlocks.MANGO_WALL_SIGN.get());
                 pOutput.accept(EOTWBlocks.WOODEN_FREEZER.get());
                 pOutput.accept(EOTWBlocks.CHEESE_MAKER.get());
             });

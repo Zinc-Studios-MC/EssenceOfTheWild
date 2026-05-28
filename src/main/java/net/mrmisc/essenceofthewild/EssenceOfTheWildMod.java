@@ -1,12 +1,8 @@
 package net.mrmisc.essenceofthewild;
 
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +31,7 @@ public class EssenceOfTheWildMod
     public EssenceOfTheWildMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-        EOTWUtils.init(modEventBus);
+        EOTWUtils.modInit(modEventBus);
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -60,6 +56,7 @@ public class EssenceOfTheWildMod
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
+            EOTWUtils.clientInit();
             EntityRenderers.register(EOTWEntities.SHEEP.get(), SheepRenderer::new);
             EntityRenderers.register(EOTWEntities.PIG.get(), PigRenderer::new);
             EntityRenderers.register(EOTWEntities.COW.get(), CowRenderer::new);

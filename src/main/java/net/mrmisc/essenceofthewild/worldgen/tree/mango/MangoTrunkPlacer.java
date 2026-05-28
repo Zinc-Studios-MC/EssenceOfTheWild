@@ -55,7 +55,7 @@ public class MangoTrunkPlacer extends TrunkPlacer {
 
         attachments.add(new FoliagePlacer.FoliageAttachment(top.above(), 0, false));
 
-        int branchCount = 3 + random.nextInt(3); // 3–5 main branches
+        int branchCount = 3 + random.nextInt(3);
 
         for (int i = 0; i < branchCount; i++) {
 
@@ -140,7 +140,6 @@ public class MangoTrunkPlacer extends TrunkPlacer {
 
             placeLog(level, placer, random, pos.relative(side), config);
 
-            // optional: make it less flat
             if (random.nextBoolean()) {
                 placeLog(level, placer, random, pos.relative(side.getOpposite()), config);
             }

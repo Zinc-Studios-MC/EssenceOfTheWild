@@ -13,11 +13,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class PigSaddleLayer extends RenderLayer<PigEntity, PigModel<PigEntity>> {
+public class PigSaddleLayer extends RenderLayer<PigEntity, PigModel> {
     private static final ResourceLocation SADDLE_LOCATION = ResourceLocation.fromNamespaceAndPath("essenceofthewild", "textures/entity/pig/pig_saddle.png");
     private final PigSaddleModel model;
 
-    public PigSaddleLayer(RenderLayerParent<PigEntity, PigModel<PigEntity>> pRenderer, EntityModelSet set) {
+    public PigSaddleLayer(RenderLayerParent<PigEntity, PigModel> pRenderer, EntityModelSet set) {
         super(pRenderer);
         this.model = new PigSaddleModel(set.bakeLayer(PigSaddleModel.LAYER_LOCATION));
     }

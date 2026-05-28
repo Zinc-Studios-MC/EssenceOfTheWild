@@ -4,14 +4,15 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.MilkBucketItem;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.item.custom.EffectIceCream;
 import net.mrmisc.essenceofthewild.item.custom.IceCream;
@@ -48,6 +49,21 @@ public class EOTWItems {
     //Tree
     public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> VANILLA_STICK = ITEMS.register("vanilla_stick", ()-> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> MANGO_SIGN = ITEMS.register("mango_sign",
+            () -> new SignItem(new Item.Properties().stacksTo(16), EOTWBlocks.MANGO_SIGN.get(), EOTWBlocks.MANGO_WALL_SIGN.get()));
+    public static final RegistryObject<Item> MANGO_HANGING_SIGN = ITEMS.register("mango_hanging_sign",
+            () -> new HangingSignItem(EOTWBlocks.MANGO_HANGING_SIGN.get(), EOTWBlocks.MANGO_WALL_HANGING_SIGN.get(),
+                    new Item.Properties().stacksTo(16)));
+
+    public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
+            ()-> new ItemNameBlockItem(EOTWBlocks.STRAWBERRY_CROP.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2f).alwaysEat().fast().build())));
+
+    public static final RegistryObject<Item> MANGO = ITEMS.register("mango",
+            ()-> new BlockItem(EOTWBlocks.MANGO.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(9).saturationMod(0.2f).alwaysEat().fast().build())));
+
+    public static RegistryObject<Item> RED_ONION = ITEMS.register("red_onion",
+            ()-> new ItemNameBlockItem(EOTWBlocks.RED_ONION_CROP.get(), new Item.Properties()));
+
     public static RegistryObject<Item> createIceCream(String name){
         return ITEMS.register(name + "_icecream", IceCream::new);
     }

@@ -16,7 +16,7 @@ public class RabiesEffect extends MobEffect {
 
 
     //TODO: Change * 1 to * 6
-    private static int TOTAL_DURATION = 20 * 60 * 1;
+    private static int TOTAL_DURATION = 20 * 60 * 6;
     private static int NAUSEA_INTERVAL = 20 * 45;
 
 

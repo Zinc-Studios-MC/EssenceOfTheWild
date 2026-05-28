@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "essenceofthewild:block/mango_slabs"
+    },
+    "type=double": {
+      "model": "essenceofthewild:block/mango_planks"
+    },
+    "type=top": {
+      "model": "essenceofthewild:block/mango_slabs_top"
+    }
+  }
+}

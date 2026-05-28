@@ -42,7 +42,7 @@ public class EOTWConfiguredFeatures {
                                               TreeDecorator hangingMangoDecorator) {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 logProvider,
-                new MangoTrunkPlacer(8, 0, 0),   // 2x2 trunk, tall and chunky
+                new MangoTrunkPlacer(8, 0, 0),
                 new WeightedStateProvider(SimpleWeightedRandomList.<BlockState>builder().add(primaryLeavesProvider, 3).add(secondaryLeavesProvider, 1)),
                 new BlobFoliagePlacer(
                         ConstantInt.of(3),

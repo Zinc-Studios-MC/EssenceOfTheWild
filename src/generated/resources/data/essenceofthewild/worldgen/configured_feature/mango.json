@@ -4,7 +4,7 @@
     "decorators": [
       {
         "type": "essenceofthewild:mango",
-        "tries": 5
+        "tries": 10
       }
     ],
     "dirt_provider": {

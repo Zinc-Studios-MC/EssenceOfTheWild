@@ -14,6 +14,7 @@ public class EOTWItemModelProvider extends ItemModelProvider {
     @Override
     protected void registerModels() {
         basicItem(EOTWItems.CONE.get());
+        basicItem(EOTWItems.MANGO.get());
         basicItem(EOTWItems.SHEEP_CHEESE.get());
         basicItem(EOTWItems.SHEEP_CHEESE_WEDGE.get());
         basicItem(EOTWItems.SHEEP_MILK_BUCKET.get());
@@ -26,5 +27,10 @@ public class EOTWItemModelProvider extends ItemModelProvider {
 
         basicItem(EOTWItems.VANILLA_STICK.get());
         basicItem(EOTWItems.VANILLA_FLOWER.get());
+        basicItem(EOTWItems.MANGO_SIGN.get());
+        basicItem(EOTWItems.MANGO_HANGING_SIGN.get());
+
+        basicItem(EOTWItems.STRAWBERRY.get());
+        basicItem(EOTWItems.RED_ONION.get());
     }
 }
