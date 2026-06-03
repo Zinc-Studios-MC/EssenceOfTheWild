@@ -1,0 +1,52 @@
+[1mdiff --git a/src/main/java/net/mrmisc/essenceofthewild/EssenceOfTheWildMod.java b/src/main/java/net/mrmisc/essenceofthewild/EssenceOfTheWildMod.java[m
+[1mindex b073d12..4c7289a 100644[m
+[1m--- a/src/main/java/net/mrmisc/essenceofthewild/EssenceOfTheWildMod.java[m
+[1m+++ b/src/main/java/net/mrmisc/essenceofthewild/EssenceOfTheWildMod.java[m
+[36m@@ -1,5 +1,8 @@[m
+ package net.mrmisc.essenceofthewild;[m
+ [m
+[32m+[m[32mimport net.minecraft.client.gui.screens.MenuScreens;[m
+[32m+[m[32mimport net.minecraft.client.renderer.ItemBlockRenderTypes;[m
+[32m+[m[32mimport net.minecraft.client.renderer.RenderType;[m
+ import net.minecraft.client.renderer.entity.EntityRenderers;[m
+ import net.minecraftforge.api.distmarker.Dist;[m
+ import net.minecraftforge.common.MinecraftForge;[m
+[36m@@ -7,9 +10,12 @@[m [mimport net.minecraftforge.event.server.ServerStartingEvent;[m
+ import net.minecraftforge.eventbus.api.IEventBus;[m
+ import net.minecraftforge.eventbus.api.SubscribeEvent;[m
+ import net.minecraftforge.fml.common.Mod;[m
+[32m+[m[32mimport net.minecraftforge.fml.config.ModConfig;[m
+ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;[m
+ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;[m
+ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;[m
+[32m+[m[32mimport net.mrmisc.essenceofthewild.block.EOTWBlocks;[m
+[32m+[m[32mimport net.mrmisc.essenceofthewild.config.EOTWConfig;[m
+ import net.mrmisc.essenceofthewild.entity.EOTWEntities;[m
+ import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenRenderer;[m
+ import net.mrmisc.essenceofthewild.entity.custom.cow.CowRenderer;[m
+[36m@@ -18,6 +24,8 @@[m [mimport net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;[m
+ import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;[m
+ import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;[m
+ import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;[m
+[32m+[m[32mimport net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;[m
+[32m+[m[32mimport net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;[m
+ import net.mrmisc.essenceofthewild.util.EOTWUtils;[m
+ [m
+ // The value here should match an entry in the META-INF/mods.toml file[m
+[36m@@ -31,6 +39,7 @@[m [mpublic class EssenceOfTheWildMod[m
+     public EssenceOfTheWildMod(FMLJavaModLoadingContext context)[m
+     {[m
+         IEventBus modEventBus = context.getModEventBus();[m
+[32m+[m[32m        context.registerConfig(ModConfig.Type.COMMON, EOTWConfig.COMMON_SPEC);[m
+         EOTWUtils.modInit(modEventBus);[m
+         // Register the commonSetup method for modloading[m
+         modEventBus.addListener(this::commonSetup);[m
+[36m@@ -64,6 +73,8 @@[m [mpublic class EssenceOfTheWildMod[m
+             EntityRenderers.register(EOTWEntities.CHICKEN.get(), ChickenRenderer::new);[m
+             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);[m
+             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);[m
+[32m+[m[32m            MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);[m
+[32m+[m[32m            ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());[m
+         }[m
+     }[m
+ }[m

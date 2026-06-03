@@ -1,4 +1,4 @@
-package net.mrmisc.essenceofthewild.item.custom;
+package net.mrmisc.essenceofthewild.item.custom.icecream;
 
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;

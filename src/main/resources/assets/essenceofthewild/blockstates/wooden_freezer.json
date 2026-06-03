@@ -1,148 +1,724 @@
 {
   "variants": {
-    "cone_count=0,content=no_cone,milk_level=0": {
+    "cone_count=0,content=no_cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=0,content=no_cone,milk_level=1": {
+    "cone_count=0,content=no_cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=0,content=no_cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=0,content=no_cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=0,content=no_cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=0,content=no_cone,milk_level=2": {
+    "cone_count=0,content=no_cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=0,content=no_cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=0,content=no_cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=0,content=no_cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=0,content=no_cone,milk_level=3": {
+    "cone_count=0,content=no_cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=0,content=no_cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=0,content=no_cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=0,content=no_cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
     },
-    "cone_count=1,content=cone,milk_level=0": {
+    "cone_count=0,content=no_cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=0,content=no_cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=0,content=no_cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
+    },
+    "cone_count=1,content=cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_cone_empty"
     },
-    "cone_count=1,content=cone,milk_level=1": {
+    "cone_count=1,content=cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_empty",
+      "y": 90
+    },
+    "cone_count=1,content=cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_empty",
+      "y": 180
+    },
+    "cone_count=1,content=cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_empty",
+      "y": 270
+    },
+    "cone_count=1,content=cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_cone_one"
     },
-    "cone_count=1,content=cone,milk_level=2": {
+    "cone_count=1,content=cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_one",
+      "y": 90
+    },
+    "cone_count=1,content=cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_one",
+      "y": 180
+    },
+    "cone_count=1,content=cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_one",
+      "y": 270
+    },
+    "cone_count=1,content=cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_cone_two"
     },
-    "cone_count=1,content=cone,milk_level=3": {
+    "cone_count=1,content=cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_two",
+      "y": 90
+    },
+    "cone_count=1,content=cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_two",
+      "y": 180
+    },
+    "cone_count=1,content=cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_two",
+      "y": 270
+    },
+    "cone_count=1,content=cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_cone_full"
     },
-    "cone_count=2,content=cone,milk_level=0": {
+    "cone_count=1,content=cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_full",
+      "y": 90
+    },
+    "cone_count=1,content=cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_full",
+      "y": 180
+    },
+    "cone_count=1,content=cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_cone_full",
+      "y": 270
+    },
+    "cone_count=2,content=cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_cone_empty"
     },
-    "cone_count=2,content=cone,milk_level=1": {
+    "cone_count=2,content=cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_empty",
+      "y": 90
+    },
+    "cone_count=2,content=cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_empty",
+      "y": 180
+    },
+    "cone_count=2,content=cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_empty",
+      "y": 270
+    },
+    "cone_count=2,content=cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_cone_one"
     },
-    "cone_count=2,content=cone,milk_level=2": {
+    "cone_count=2,content=cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_one",
+      "y": 90
+    },
+    "cone_count=2,content=cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_one",
+      "y": 180
+    },
+    "cone_count=2,content=cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_one",
+      "y": 270
+    },
+    "cone_count=2,content=cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_cone_two"
     },
-    "cone_count=2,content=cone,milk_level=3": {
+    "cone_count=2,content=cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_two",
+      "y": 90
+    },
+    "cone_count=2,content=cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_two",
+      "y": 180
+    },
+    "cone_count=2,content=cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_two",
+      "y": 270
+    },
+    "cone_count=2,content=cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_cone_full"
     },
-    "cone_count=3,content=cone,milk_level=0": {
+    "cone_count=2,content=cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_full",
+      "y": 90
+    },
+    "cone_count=2,content=cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_full",
+      "y": 180
+    },
+    "cone_count=2,content=cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_cone_full",
+      "y": 270
+    },
+    "cone_count=3,content=cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_cone_empty"
     },
-    "cone_count=3,content=cone,milk_level=1": {
+    "cone_count=3,content=cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_empty",
+      "y": 90
+    },
+    "cone_count=3,content=cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_empty",
+      "y": 180
+    },
+    "cone_count=3,content=cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_empty",
+      "y": 270
+    },
+    "cone_count=3,content=cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_cone_one"
     },
-    "cone_count=3,content=cone,milk_level=2": {
+    "cone_count=3,content=cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_one",
+      "y": 90
+    },
+    "cone_count=3,content=cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_one",
+      "y": 180
+    },
+    "cone_count=3,content=cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_one",
+      "y": 270
+    },
+    "cone_count=3,content=cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_cone_two"
     },
-    "cone_count=3,content=cone,milk_level=3": {
+    "cone_count=3,content=cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_two",
+      "y": 90
+    },
+    "cone_count=3,content=cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_two",
+      "y": 180
+    },
+    "cone_count=3,content=cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_two",
+      "y": 270
+    },
+    "cone_count=3,content=cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_cone_full"
     },
-    "cone_count=1,content=icecream,milk_level=0": {
+    "cone_count=3,content=cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_full",
+      "y": 90
+    },
+    "cone_count=3,content=cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_full",
+      "y": 180
+    },
+    "cone_count=3,content=cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_cone_full",
+      "y": 270
+    },
+    "cone_count=1,content=icecream,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_icecream_empty"
     },
-    "cone_count=1,content=icecream,milk_level=1": {
+    "cone_count=1,content=icecream,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_empty",
+      "y": 90
+    },
+    "cone_count=1,content=icecream,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_empty",
+      "y": 180
+    },
+    "cone_count=1,content=icecream,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_empty",
+      "y": 270
+    },
+    "cone_count=1,content=icecream,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_icecream_one"
     },
-    "cone_count=1,content=icecream,milk_level=2": {
+    "cone_count=1,content=icecream,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_one",
+      "y": 90
+    },
+    "cone_count=1,content=icecream,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_one",
+      "y": 180
+    },
+    "cone_count=1,content=icecream,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_one",
+      "y": 270
+    },
+    "cone_count=1,content=icecream,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_icecream_two"
     },
-    "cone_count=1,content=icecream,milk_level=3": {
+    "cone_count=1,content=icecream,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_two",
+      "y": 90
+    },
+    "cone_count=1,content=icecream,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_two",
+      "y": 180
+    },
+    "cone_count=1,content=icecream,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_two",
+      "y": 270
+    },
+    "cone_count=1,content=icecream,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_one_icecream_full"
     },
-    "cone_count=2,content=icecream,milk_level=0": {
+    "cone_count=1,content=icecream,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_full",
+      "y": 90
+    },
+    "cone_count=1,content=icecream,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_full",
+      "y": 180
+    },
+    "cone_count=1,content=icecream,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_one_icecream_full",
+      "y": 270
+    },
+    "cone_count=2,content=icecream,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_icecream_empty"
     },
-    "cone_count=2,content=icecream,milk_level=1": {
+    "cone_count=2,content=icecream,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_empty",
+      "y": 90
+    },
+    "cone_count=2,content=icecream,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_empty",
+      "y": 180
+    },
+    "cone_count=2,content=icecream,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_empty",
+      "y": 270
+    },
+    "cone_count=2,content=icecream,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_icecream_one"
     },
-    "cone_count=2,content=icecream,milk_level=2": {
+    "cone_count=2,content=icecream,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_one",
+      "y": 90
+    },
+    "cone_count=2,content=icecream,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_one",
+      "y": 180
+    },
+    "cone_count=2,content=icecream,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_one",
+      "y": 270
+    },
+    "cone_count=2,content=icecream,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_icecream_two"
     },
-    "cone_count=2,content=icecream,milk_level=3": {
+    "cone_count=2,content=icecream,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_two",
+      "y": 90
+    },
+    "cone_count=2,content=icecream,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_two",
+      "y": 180
+    },
+    "cone_count=2,content=icecream,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_two",
+      "y": 270
+    },
+    "cone_count=2,content=icecream,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_two_icecream_full"
     },
-    "cone_count=3,content=icecream,milk_level=0": {
+    "cone_count=2,content=icecream,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_full",
+      "y": 90
+    },
+    "cone_count=2,content=icecream,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_full",
+      "y": 180
+    },
+    "cone_count=2,content=icecream,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_two_icecream_full",
+      "y": 270
+    },
+    "cone_count=3,content=icecream,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_icecream_empty"
     },
-    "cone_count=3,content=icecream,milk_level=1": {
+    "cone_count=3,content=icecream,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_empty",
+      "y": 90
+    },
+    "cone_count=3,content=icecream,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_empty",
+      "y": 180
+    },
+    "cone_count=3,content=icecream,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_empty",
+      "y": 270
+    },
+    "cone_count=3,content=icecream,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_icecream_one"
     },
-    "cone_count=3,content=icecream,milk_level=2": {
+    "cone_count=3,content=icecream,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_one",
+      "y": 90
+    },
+    "cone_count=3,content=icecream,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_one",
+      "y": 180
+    },
+    "cone_count=3,content=icecream,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_one",
+      "y": 270
+    },
+    "cone_count=3,content=icecream,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_icecream_two"
     },
-    "cone_count=3,content=icecream,milk_level=3": {
+    "cone_count=3,content=icecream,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_two",
+      "y": 90
+    },
+    "cone_count=3,content=icecream,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_two",
+      "y": 180
+    },
+    "cone_count=3,content=icecream,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_two",
+      "y": 270
+    },
+    "cone_count=3,content=icecream,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_three_icecream_full"
     },
-    "cone_count=0,content=cone,milk_level=0": {
+    "cone_count=3,content=icecream,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_full",
+      "y": 90
+    },
+    "cone_count=3,content=icecream,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_full",
+      "y": 180
+    },
+    "cone_count=3,content=icecream,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_three_icecream_full",
+      "y": 270
+    },
+    "cone_count=0,content=cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=0,content=cone,milk_level=1": {
+    "cone_count=0,content=cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=0,content=cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=0,content=cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=0,content=cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=0,content=cone,milk_level=2": {
+    "cone_count=0,content=cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=0,content=cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=0,content=cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=0,content=cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=0,content=cone,milk_level=3": {
+    "cone_count=0,content=cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=0,content=cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=0,content=cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=0,content=cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
     },
-    "cone_count=0,content=icecream,milk_level=0": {
+    "cone_count=0,content=cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=0,content=cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=0,content=cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
+    },
+    "cone_count=0,content=icecream,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=0,content=icecream,milk_level=1": {
+    "cone_count=0,content=icecream,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=0,content=icecream,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=0,content=icecream,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=0,content=icecream,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=0,content=icecream,milk_level=2": {
+    "cone_count=0,content=icecream,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=0,content=icecream,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=0,content=icecream,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=0,content=icecream,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=0,content=icecream,milk_level=3": {
+    "cone_count=0,content=icecream,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=0,content=icecream,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=0,content=icecream,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=0,content=icecream,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
     },
-    "cone_count=1,content=no_cone,milk_level=0": {
+    "cone_count=0,content=icecream,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=0,content=icecream,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=0,content=icecream,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
+    },
+    "cone_count=1,content=no_cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=1,content=no_cone,milk_level=1": {
+    "cone_count=1,content=no_cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=1,content=no_cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=1,content=no_cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=1,content=no_cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=1,content=no_cone,milk_level=2": {
+    "cone_count=1,content=no_cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=1,content=no_cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=1,content=no_cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=1,content=no_cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=1,content=no_cone,milk_level=3": {
+    "cone_count=1,content=no_cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=1,content=no_cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=1,content=no_cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=1,content=no_cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
     },
-    "cone_count=2,content=no_cone,milk_level=0": {
+    "cone_count=1,content=no_cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=1,content=no_cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=1,content=no_cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
+    },
+    "cone_count=2,content=no_cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=2,content=no_cone,milk_level=1": {
+    "cone_count=2,content=no_cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=2,content=no_cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=2,content=no_cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=2,content=no_cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=2,content=no_cone,milk_level=2": {
+    "cone_count=2,content=no_cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=2,content=no_cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=2,content=no_cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=2,content=no_cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=2,content=no_cone,milk_level=3": {
+    "cone_count=2,content=no_cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=2,content=no_cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=2,content=no_cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=2,content=no_cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
     },
-    "cone_count=3,content=no_cone,milk_level=0": {
+    "cone_count=2,content=no_cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=2,content=no_cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=2,content=no_cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
+    },
+    "cone_count=3,content=no_cone,milk_level=0,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_empty"
     },
-    "cone_count=3,content=no_cone,milk_level=1": {
+    "cone_count=3,content=no_cone,milk_level=0,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 90
+    },
+    "cone_count=3,content=no_cone,milk_level=0,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 180
+    },
+    "cone_count=3,content=no_cone,milk_level=0,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+      "y": 270
+    },
+    "cone_count=3,content=no_cone,milk_level=1,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_one"
     },
-    "cone_count=3,content=no_cone,milk_level=2": {
+    "cone_count=3,content=no_cone,milk_level=1,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 90
+    },
+    "cone_count=3,content=no_cone,milk_level=1,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 180
+    },
+    "cone_count=3,content=no_cone,milk_level=1,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_one",
+      "y": 270
+    },
+    "cone_count=3,content=no_cone,milk_level=2,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_two"
     },
-    "cone_count=3,content=no_cone,milk_level=3": {
+    "cone_count=3,content=no_cone,milk_level=2,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 90
+    },
+    "cone_count=3,content=no_cone,milk_level=2,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 180
+    },
+    "cone_count=3,content=no_cone,milk_level=2,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_two",
+      "y": 270
+    },
+    "cone_count=3,content=no_cone,milk_level=3,facing=north": {
       "model": "essenceofthewild:block/wooden_freezer_no_cone_full"
+    },
+    "cone_count=3,content=no_cone,milk_level=3,facing=east": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 90
+    },
+    "cone_count=3,content=no_cone,milk_level=3,facing=south": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 180
+    },
+    "cone_count=3,content=no_cone,milk_level=3,facing=west": {
+      "model": "essenceofthewild:block/wooden_freezer_no_cone_full",
+      "y": 270
     }
   }
 }

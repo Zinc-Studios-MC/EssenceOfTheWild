@@ -74,6 +74,8 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWBlocks.MANGO_WALL_SIGN.get());
                 pOutput.accept(EOTWBlocks.WOODEN_FREEZER.get());
                 pOutput.accept(EOTWBlocks.CHEESE_MAKER.get());
+                pOutput.accept(EOTWItems.ICE_CUBES.get());
+                pOutput.accept(EOTWItems.UNDERWATER_ARROW.get());
             });
 
 

@@ -3,6 +3,7 @@ package net.mrmisc.essenceofthewild.block.entity.custom.nest;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
@@ -53,7 +54,11 @@ public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEnt
         if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
             return;
         }
-
+        assert blockEntity.getLevel() != null;
+        int light = LevelRenderer.getLightColor(
+                blockEntity.getLevel(),
+                blockEntity.getBlockPos().above()
+        );
         poseStack.pushPose();
         poseStack.translate(0.5F, 0.29F + bob, 0.5F);
         poseStack.mulPose(Axis.YP.rotationDegrees(Mth.sin(ticks * 0.12F) * 5.0F * progress));
@@ -66,11 +71,11 @@ public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEnt
         blockRenderer.getModelRenderer().renderModel(
                 poseStack.last(),
                 buffer.getBuffer(renderType),
-                null,
+                blockEntity.getBlockState(),
                 model,
                 1.0F,
                 1.0F,
-                1.0F,
+                1F,
                 packedLight,
                 packedOverlay
         );

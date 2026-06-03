@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,10 +27,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.NotNull;
 
-public class StrawberryCropBlock extends BushBlock implements BonemealableBlock {
+public class StrawberryBushBlock extends BushBlock implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
 
-    public StrawberryCropBlock(Properties pProperties) {
+    public StrawberryBushBlock(Properties pProperties) {
         super(pProperties);
     }
 
@@ -67,7 +66,7 @@ public class StrawberryCropBlock extends BushBlock implements BonemealableBlock 
         boolean flag = i == 3;
         if (!flag && pPlayer.getItemInHand(pHand).is(Items.BONE_MEAL)) {
             return InteractionResult.PASS;
-        } else if (i >= 1) {
+        } else if (i > 1) {
             int j = pLevel.random.nextInt(2);
             popResource(pLevel, pPos, new ItemStack(EOTWItems.STRAWBERRY.get(), i <= 2 ? i : i + j));
             pLevel.playSound(null, pPos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + pLevel.random.nextFloat() * 0.4F);

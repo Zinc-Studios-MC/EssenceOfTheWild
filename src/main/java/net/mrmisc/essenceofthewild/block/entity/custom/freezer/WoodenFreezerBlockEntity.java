@@ -33,7 +33,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
-import net.mrmisc.essenceofthewild.item.custom.IceCream;
+import net.mrmisc.essenceofthewild.item.custom.icecream.IceCream;
 import net.mrmisc.essenceofthewild.menu.freezer.WoodenFreezerMenu;
 import net.mrmisc.essenceofthewild.recipe.EOTWRecipes;
 import net.mrmisc.essenceofthewild.recipe.freezer.WoodenFreezerRecipe;

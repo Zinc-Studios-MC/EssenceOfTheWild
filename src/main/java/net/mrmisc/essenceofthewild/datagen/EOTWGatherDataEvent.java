@@ -3,6 +3,7 @@ package net.mrmisc.essenceofthewild.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -26,6 +27,8 @@ public class EOTWGatherDataEvent {
         generator.addProvider(event.includeServer(), new EOTWWorldGenProvider(packOutput, lookupProvider));
 
         BlockTagsProvider blockTagsProvider = new EOTWBlockTagsProvider(packOutput, lookupProvider, existingFileHelper);
+        ItemTagsProvider itemTagsProvider = new EOTWItemTagsProvider(packOutput, lookupProvider, blockTagsProvider.contentsGetter() ,existingFileHelper);
         generator.addProvider(event.includeServer(), blockTagsProvider);
+        generator.addProvider(event.includeServer(), itemTagsProvider);
     }
 }

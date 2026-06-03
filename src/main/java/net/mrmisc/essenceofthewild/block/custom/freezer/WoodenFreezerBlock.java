@@ -1,10 +1,12 @@
 package net.mrmisc.essenceofthewild.block.custom.freezer;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -15,6 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,6 +33,7 @@ import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import org.jetbrains.annotations.Nullable;
 
 public class WoodenFreezerBlock extends BaseEntityBlock {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public static final IntegerProperty CONE_COUNT = IntegerProperty.create("cone_count", 0, 3);
     public static final EnumProperty<FreezerContent> CONTENT = EnumProperty.create("content", FreezerContent.class);
@@ -45,6 +50,7 @@ public class WoodenFreezerBlock extends BaseEntityBlock {
         super(properties);
 
         this.registerDefaultState(this.stateDefinition.any()
+                .setValue(FACING, Direction.NORTH)
                 .setValue(CONE_COUNT, 0)
                 .setValue(CONTENT, FreezerContent.NO_CONE)
                 .setValue(MILK_LEVEL, 0)
@@ -53,7 +59,12 @@ public class WoodenFreezerBlock extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(CONE_COUNT, CONTENT, MILK_LEVEL);
+        builder.add(FACING, CONE_COUNT, CONTENT,MILK_LEVEL);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        return defaultBlockState().setValue(FACING, pContext.getHorizontalDirection());
     }
 
     @Override
@@ -63,7 +74,7 @@ public class WoodenFreezerBlock extends BaseEntityBlock {
 
     @Override
     public float getShadeBrightness(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
-        return 1.0f;
+        return 0.7f;
     }
 
     @Override

@@ -24,7 +24,7 @@ import net.mrmisc.essenceofthewild.block.custom.cheesemaker.CheeseMakerBlock;
 import net.mrmisc.essenceofthewild.block.custom.crops.RedOnionCropBlock;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
 import net.mrmisc.essenceofthewild.block.custom.misc.MangoBlock;
-import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryCropBlock;
+import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryBushBlock;
 import net.mrmisc.essenceofthewild.block.custom.nest.NestBlock;
 import net.mrmisc.essenceofthewild.block.custom.wood.*;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
@@ -109,8 +109,8 @@ public class EOTWBlocks {
     public static RegistryObject<Block> STRIPPED_MANGO_WOOD = registerBlock("stripped_mango_wood",
             ()-> new EOTWWoodBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
 
-    public static RegistryObject<Block> STRAWBERRY_CROP = registerBlock("strawberry_crop",
-            ()-> new StrawberryCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static RegistryObject<Block> STRAWBERRY_BUSH = registerBlock("strawberry_bush",
+            ()-> new StrawberryBushBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
     public static RegistryObject<Block> RED_ONION_CROP = registerBlock("red_onion_crop",
             ()-> new RedOnionCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
@@ -128,6 +128,11 @@ public class EOTWBlocks {
             @Override
             public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
                 return flammability;
+            }
+
+            @Override
+            protected boolean decaying(BlockState pState) {
+                return pState.getValue(PERSISTENT) && pState.getValue(DISTANCE) == 15;
             }
 
             @Override

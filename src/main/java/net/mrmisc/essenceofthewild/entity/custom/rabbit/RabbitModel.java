@@ -1,10 +1,8 @@
-package net.mrmisc.essenceofthewild.entity.custom.rabbit;// Made with Blockbench 5.1.3
+package net.mrmisc.essenceofthewild.entity.custom.rabbit;// Made with Blockbench 5.1.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,9 +10,10 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitEntity;
+import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitAnimations;
 
 public class RabbitModel extends HierarchicalModel<RabbitEntity> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "rabbit"), "main");
 	private final ModelPart body;
 	private final ModelPart left_thigh;
@@ -29,9 +28,9 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 	private final ModelPart right_ear;
 	private final ModelPart right_ear_ice;
 	private final ModelPart right_whiskers;
+	private final ModelPart tail;
 	private final ModelPart left_arm;
 	private final ModelPart right_arm;
-	private final ModelPart tail;
 
 	public RabbitModel(ModelPart root) {
 		this.body = root.getChild("body");
@@ -47,9 +46,9 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 		this.right_ear = this.head.getChild("right_ear");
 		this.right_ear_ice = this.head.getChild("right_ear_ice");
 		this.right_whiskers = this.head.getChild("right_whiskers");
-		this.left_arm = this.bone.getChild("left_arm");
-		this.right_arm = this.bone.getChild("right_arm");
 		this.tail = this.bone.getChild("tail");
+		this.left_arm = this.body.getChild("left_arm");
+		this.right_arm = this.body.getChild("right_arm");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -58,13 +57,13 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 
 		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 19.0F, 7.0F));
 
-		PartDefinition left_thigh = body.addOrReplaceChild("left_thigh", CubeListBuilder.create().texOffs(14, 31).addBox(-1.0F, 0.0F, 1.0F, 2.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, -4.5F));
+		PartDefinition left_thigh = body.addOrReplaceChild("left_thigh", CubeListBuilder.create().texOffs(14, 31).addBox(-1.0F, -1.0F, -2.0F, 2.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 1.0F, -1.5F));
 
-		PartDefinition left_foot = left_thigh.addOrReplaceChild("left_foot", CubeListBuilder.create().texOffs(20, 15).addBox(-1.0F, 5.5F, -3.7F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.5F, 1.7F));
+		PartDefinition left_foot = left_thigh.addOrReplaceChild("left_foot", CubeListBuilder.create().texOffs(20, 15).addBox(-1.0F, 0.0F, -6.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(-0.001F)), PartPose.offset(0.0F, 3.0F, 1.5F));
 
-		PartDefinition right_thigh = body.addOrReplaceChild("right_thigh", CubeListBuilder.create().texOffs(26, 31).addBox(-1.0F, 0.0F, 1.0F, 2.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, -4.5F));
+		PartDefinition right_thigh = body.addOrReplaceChild("right_thigh", CubeListBuilder.create().texOffs(26, 31).addBox(-1.0F, -1.0F, -2.0F, 2.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 1.0F, -1.5F));
 
-		PartDefinition right_foot = right_thigh.addOrReplaceChild("right_foot", CubeListBuilder.create().texOffs(20, 23).addBox(-1.0F, 5.5F, -3.7F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.5F, 1.7F));
+		PartDefinition right_foot = right_thigh.addOrReplaceChild("right_foot", CubeListBuilder.create().texOffs(20, 23).addBox(-1.0F, 0.0F, -6.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(-0.001F)), PartPose.offset(0.0F, 3.0F, 1.5F));
 
 		PartDefinition bone = body.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -4.0F, -8.0F, 6.0F, 5.0F, 10.0F, new CubeDeformation(0.0F))
 		.texOffs(28, 47).addBox(-3.5F, -5.0F, -8.0F, 7.0F, 7.0F, 10.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, 2.0F, -2.0F));
@@ -85,18 +84,13 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 
 		PartDefinition right_whiskers = head.addOrReplaceChild("right_whiskers", CubeListBuilder.create().texOffs(0, 60).mirror().addBox(-4.0F, -2.5F, 0.0F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)).mirror(false), PartPose.offset(-1.5F, -1.0F, -5.0F));
 
-		PartDefinition left_arm = bone.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 32).addBox(-1.01F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -1.0F, -7.0F));
-
-		PartDefinition right_arm = bone.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-0.99F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -1.0F, -7.0F));
-
 		PartDefinition tail = bone.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 25).addBox(-2.0F, -2.25F, -1.0F, 4.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.75F, 1.5F));
 
-		return LayerDefinition.create(meshdefinition, 64, 64);
-	}
+		PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 32).addBox(-1.01F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 1.0F, -9.0F));
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+		PartDefinition right_arm = body.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-0.99F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 1.0F, -9.0F));
+
+		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 
 	@Override
@@ -105,7 +99,18 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 	}
 
 	@Override
-	public void setupAnim(RabbitEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
+	public void setupAnim(RabbitEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float pNetHeadYaw, float pHeadPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		if (limbSwingAmount < 0.01F) {
+			this.animate(pEntity.idleAnimationState, RabbitAnimations.idle, ageInTicks);
+		} else {
+			double speed = pEntity.getDeltaMovement().horizontalDistance();
 
+			if (speed > 0.2D) {
+				this.animateWalk(RabbitAnimations.run, limbSwing, limbSwingAmount, 3.5F, 2.5F);
+			} else {
+				this.animateWalk(RabbitAnimations.walk, limbSwing, limbSwingAmount, 1.6F, 1.3F);
+			}
+		}
 	}
 }

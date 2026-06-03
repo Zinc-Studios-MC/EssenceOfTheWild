@@ -109,6 +109,16 @@ public class PigEntity extends Pig {
     }
 
     @Override
+    protected void positionRider(Entity pPassenger, MoveFunction pCallback) {
+        if(this.hasPassenger(pPassenger)){
+            double x = this.getX();
+            double y = this.getY() + 0.35;
+            double z = this.getZ();
+            pCallback.accept(pPassenger, x, y, z);
+        }
+    }
+
+    @Override
     public @Nullable Pig getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         return new PigEntity(EOTWEntities.PIG.get(), pLevel);
     }

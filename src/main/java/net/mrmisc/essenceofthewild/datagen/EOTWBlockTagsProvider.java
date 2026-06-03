@@ -23,5 +23,8 @@ public class EOTWBlockTagsProvider extends BlockTagsProvider {
                 .add(EOTWBlocks.STRIPPED_MANGO_LOG.get())
                 .add(EOTWBlocks.MANGO_WOOD.get())
                 .add(EOTWBlocks.STRIPPED_MANGO_WOOD.get());
+
+        this.tag(BlockTags.FENCES).add(EOTWBlocks.MANGO_FENCE.get());
+        this.tag(BlockTags.FENCE_GATES).add(EOTWBlocks.MANGO_FENCE_GATE.get());
     }
 }

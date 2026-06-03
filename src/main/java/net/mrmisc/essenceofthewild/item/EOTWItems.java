@@ -6,7 +6,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,10 +13,10 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
-import net.mrmisc.essenceofthewild.item.custom.EffectIceCream;
-import net.mrmisc.essenceofthewild.item.custom.IceCream;
-
-import java.util.function.Supplier;
+import net.mrmisc.essenceofthewild.item.custom.icecream.EffectIceCream;
+import net.mrmisc.essenceofthewild.item.custom.icecream.IceCream;
+import net.mrmisc.essenceofthewild.item.custom.tools.IceAxe;
+import net.mrmisc.essenceofthewild.item.custom.tools.UnderwaterArrowItem;
 
 public class EOTWItems {
     public static final DeferredRegister<Item> ITEMS =
@@ -34,8 +33,11 @@ public class EOTWItems {
     //Items
     public static RegistryObject<Item> CONE = ITEMS.register("cone", ()-> new Item(new Item.Properties().stacksTo(8)));
     public static RegistryObject<Item> SHEEP_CHEESE = ITEMS.register("sheep_cheese", ()-> new Item(new Item.Properties()));
-    public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.2f).build())));
+    public static RegistryObject<Item> ICE_CUBES = ITEMS.register("ice_cubes", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> ICE_AXE = ITEMS.register("ice_axe", ()-> new IceAxe(new Item.Properties().durability(65)));
     public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties()));
+    public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
 
     //Spawn Eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 15198183, 16758197);
@@ -56,13 +58,13 @@ public class EOTWItems {
                     new Item.Properties().stacksTo(16)));
 
     public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
-            ()-> new ItemNameBlockItem(EOTWBlocks.STRAWBERRY_CROP.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2f).alwaysEat().fast().build())));
+            ()-> new ItemNameBlockItem(EOTWBlocks.STRAWBERRY_BUSH.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2f).alwaysEat().fast().build())));
 
     public static final RegistryObject<Item> MANGO = ITEMS.register("mango",
             ()-> new BlockItem(EOTWBlocks.MANGO.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(9).saturationMod(0.2f).alwaysEat().fast().build())));
 
     public static RegistryObject<Item> RED_ONION = ITEMS.register("red_onion",
-            ()-> new ItemNameBlockItem(EOTWBlocks.RED_ONION_CROP.get(), new Item.Properties()));
+            ()-> new ItemNameBlockItem(EOTWBlocks.RED_ONION_CROP.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationMod(0.2f).build())));
 
     public static RegistryObject<Item> createIceCream(String name){
         return ITEMS.register(name + "_icecream", IceCream::new);

@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
+import net.mrmisc.essenceofthewild.config.EOTWConfig;
 import net.mrmisc.essenceofthewild.effect.EOTWEffects;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.item.EOTWItems;

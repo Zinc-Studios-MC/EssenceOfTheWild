@@ -23,6 +23,9 @@
   "item.essenceofthewild.sheep_cheese" : "Sheep Cheese",
   "item.essenceofthewild.sheep_cheese_wedge" : "Sheep Cheese Wedge",
   "item.essenceofthewild.sheep_milk_bucket" : "Bucket of Sheep Milk ",
+  "item.essenceofthewild.ice_cubes" : "Ice Cubes",
+  "item.essenceofthewild.ice_axe" : "Ice Axe",
+  "item.essenceofthewild.underwater_arrow" : "Underwater Arrow",
 
   "entity.essenceofthewild.sheep" : "Sheep",
   "entity.essenceofthewild.pig" : "Pig",
@@ -31,9 +34,11 @@
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
   "entity.essenceofthewild.rabbit" : "Rabbit",
 
+  "entity.essenceofthewild.underwater_arrow" : "Underwater Arrow",
+
   "block.essenceofthewild.wooden_freezer" : "Wooden Freezer",
   "block.essenceofthewild.cheese_maker" : "Cheese Maker",
-  "block.essenceofthewild.strawberry_crop" : "Strawberry Bush",
+  "block.essenceofthewild.strawberry_bush" : "Strawberry Bush",
   "block.essenceofthewild.nest" : "Nest",
   "block.essenceofthewild.mango" : "Mango",
   "block.essenceofthewild.mango_sapling" : "Mango Sapling",

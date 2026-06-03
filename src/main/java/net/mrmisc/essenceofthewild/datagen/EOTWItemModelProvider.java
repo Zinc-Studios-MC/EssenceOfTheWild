@@ -32,5 +32,8 @@ public class EOTWItemModelProvider extends ItemModelProvider {
 
         basicItem(EOTWItems.STRAWBERRY.get());
         basicItem(EOTWItems.RED_ONION.get());
+        basicItem(EOTWItems.ICE_CUBES.get());
+        basicItem(EOTWItems.ICE_AXE.get());
+        basicItem(EOTWItems.UNDERWATER_ARROW.get());
     }
 }

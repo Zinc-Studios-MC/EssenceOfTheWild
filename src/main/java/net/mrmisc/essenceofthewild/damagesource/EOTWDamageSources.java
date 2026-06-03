@@ -14,7 +14,8 @@ public class EOTWDamageSources {
 
     public static DamageSource rabiesWaterDamage(Entity entity){
         return new DamageSource(entity.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(RABIES_WATER), entity);
-    }public static DamageSource rabiesFinalDamage(Entity entity){
+    }
+    public static DamageSource rabiesFinalDamage(Entity entity){
         return new DamageSource(entity.level().registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(RABIES_FINAL), entity);
     }
 }

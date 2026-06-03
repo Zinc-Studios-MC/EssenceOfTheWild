@@ -10,10 +10,10 @@ import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
-import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomVariants;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitEntity;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
+import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrow;
 
 public class EOTWEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES =
@@ -33,4 +33,6 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(RabbitEntity::new, MobCategory.AMBIENT).sized(0.6f, 0.6f).build("rabbit"));
     public static RegistryObject<EntityType<HareEntity>> HARE = ENTITIES.register("hare",
             ()-> EntityType.Builder.of(HareEntity::new, MobCategory.AMBIENT).sized(0.6f, 0.6f).build("hare"));
+    public static RegistryObject<EntityType<UnderwaterArrow>> UNDERWATER_ARROW = ENTITIES.register("underwater_arrow",
+            ()-> EntityType.Builder.<UnderwaterArrow>of(UnderwaterArrow::new, MobCategory.MISC).sized(0.5f, 0.9f).clientTrackingRange(5).build("underwater_arrow"));
 }

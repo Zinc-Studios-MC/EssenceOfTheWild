@@ -1,2 +1,4 @@
-// 1.20.1	2026-04-19T16:02:50.3301132	Tags for minecraft:block mod id essenceofthewild
+// 1.20.1	2026-06-03T21:18:18.7378415	Tags for minecraft:block mod id essenceofthewild
+c7a9ba877c89dd5d96f35876c3dfb9da4a0f2bc3 data/minecraft/tags/blocks/fences.json
+988684f0bcb35037408e1fc5c4db7d158077151a data/minecraft/tags/blocks/fence_gates.json
 c4b94f97b8beb95b70b09056db22b8c1d2e3f8d4 data/minecraft/tags/blocks/logs_that_burn.json
