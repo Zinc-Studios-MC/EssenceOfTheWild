@@ -77,7 +77,7 @@ public class WoodenFreezerBlockEntity extends BlockEntity implements MenuProvide
             return switch (slot) {
                 case CONE_SLOT_0, CONE_SLOT_1, CONE_SLOT_2 -> stack.is(EOTWItems.CONE.get()) && !hasIceCreamResults();
                 case FLAVOR_SLOT -> isFreezerIngredient(stack);
-                case ICE_SLOT -> stack.is(Items.ICE);
+                case ICE_SLOT -> stack.is(EOTWItems.ICE_CUBES.get());
                 case MILK_SLOT -> stack.is(EOTWItems.SHEEP_MILK_BUCKET.get());
                 default -> false;
             };
@@ -211,7 +211,7 @@ public class WoodenFreezerBlockEntity extends BlockEntity implements MenuProvide
     private boolean loadIce() {
         ItemStack iceStack = itemHandler.getStackInSlot(ICE_SLOT);
 
-        if (iceLevel > MAX_ICE_LEVEL - ICE_FROM_BLOCK || !iceStack.is(Items.ICE)) {
+        if (iceLevel > MAX_ICE_LEVEL - ICE_FROM_BLOCK || !iceStack.is(EOTWItems.ICE_CUBES.get())) {
             return false;
         }
 

@@ -1,3 +1,6 @@
 {
-  "parent": "essenceofthewild:block/cheese_maker"
+  "parent": "minecraft:item/generated",
+  "textures" : {
+    "layer0" : "essenceofthewild:item/cheese_maker"
+  }
 }

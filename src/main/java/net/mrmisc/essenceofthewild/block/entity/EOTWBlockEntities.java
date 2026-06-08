@@ -10,6 +10,7 @@ import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.block.entity.custom.cheesemaker.CheeseMakerBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.freezer.WoodenFreezerBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntity;
+import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.server.SleepingBagBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.util.EOTWSignBlockEntity;
 
 import java.util.Set;
@@ -20,6 +21,8 @@ public class EOTWBlockEntities {
 
     public static RegistryObject<BlockEntityType<WoodenFreezerBlockEntity>> WOODEN_FREEZER = BLOCK_ENTITY.register("wooden_freezer",
             ()-> new BlockEntityType<>(WoodenFreezerBlockEntity::new, Set.of(EOTWBlocks.WOODEN_FREEZER.get()), null));
+    public static RegistryObject<BlockEntityType<SleepingBagBlockEntity>> SLEEPING_BAG = BLOCK_ENTITY.register("sleeping_bag",
+            ()-> new BlockEntityType<>(SleepingBagBlockEntity::new, Set.of(EOTWBlocks.WHITE_SLEEPING_BAG.get()), null));
 
     public static final RegistryObject<BlockEntityType<EOTWSignBlockEntity>> MOD_SIGN =
             BLOCK_ENTITY.register("mod_sign", () ->
