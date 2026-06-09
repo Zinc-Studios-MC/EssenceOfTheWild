@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.event.client.entity;
 
+import net.minecraft.client.renderer.blockentity.BedRenderer;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -8,6 +9,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntityRenderer;
+import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.client.SleepingBagRenderer;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
@@ -44,6 +46,8 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(ChickenModel.LAYER_LOCATION, ChickenModel::createBodyLayer);
         event.registerLayerDefinition(RabbitModel.LAYER_LOCATION, RabbitModel::createBodyLayer);
         event.registerLayerDefinition(HareModel.LAYER_LOCATION, HareModel::createBodyLayer);
+        event.registerLayerDefinition(SleepingBagRenderer.HEAD, SleepingBagRenderer::createHeadLayer);
+        event.registerLayerDefinition(SleepingBagRenderer.FOOT, SleepingBagRenderer::createFootLayer);
     }
 
     @SubscribeEvent
@@ -60,6 +64,7 @@ public class EntityRegistrationsEvent {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(EOTWBlockEntities.NEST.get(), NestBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(EOTWBlockEntities.SLEEPING_BAG.get(), SleepingBagRenderer::new);
     }
 
     @SubscribeEvent

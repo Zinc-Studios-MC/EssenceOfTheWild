@@ -56,6 +56,10 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
         saplingBlock(EOTWBlocks.MANGO_SAPLING);
 
         makeCrop((CropBlock) EOTWBlocks.RED_ONION_CROP.get(), "red_onion_stage", "red_onion_stage");
+
+        EOTWBlocks.getRolledWool().forEach(this::makeRolledWool);
+
+
     }
 
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
@@ -76,11 +80,17 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
         getVariantBuilder(block).forAllStates(function);
     }
 
+    public void makeRolledWool(RegistryObject<Block> reg){
+        Block block = reg.get();
+        simpleBlock(block, models().cubeColumn(name(block), EOTWUtils.getLoc("block/" + name(block) + "_side"), EOTWUtils.getLoc("block/" + name(block))));
+        blockItem(reg);
+    }
 
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ModelFile sign) {
         simpleBlock(signBlock, sign);
         simpleBlock(wallSignBlock, sign);
     }
+
 
     private String name(Block block) {
         return key(block).getPath();

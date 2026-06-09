@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_17",
+  "package": "net.mrmisc.essenceofthewild.mixin",
+  "mixins": [
+    "BedBlockSaveSpawnpointMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "essenceofthewild:block/cyan_rolled_wool",
+    "side": "essenceofthewild:block/cyan_rolled_wool_side"
+  }
+}

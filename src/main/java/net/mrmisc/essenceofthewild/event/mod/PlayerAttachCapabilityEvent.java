@@ -26,4 +26,6 @@ public class PlayerAttachCapabilityEvent {
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(SleepingBagSpawn.class);
     }
+
+
 }

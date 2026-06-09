@@ -1,30 +1,44 @@
-[03Jun2026 21:17:35.770] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\desktop\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, essenceofthewild, --all, --output, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\generated\resources, --existing, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\main\resources]
-[03Jun2026 21:17:35.786] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.17 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
-[03Jun2026 21:17:36.019] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
-[03Jun2026 21:17:36.240] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/desktop/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
-[03Jun2026 21:17:39.139] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.10\ccc533c7dd67e0983217197d7549c8b49e7ab453\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[03Jun2026 21:17:39.146] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.10\e9a2879fe3612ea34b9728ec2633304a1e67d480\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[03Jun2026 21:17:39.178] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.10\ec5cefbbc65c67302b8fac317010faab85fa14b9\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
-[03Jun2026 21:17:39.185] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.10\94dae566be650566ea9115a1414ab76bfcf5a804\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
-[03Jun2026 21:17:39.426] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
-[03Jun2026 21:17:45.732] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\desktop\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, essenceofthewild, --all, --output, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\generated\resources, --existing, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\main\resources]
-[03Jun2026 21:17:48.839] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using D:\MrMisc29-D\Mods\EssenceOfTheWild/build/createSrgToMcp/output.srg
-[03Jun2026 21:17:50.901] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [essenceofthewild]
-[03Jun2026 21:18:10.345] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
-[03Jun2026 21:18:10.351] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
-[03Jun2026 21:18:14.593] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
-[03Jun2026 21:18:14.623] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 13.47 ms
-[03Jun2026 21:18:15.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/desktop/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/assets/.mcassetsroot' uses unexpected schema
-[03Jun2026 21:18:15.996] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/desktop/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1-recomp.jar%23191!/data/.mcassetsroot' uses unexpected schema
-[03Jun2026 21:18:17.566] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: essenceofthewild
-[03Jun2026 21:18:17.996] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: essenceofthewild finished after 430 ms
-[03Jun2026 21:18:17.997] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: essenceofthewild
-[03Jun2026 21:18:18.656] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: essenceofthewild finished after 659 ms
-[03Jun2026 21:18:18.657] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
-[03Jun2026 21:18:18.697] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 40 ms
-[03Jun2026 21:18:18.700] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id essenceofthewild
-[03Jun2026 21:18:18.731] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id essenceofthewild finished after 20 ms
-[03Jun2026 21:18:18.731] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id essenceofthewild
-[03Jun2026 21:18:18.734] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id essenceofthewild finished after 2 ms
-[03Jun2026 21:18:18.734] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 1168 ms
-[03Jun2026 21:18:18.749] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 104, old count: 102, new count: 105, removed stale: 0, written: 2
+[09Jun2026 21:14:09.617] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgedatauserdev, --assetIndex, 5, --assetsDir, C:\Users\desktop\.gradle\caches\forge_gradle\assets, --gameDir, ., --fml.forgeVersion, 47.4.10, --fml.mcVersion, 1.20.1, --fml.forgeGroup, net.minecraftforge, --fml.mcpVersion, 20230612.114412, --mod, essenceofthewild, --all, --output, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\generated\resources, --existing, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\main\resources, --mixin.config, mixins.essenceofthewild.json]
+[09Jun2026 21:14:09.634] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.0.9+10.0.9+main.dcd20f30 starting: java version 17.0.17 by Eclipse Adoptium; OS Windows 10 arch amd64 version 10.0
+[09Jun2026 21:14:11.022] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgedatauserdev
+[09Jun2026 21:14:11.621] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.5 Source=union:/C:/Users/desktop/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.5/9d1c0c3a304ae6697ecd477218fa61b850bf57fc/mixin-0.8.5.jar%23128!/ Service=ModLauncher Env=CLIENT
+[09Jun2026 21:14:14.269] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\javafmllanguage\1.20.1-47.4.10\ccc533c7dd67e0983217197d7549c8b49e7ab453\javafmllanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[09Jun2026 21:14:14.275] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\lowcodelanguage\1.20.1-47.4.10\e9a2879fe3612ea34b9728ec2633304a1e67d480\lowcodelanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[09Jun2026 21:14:14.281] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\mclanguage\1.20.1-47.4.10\ec5cefbbc65c67302b8fac317010faab85fa14b9\mclanguage-1.20.1-47.4.10.jar is missing mods.toml file
+[09Jun2026 21:14:14.285] [main/WARN] [net.minecraftforge.fml.loading.moddiscovery.ModFileParser/LOADING]: Mod file C:\Users\desktop\.gradle\caches\modules-2\files-2.1\net.minecraftforge\fmlcore\1.20.1-47.4.10\94dae566be650566ea9115a1414ab76bfcf5a804\fmlcore-1.20.1-47.4.10.jar is missing mods.toml file
+[09Jun2026 21:14:14.540] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[09Jun2026 21:14:19.006] [main/WARN] [mixin/]: Compatibility level JAVA_17 specified by mixins.essenceofthewild.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[09Jun2026 21:14:19.006] [main/INFO] [mixin/]: Compatibility level set to JAVA_17
+[09Jun2026 21:14:19.007] [main/ERROR] [mixin/]: Mixin config mixins.essenceofthewild.json does not specify "minVersion" property
+[09Jun2026 21:14:19.019] [main/WARN] [mixin/]: Compatibility level JAVA_16 specified by jade.mixins.json is higher than the maximum level supported by this version of mixin (JAVA_13).
+[09Jun2026 21:14:19.029] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgedatauserdev' with arguments [--gameDir, ., --assetsDir, C:\Users\desktop\.gradle\caches\forge_gradle\assets, --assetIndex, 5, --mod, essenceofthewild, --all, --output, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\generated\resources, --existing, D:\MrMisc29-D\Mods\EssenceOfTheWild\src\main\resources]
+[09Jun2026 21:14:19.837] [main/INFO] [mixin/]: Attempting to load Fernflower decompiler (Threaded mode)
+[09Jun2026 21:14:19.840] [main/INFO] [mixin/]: Fernflower could not be loaded, exported classes will not be decompiled. NoClassDefFoundError: org/jetbrains/java/decompiler/main/extern/IResultSaver
+[09Jun2026 21:14:21.093] [main/INFO] [mixin/]: Preparing mixins for MixinEnvironment[DEFAULT]
+[09Jun2026 21:14:21.093] [main/INFO] [mixin/]: Selecting config mixins.essenceofthewild.json
+[09Jun2026 21:14:21.103] [main/INFO] [mixin/]: Selecting config jade.mixins.json
+[09Jun2026 21:14:22.953] [main/INFO] [mixin/]: Remapping refMap jade.refmap.json using D:\MrMisc29-D\Mods\EssenceOfTheWild/build/createSrgToMcp/output.srg
+[09Jun2026 21:14:22.954] [main/INFO] [mixin/]: Preparing mixins.essenceofthewild.json (1)
+[09Jun2026 21:14:23.516] [main/INFO] [mixin/]: Preparing jade.mixins.json (2)
+[09Jun2026 21:14:24.586] [main/INFO] [mixin/]: Prepared 3 mixins in 3.490 sec (1163.3ms avg) (0ms load, 0ms transform, 0ms plugin)
+[09Jun2026 21:14:27.882] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [essenceofthewild]
+[09Jun2026 21:14:34.528] [main/INFO] [mixin/]: Mixing BedBlockSaveSpawnpointMixin from mixins.essenceofthewild.json into net.minecraft.world.level.block.BedBlock
+[09Jun2026 21:14:34.554] [main/INFO] [mixin/]: Renaming synthetic method lambda$saveSpawnpoint$0(Lnet/minecraft/core/BlockPos;Lnet/mrmisc/essenceofthewild/capability/custom/sleeping_bag/SleepingBagSpawn;)V to md0c39e1$lambda$saveSpawnpoint$0$0 in mixins.essenceofthewild.json:BedBlockSaveSpawnpointMixin
+[09Jun2026 21:14:51.967] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 47.4.10, for MC 1.20.1 with MCP 20230612.114412
+[09Jun2026 21:14:52.039] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v47.4.10 Initialized
+[09Jun2026 21:14:54.811] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager...
+[09Jun2026 21:14:54.820] [modloading-worker-0/INFO] [mezz.jei.library.load.PluginCaller/]: Sending ConfigManager took 7.115 ms
+[09Jun2026 21:14:55.681] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/MrMisc29-D/Mods/EssenceOfTheWild/build/fg_cache/net/minecraftforge/forge/1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1.jar%23191!/assets/.mcassetsroot' uses unexpected schema
+[09Jun2026 21:14:55.681] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/D:/MrMisc29-D/Mods/EssenceOfTheWild/build/fg_cache/net/minecraftforge/forge/1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1/forge-1.20.1-47.4.10_mapped_parchment_2023.09.03-1.20.1.jar%23191!/data/.mcassetsroot' uses unexpected schema
+[09Jun2026 21:14:56.139] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Item Models: essenceofthewild
+[09Jun2026 21:14:56.378] [main/INFO] [net.minecraft.data.DataGenerator/]: Item Models: essenceofthewild finished after 238 ms
+[09Jun2026 21:14:56.378] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Block States: essenceofthewild
+[09Jun2026 21:14:56.758] [main/INFO] [net.minecraft.data.DataGenerator/]: Block States: essenceofthewild finished after 379 ms
+[09Jun2026 21:14:56.758] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Registries
+[09Jun2026 21:14:56.788] [main/INFO] [net.minecraft.data.DataGenerator/]: Registries finished after 29 ms
+[09Jun2026 21:14:56.789] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:block mod id essenceofthewild
+[09Jun2026 21:14:56.810] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:block mod id essenceofthewild finished after 20 ms
+[09Jun2026 21:14:56.810] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: Tags for minecraft:item mod id essenceofthewild
+[09Jun2026 21:14:56.812] [main/INFO] [net.minecraft.data.DataGenerator/]: Tags for minecraft:item mod id essenceofthewild finished after 2 ms
+[09Jun2026 21:14:56.812] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 673 ms
+[09Jun2026 21:14:56.835] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 168, old count: 152, new count: 169, removed stale: 0, written: 16

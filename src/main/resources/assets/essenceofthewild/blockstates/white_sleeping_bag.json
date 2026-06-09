@@ -1,7 +1,7 @@
 {
   "variants" : {
     "" : {
-      "model" : "essenceofthewild:block/sleeping_bag"
+      "model" : "essenceofthewild:block/white_sleeping_bag"
     }
   }
 }

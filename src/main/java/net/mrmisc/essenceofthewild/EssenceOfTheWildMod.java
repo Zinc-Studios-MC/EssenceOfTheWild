@@ -24,6 +24,7 @@ import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
+import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrowRenderer;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
 import net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
@@ -73,6 +74,8 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.CHICKEN.get(), ChickenRenderer::new);
             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
+            EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
+            EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
         }

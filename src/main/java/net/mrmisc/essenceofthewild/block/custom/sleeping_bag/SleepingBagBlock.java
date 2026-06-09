@@ -11,9 +11,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ExplosionDamageCalculator;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,23 +27,41 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.server.SleepingBagBlockEntity;
+import net.mrmisc.essenceofthewild.capability.custom.sleeping_bag.SleepingBagSpawnProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class SleepingBagBlock extends BedBlock {
-    public static final String IS_SLEEPING_BAG = "isSleepingBag";
+    private DyeColor color;
+    private static final VoxelShape SLEEPING_BAG_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     public SleepingBagBlock(DyeColor pColor, Properties pProperties) {
         super(pColor, pProperties);
+        this.color = pColor;
     }
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        //TODO : Add pos saving and pos loading so that respawn pos is only set if sleeping bag was a respawn point for player
         if(!level.isClientSide()){
             ServerPlayer serverPlayer = (ServerPlayer) player;
+            serverPlayer.getCapability(SleepingBagSpawnProvider.SLEEPING_BAG_SPAWN).ifPresent(sleepingBagSpawn -> serverPlayer.setRespawnPosition(level.dimension(), sleepingBagSpawn.getSleepingBagSpawnPos(), 0f, false, false));
         }
         return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    }
+
+    @Override
+    public DyeColor getColor() {
+        return color;
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return SLEEPING_BAG_SHAPE;
     }
 
     private boolean kickVillagerOutOfBed(Level pLevel, BlockPos pPos) {
@@ -84,7 +104,6 @@ public class SleepingBagBlock extends BedBlock {
 
                 return InteractionResult.SUCCESS;
             } else {
-                pPlayer.getPersistentData().putBoolean(IS_SLEEPING_BAG,true);
                 pPlayer.startSleepInBed(pPos).ifLeft((problem) -> {
                     if (problem.getMessage() != null) {
                         pPlayer.displayClientMessage(problem.getMessage(), true);
@@ -94,5 +113,12 @@ public class SleepingBagBlock extends BedBlock {
                 return InteractionResult.SUCCESS;
             }
         }
+    }
+
+
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new SleepingBagBlockEntity(color, pPos, pState);
     }
 }
