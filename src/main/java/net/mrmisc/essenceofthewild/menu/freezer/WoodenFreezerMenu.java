@@ -10,7 +10,6 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.SlotItemHandler;
@@ -156,7 +155,7 @@ public class WoodenFreezerMenu extends AbstractContainerMenu {
         addSlot(new SlotItemHandler(blockEntity.getItemHandler(), WoodenFreezerBlockEntity.ICE_SLOT, ICE_SLOT_X, ICE_SLOT_Y) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(Items.ICE);
+                return stack.is(EOTWItems.ICE_CUBES.get());
             }
         });
     }
@@ -256,7 +255,7 @@ public class WoodenFreezerMenu extends AbstractContainerMenu {
             return moveItemStackTo(stack, MENU_CONE_SLOT_0, MENU_CONE_SLOT_2 + 1, false);
         }
 
-        if (stack.is(Items.ICE)) {
+        if (stack.is(EOTWItems.ICE_CUBES.get())) {
             return moveItemStackTo(stack, MENU_ICE_SLOT, MENU_ICE_SLOT + 1, false);
         }
 

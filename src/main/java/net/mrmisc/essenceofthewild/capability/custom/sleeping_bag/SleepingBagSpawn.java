@@ -4,30 +4,51 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 
 public class SleepingBagSpawn {
-    private BlockPos sleepingBagSpawnPos;
+    private BlockPos originalPos;
+    private BlockPos sbPos;
 
-    public BlockPos getSleepingBagSpawnPos() {
-        return sleepingBagSpawnPos;
+    public BlockPos getOriginalPos() {
+        return originalPos;
+    }
+
+    public BlockPos getSbPos() {
+        return sbPos;
+    }
+
+    public void setSbPos(BlockPos sbPos) {
+        this.sbPos = sbPos;
     }
 
     public void setOriginalPos(BlockPos sleepingBagSpawnPos) {
-        this.sleepingBagSpawnPos = sleepingBagSpawnPos;
+        this.originalPos = sleepingBagSpawnPos;
     }
 
     public void saveNBTData(CompoundTag tag) {
-        if (sleepingBagSpawnPos != null) {
-            tag.putInt("X", sleepingBagSpawnPos.getX());
-            tag.putInt("Y", sleepingBagSpawnPos.getY());
-            tag.putInt("Z", sleepingBagSpawnPos.getZ());
+        if (originalPos != null) {
+            tag.putInt("X", originalPos.getX());
+            tag.putInt("Y", originalPos.getY());
+            tag.putInt("Z", originalPos.getZ());
+        }
+        if (sbPos != null) {
+            tag.putInt("sX", sbPos.getX());
+            tag.putInt("sY", sbPos.getY());
+            tag.putInt("sZ", sbPos.getZ());
         }
     }
 
     public void loadNBTData(CompoundTag tag) {
         if (tag.contains("X")) {
-            sleepingBagSpawnPos = new BlockPos(
+            originalPos = new BlockPos(
                     tag.getInt("X"),
                     tag.getInt("Y"),
                     tag.getInt("Z")
+            );
+        }
+        if (tag.contains("sX")) {
+            sbPos = new BlockPos(
+                    tag.getInt("sX"),
+                    tag.getInt("sY"),
+                    tag.getInt("sZ")
             );
         }
     }

@@ -15,8 +15,10 @@ public class CopyCapOnDeathEvent {
         }
         event.getOriginal().reviveCaps();
         event.getOriginal().getCapability(SleepingBagSpawnProvider.SLEEPING_BAG_SPAWN).ifPresent(oldCap ->
-                event.getEntity().getCapability(SleepingBagSpawnProvider.SLEEPING_BAG_SPAWN).ifPresent(newCap ->
-                        newCap.setOriginalPos(oldCap.getSleepingBagSpawnPos())));
+                event.getEntity().getCapability(SleepingBagSpawnProvider.SLEEPING_BAG_SPAWN).ifPresent(newCap -> {
+                    newCap.setOriginalPos(oldCap.getOriginalPos());
+                    newCap.setSbPos(oldCap.getSbPos());
+                }));
         event.getOriginal().invalidateCaps();
     }
 }

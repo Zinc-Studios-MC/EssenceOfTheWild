@@ -36,7 +36,7 @@ public class EOTWItems {
     public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.2f).build())));
     public static RegistryObject<Item> ICE_CUBES = ITEMS.register("ice_cubes", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> ICE_AXE = ITEMS.register("ice_axe", ()-> new IceAxe(new Item.Properties().durability(65)));
-    public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties()));
+    public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties().stacksTo(1)));
     public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
 
     //Spawn Eggs

@@ -75,6 +75,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWBlocks.WOODEN_FREEZER.get());
                 pOutput.accept(EOTWBlocks.CHEESE_MAKER.get());
                 pOutput.accept(EOTWItems.ICE_CUBES.get());
+                pOutput.accept(EOTWItems.ICE_AXE.get());
                 pOutput.accept(EOTWItems.UNDERWATER_ARROW.get());
                 EOTWBlocks.getRolledWool().forEach(wool -> pOutput.accept(wool.get()));
                 EOTWBlocks.getSleepingBags().forEach(sb -> pOutput.accept(sb.get()));
