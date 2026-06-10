@@ -40,7 +40,7 @@ public class EOTWItems {
     public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
 
     //Spawn Eggs
-    public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 15198183, 16758197);
+    public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> PIG_SPAWN_EGG = createSpawnEgg(EOTWEntities.PIG, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> MOOSHROOM_SPAWN_EGG = createSpawnEgg(EOTWEntities.MOOSHROOM, 0xFFFFFF, 0xFFFFFF);
