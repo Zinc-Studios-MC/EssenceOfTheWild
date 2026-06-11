@@ -13,6 +13,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
@@ -82,6 +83,19 @@ public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
 
 	@Override
 	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.applyHeadRotation((FerretEntity)entity, netHeadYaw, headPitch, ageInTicks);
+
+		this.animateWalk(((FerretEntity)entity).isRunning() ? FerretAnimation.run : FerretAnimation.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
+		this.animate(((FerretEntity)entity).idleAnimationState, FerretAnimation.idle, ageInTicks, 1);
+	}
+
+	private void applyHeadRotation(FerretEntity pEntity, float pNetHeadYaw, float pHeadPitch, float pAgeInTicks){
+		pNetHeadYaw = Mth.clamp(pNetHeadYaw, -30, 30);
+		pHeadPitch = Mth.clamp(pHeadPitch, -25, 45);
+
+		this.head.yRot = pNetHeadYaw * ((float)Math.PI / 180F);
+		this.head.xRot = pHeadPitch * ((float)Math.PI / 180F);
 	}
 
 	@Override
