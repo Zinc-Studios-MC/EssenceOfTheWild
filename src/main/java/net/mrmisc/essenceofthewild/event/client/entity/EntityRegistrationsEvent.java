@@ -15,6 +15,8 @@ import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowModel;
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareModel;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
@@ -48,6 +50,7 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(HareModel.LAYER_LOCATION, HareModel::createBodyLayer);
         event.registerLayerDefinition(SleepingBagRenderer.HEAD, SleepingBagRenderer::createHeadLayer);
         event.registerLayerDefinition(SleepingBagRenderer.FOOT, SleepingBagRenderer::createFootLayer);
+        event.registerLayerDefinition(FerretModel.LAYER_LOCATION, FerretModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -59,6 +62,7 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.CHICKEN.get(), ChickenEntity.createAttributes().build());
         event.put(EOTWEntities.RABBIT.get(), RabbitEntity.createAttributes().build());
         event.put(EOTWEntities.HARE.get(), HareEntity.createAttributes().build());
+        event.put(EOTWEntities.FERRET.get(), FerretEntity.createAttributes().build());
     }
 
     @SubscribeEvent
