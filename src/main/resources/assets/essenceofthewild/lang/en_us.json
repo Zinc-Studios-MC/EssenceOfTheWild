@@ -19,6 +19,7 @@
   "item.essenceofthewild.mooshroom_spawn_egg" : "Mooshroom Spawn Egg",
   "item.essenceofthewild.rabbit_spawn_egg" : "Rabbit Spawn Egg",
   "item.essenceofthewild.hare_spawn_egg" : "Hare Spawn Egg",
+  "item.essenceofthewild.ferret_spawn_egg" : "Ferret Spawn Egg",
 
   "item.essenceofthewild.sheep_cheese" : "Sheep Cheese",
   "item.essenceofthewild.sheep_cheese_wedge" : "Sheep Cheese Wedge",
@@ -33,6 +34,7 @@
   "entity.essenceofthewild.chicken" : "Chicken",
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
   "entity.essenceofthewild.rabbit" : "Rabbit",
+  "entity.essenceofthewild.ferret" : "Ferret",
 
   "entity.essenceofthewild.underwater_arrow" : "Underwater Arrow",
 
