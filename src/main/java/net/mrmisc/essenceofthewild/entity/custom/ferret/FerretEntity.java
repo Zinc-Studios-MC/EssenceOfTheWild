@@ -2,16 +2,21 @@ package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,7 +34,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 
 public class FerretEntity extends TamableAnimal{
 
@@ -37,7 +45,10 @@ public class FerretEntity extends TamableAnimal{
     private int idleAnimationTimeout = 0;
 
     private static final EntityDataAccessor<Boolean> RUNNING = 
-        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN); 
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+    
+    private static final EntityDataAccessor<Integer> VARIANT =
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
 
     public FerretEntity(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -145,6 +156,31 @@ public class FerretEntity extends TamableAnimal{
         }
     }
 
+    public MobVariant getVariant() {
+        int i = this.entityData.get(VARIANT);
+        return (i >= 0 && i < FerretVariants.ALL.size())
+                ? FerretVariants.ALL.get(i)
+                : FerretVariants.ALL.get(0);
+    }
+
+    private MobVariant pickVariant(Level level, BlockPos pos) {
+        if (level.getBiome(pos).is(Biomes.FOREST) || 
+            level.getBiome(pos).is(Biomes.BIRCH_FOREST) ||
+            level.getBiome(pos).is(Biomes.FLOWER_FOREST)
+            ) {
+            return FerretVariants.BASIC;
+        } else if (
+            level.getBiome(pos).is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
+            level.getBiome(pos).is(Biomes.OLD_GROWTH_PINE_TAIGA)) {
+            return FerretVariants.RED_FERRET;
+        } else if (
+            level.getBiome(pos).is(Biomes.TAIGA) || 
+            level.getBiome(pos).is(Biomes.SNOWY_TAIGA)) {
+            return FerretVariants.WHITE_FERRET;
+        }
+        return level.random.nextBoolean() ? FerretVariants.BASIC : FerretVariants.RED_FERRET;
+    }
+
     public void setRunning(boolean running){
         this.entityData.set(RUNNING, running);
     }
@@ -152,9 +188,45 @@ public class FerretEntity extends TamableAnimal{
         return this.entityData.get(RUNNING);
     }
 
+    public void setVariant(MobVariant variant) {
+        this.entityData.set(VARIANT, FerretVariants.ALL.indexOf(variant));
+    }
+
+    private void setVariantById(String id) {
+        for (int i = 0; i < FerretVariants.ALL.size(); i++) {
+            if (FerretVariants.ALL.get(i).id().equals(id)) {
+                this.entityData.set(VARIANT, i);
+                return;
+            }
+        }
+        this.entityData.set(VARIANT, 0);
+    }
+
     @Override
     protected void defineSynchedData(){
         super.defineSynchedData();
         this.entityData.define(RUNNING, false);
+        this.entityData.define(VARIANT, 0);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
+            MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+        if (pDataTag == null || !pDataTag.contains("Variant")) {
+            this.setVariant(pickVariant(pLevel.getLevel(), this.blockPosition()));
+        }
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag pCompound) {
+        super.addAdditionalSaveData(pCompound);
+        pCompound.putString("Variant", getVariant().id());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag pCompound) {
+        super.readAdditionalSaveData(pCompound);
+        this.setVariantById(pCompound.getString("Variant"));
     }
 }

@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class FerretRenderer extends MobRenderer<FerretEntity, FerretModel<FerretEntity>> {
 
@@ -17,7 +16,7 @@ public class FerretRenderer extends MobRenderer<FerretEntity, FerretModel<Ferret
 
     @Override
     public ResourceLocation getTextureLocation(FerretEntity pEntity) {
-        return ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "textures/entity/ferret/ferret_texture.png");
+        return pEntity.getVariant().location();
     }
 
     @Override
