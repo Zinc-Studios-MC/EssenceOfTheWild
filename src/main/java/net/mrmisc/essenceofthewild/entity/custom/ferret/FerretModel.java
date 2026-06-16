@@ -88,6 +88,8 @@ public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
 
 		this.animateWalk(((FerretEntity)entity).isRunning() ? FerretAnimation.run : FerretAnimation.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
 		this.animate(((FerretEntity)entity).idleAnimationState, FerretAnimation.idle, ageInTicks, 1);
+		this.animate(((FerretEntity)entity).diggingInAnimationState, FerretAnimation.dig, ageInTicks, 1);
+		this.animate(((FerretEntity)entity).diggingOutAnimationState, FerretAnimation.digOut, ageInTicks, 1);
 	}
 
 	private void applyHeadRotation(FerretEntity pEntity, float pNetHeadYaw, float pHeadPitch, float pAgeInTicks){
