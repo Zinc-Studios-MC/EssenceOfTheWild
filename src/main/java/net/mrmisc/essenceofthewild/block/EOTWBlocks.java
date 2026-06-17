@@ -20,6 +20,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.block.custom.burrow.BurrowBlock;
 import net.mrmisc.essenceofthewild.block.custom.cheesemaker.CheeseMakerBlock;
 import net.mrmisc.essenceofthewild.block.custom.crops.RedOnionCropBlock;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
@@ -179,6 +180,14 @@ public class EOTWBlocks {
 
     public static RegistryObject<Block> YELLOW_ROLLED_WOOL = registerBlock("yellow_rolled_wool",
             ()-> new Block(BlockBehaviour.Properties.copy(Blocks.YELLOW_WOOL  )));
+    
+    public static RegistryObject<Block> DIRT_BURROW_BLOCK = registerBlock("dirt_burrow_block",
+            ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.DIRT).noOcclusion()));
+    public static RegistryObject<Block> SAND_BURROW_BLOCK = registerBlock("sand_burrow_block",
+            ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.SAND).noOcclusion()));
+    public static RegistryObject<Block> MUD_BURROW_BLOCK = registerBlock("mud_burrow_block",
+            ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.MUD).noOcclusion()));
+
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
         registerBlockItem(name, toReturn);

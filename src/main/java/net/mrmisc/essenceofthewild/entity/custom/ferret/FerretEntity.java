@@ -36,6 +36,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
+import net.mrmisc.essenceofthewild.block.EOTWBlocks;
+import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 
@@ -43,12 +45,23 @@ public class FerretEntity extends TamableAnimal{
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
+    public final AnimationState diggingInAnimationState = new AnimationState();
+    private int diggingInAnimationTimeout = 0;
+    public final AnimationState diggingOutAnimationState = new AnimationState();
+    private int diggingOutAnimationTimeout = 0;
 
     private static final EntityDataAccessor<Boolean> RUNNING = 
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     
     private static final EntityDataAccessor<Integer> VARIANT =
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
+    
+    private static final EntityDataAccessor<Boolean> DIGGING_IN =
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DIGGING_OUT =
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+    
+    public int ticks = 0;
 
     public FerretEntity(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -100,6 +113,28 @@ public class FerretEntity extends TamableAnimal{
         if(this.level().isClientSide){
             setupAnimationStates();
         }
+        if(!this.level().isClientSide){
+            if(ticks == 0 && this.isDiggingOut()){
+                this.setDiggingOut(false);
+            }else{
+                --ticks;
+            }
+            if (this.level().isNight()) {
+                if(ticks == 0){
+                    this.setDiggingIn(true);
+                    ticks = 27;
+                }
+                if(ticks <= 0){
+                    level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 0);
+                    BurrowBlockEntity bbe = (BurrowBlockEntity)level().getBlockEntity(this.getOnPos());
+                    bbe.addFerret(this);
+                    ticks = 0;
+                    this.remove(RemovalReason.DISCARDED);
+                }else{
+                    --ticks;
+                }
+            }
+        }
     }
 
     private void setupAnimationStates(){
@@ -108,6 +143,24 @@ public class FerretEntity extends TamableAnimal{
             this.idleAnimationState.start(this.tickCount);
         }else{
             --this.idleAnimationTimeout;
+        }
+        if(this.isDiggingIn() && diggingInAnimationTimeout <=0){
+            diggingInAnimationTimeout = 27;
+            diggingInAnimationState.start(this.tickCount);
+        }else{
+            --this.diggingInAnimationTimeout;
+        }
+        if(this.isDiggingOut() && diggingOutAnimationTimeout <=0){
+            diggingOutAnimationTimeout = 25;
+            diggingOutAnimationState.start(this.tickCount);
+        }else{
+            --this.diggingOutAnimationTimeout;
+        }
+        if(!this.isDiggingIn()){
+            diggingInAnimationState.stop();
+        }
+        if(!this.isDiggingOut()){
+            diggingOutAnimationState.stop();
         }
     }
 
@@ -202,11 +255,26 @@ public class FerretEntity extends TamableAnimal{
         this.entityData.set(VARIANT, 0);
     }
 
+    public void setDiggingIn(boolean bool){
+        this.entityData.set(DIGGING_IN, bool);
+    }
+    public void setDiggingOut(boolean bool){
+        this.entityData.set(DIGGING_OUT, bool);
+    }
+    public boolean isDiggingIn(){
+        return this.entityData.get(DIGGING_IN);
+    }
+    public boolean isDiggingOut(){
+        return this.entityData.get(DIGGING_OUT);
+    }
+
     @Override
     protected void defineSynchedData(){
         super.defineSynchedData();
         this.entityData.define(RUNNING, false);
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(DIGGING_IN, false);
+        this.entityData.define(DIGGING_OUT, false);
     }
 
     @Override

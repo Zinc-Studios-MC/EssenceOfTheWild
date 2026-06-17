@@ -60,7 +60,11 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.DUCK_FEATHER.get());
                 pOutput.accept(EOTWItems.VANILLA_FLOWER.get());
                 pOutput.accept(EOTWItems.VANILLA_STICK.get());
+                pOutput.accept(EOTWBlocks.DIRT_BURROW_BLOCK.get());
+                pOutput.accept(EOTWBlocks.SAND_BURROW_BLOCK.get());
+                pOutput.accept(EOTWBlocks.MUD_BURROW_BLOCK.get());
             });
+            
     public static RegistryObject<CreativeModeTab> MANMADE_TAB =
             createNewTabWithBlockIcon("manmade_tab", "Essence Of The Wild Blocks And Items", ()-> EOTWBlocks.WOODEN_FREEZER.get(), (pParameters, pOutput) -> {
                 pOutput.accept(EOTWBlocks.MANGO_WOOD.get());
@@ -83,8 +87,8 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.UNDERWATER_ARROW.get());
                 EOTWBlocks.getRolledWool().forEach(wool -> pOutput.accept(wool.get()));
                 EOTWBlocks.getSleepingBags().forEach(sb -> pOutput.accept(sb.get()));
-            });
-
+        });
+        
 
     public static RegistryObject<CreativeModeTab> createNewTabWithItemIcon(
             String name,

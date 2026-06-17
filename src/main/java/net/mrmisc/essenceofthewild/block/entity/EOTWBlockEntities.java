@@ -8,6 +8,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
+import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.cheesemaker.CheeseMakerBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.freezer.WoodenFreezerBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntity;
@@ -26,6 +27,10 @@ public class EOTWBlockEntities {
     public static RegistryObject<BlockEntityType<SleepingBagBlockEntity>> SLEEPING_BAG = BLOCK_ENTITY.register("sleeping_bag",
             () -> new BlockEntityType<>(SleepingBagBlockEntity::new,
                     EOTWBlocks.getSleepingBags().stream().map(RegistryObject::get).collect(Collectors.toSet()),null));
+
+    public static RegistryObject<BlockEntityType<BurrowBlockEntity>> BURROW_BLOCK_ENTITY = BLOCK_ENTITY.register("burrow_block_entity",
+            ()-> new BlockEntityType<>(BurrowBlockEntity::new, Set.of(EOTWBlocks.DIRT_BURROW_BLOCK.get(), EOTWBlocks.SAND_BURROW_BLOCK.get(), EOTWBlocks.MUD_BURROW_BLOCK.get()), null));
+
 
     public static final RegistryObject<BlockEntityType<EOTWSignBlockEntity>> MANGO_SIGN =
             BLOCK_ENTITY.register("mango_sign", () ->

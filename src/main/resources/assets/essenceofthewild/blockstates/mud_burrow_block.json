@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": { 
+      "model": "essenceofthewild:block/mud_burrow_block" 
+    }
+  }
+}
