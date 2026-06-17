@@ -36,6 +36,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
@@ -113,25 +117,37 @@ public class FerretEntity extends TamableAnimal{
         if(this.level().isClientSide){
             setupAnimationStates();
         }
-        if(!this.level().isClientSide){
-            if(ticks == 0 && this.isDiggingOut()){
-                this.setDiggingOut(false);
-            }else{
-                --ticks;
+        if(!this.level().isClientSide()){
+            if(this.level().isDay()){
+                if(ticks == 0 && this.isDiggingOut()){
+                    this.setDiggingOut(false);
+                    this.setNoAi(false);
+                }else if(ticks > 0 && this.isDiggingOut()){
+                    this.setNoAi(true);
+                    this.moveTo(this.getX(), this.getY()+0.05, this.getZ(), 0, 0);
+                    --ticks;
+                }
+                else{
+                    --ticks;
+                }
             }
             if (this.level().isNight()) {
-                if(ticks == 0){
-                    this.setDiggingIn(true);
-                    ticks = 27;
-                }
                 if(ticks <= 0){
-                    level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 0);
+                    this.setDiggingIn(true);
+                    this.ticks = 30;
+                    this.setNoAi(true);//become a vegitable to let the digging animation play nice
+                }else if(this.ticks > 1 && this.ticks < 25){
+                    this.moveTo(this.getX(), this.getY()-0.02, this.getZ(), 0, 0);
+                    --this.ticks;
+                }
+                else if (ticks == 1){
+                    this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
                     BurrowBlockEntity bbe = (BurrowBlockEntity)level().getBlockEntity(this.getOnPos());
                     bbe.addFerret(this);
-                    ticks = 0;
+                    this.ticks = 0;
                     this.remove(RemovalReason.DISCARDED);
                 }else{
-                    --ticks;
+                    --this.ticks;
                 }
             }
         }
@@ -145,13 +161,13 @@ public class FerretEntity extends TamableAnimal{
             --this.idleAnimationTimeout;
         }
         if(this.isDiggingIn() && diggingInAnimationTimeout <=0){
-            diggingInAnimationTimeout = 27;
+            diggingInAnimationTimeout = 30;
             diggingInAnimationState.start(this.tickCount);
         }else{
             --this.diggingInAnimationTimeout;
         }
         if(this.isDiggingOut() && diggingOutAnimationTimeout <=0){
-            diggingOutAnimationTimeout = 25;
+            diggingOutAnimationTimeout = 28;
             diggingOutAnimationState.start(this.tickCount);
         }else{
             --this.diggingOutAnimationTimeout;
@@ -296,5 +312,26 @@ public class FerretEntity extends TamableAnimal{
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.setVariantById(pCompound.getString("Variant"));
+    }
+    @Override
+    public boolean isInWall() {
+        if (this.noPhysics) {
+         return false;
+      } else {
+         float f = this.getDimensions(this.getPose()).width * 0.8F;
+         AABB aabb = AABB.ofSize(this.getEyePosition(), (double)f, 1.0E-6D, (double)f);
+         return BlockPos.betweenClosedStream(aabb).anyMatch((p_201942_) -> {
+            BlockState blockstate = this.level().getBlockState(p_201942_);
+            if(
+                blockstate.is(EOTWBlocks.DIRT_BURROW_BLOCK.get()) ||
+                blockstate.is(EOTWBlocks.SAND_BURROW_BLOCK.get()) ||
+                blockstate.is(EOTWBlocks.MUD_BURROW_BLOCK.get()) ||
+                this.isDiggingIn()
+            ){
+                return false;
+            }
+            return !blockstate.isAir() && blockstate.isSuffocating(this.level(), p_201942_) && Shapes.joinIsNotEmpty(blockstate.getCollisionShape(this.level(), p_201942_).move((double)p_201942_.getX(), (double)p_201942_.getY(), (double)p_201942_.getZ()), Shapes.create(aabb), BooleanOp.AND);
+         });
+      }
     }
 }

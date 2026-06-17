@@ -63,12 +63,13 @@ public class BurrowBlockEntity extends BlockEntity{
                         ferret.setVariant(FerretVariants.WHITE_FERRET);
                         break;
                 }
-                ferret.ticks = 25;
+                ferret.ticks = 28;
                 ferret.setDiggingOut(true);
-                ferret.moveTo(this.getBlockPos().above(), 0, 0);
+                ferret.moveTo(this.getBlockPos(), 0, 0);
                 this.getLevel().addFreshEntity(ferret);
             }
         }
+        ferretData.clear();
     }
 
     //will do the breeding thing later
