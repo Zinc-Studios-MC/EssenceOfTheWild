@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.config.EOTWConfig;
-import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import org.jetbrains.annotations.Nullable;
 
 public class NestBlockEntity extends BlockEntity {
@@ -84,7 +84,7 @@ public class NestBlockEntity extends BlockEntity {
         hatchProgress = 0;
         animationTicks = 0;
         hatchEntityId = ForgeRegistries.ENTITY_TYPES.getKey(parent.getType());
-        variantId = parent instanceof ChickenEntity chicken ? chicken.getVariant().id() : "";
+        variantId = parent instanceof VariantCarrier carrier ? carrier.getVariantId() : "";
 
         setChanged();
         syncState();
@@ -131,8 +131,8 @@ public class NestBlockEntity extends BlockEntity {
                     baby.setBaby(true);
                 }
 
-                if (entity instanceof ChickenEntity chicken && !variantId.isEmpty()) {
-                    chicken.setVariantById(variantId);
+                if (entity instanceof VariantCarrier carrier && !variantId.isEmpty()) {
+                    carrier.setVariantById(variantId);
                 }
 
                 if (entity != null) {

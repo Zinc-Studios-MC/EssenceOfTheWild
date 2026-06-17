@@ -24,11 +24,12 @@ import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.EOTWNestHelper;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
-public class ChickenEntity extends Chicken {
+public class ChickenEntity extends Chicken implements VariantCarrier {
     private static final int LAY_NEST_SEARCH_TICKS = 1200;
     private static final int DELIVERY_TIMEOUT_TICKS = 2400;
     private static final int NEST_SIT_TICKS = 7 * 20;
@@ -146,6 +147,11 @@ public class ChickenEntity extends Chicken {
         return (i >= 0 && i < ChickenVariants.ALL.size())
                 ? ChickenVariants.ALL.get(i)
                 : ChickenVariants.ALL.get(0);
+    }
+
+    @Override
+    public String getVariantId() {
+        return getVariant().id();
     }
 
     @Override

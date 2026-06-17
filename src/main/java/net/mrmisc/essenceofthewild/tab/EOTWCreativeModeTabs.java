@@ -26,6 +26,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.COW_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.MOOSHROOM_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.CHICKEN_SPAWN_EGG.get());
+                pOutput.accept(EOTWItems.DUCK_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.RABBIT_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.HARE_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.FERRET_SPAWN_EGG.get());
@@ -55,6 +56,8 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWBlocks.MANGO_LEAVES.get());
                 pOutput.accept(EOTWBlocks.VANILLA_LEAVES.get());
                 pOutput.accept(EOTWBlocks.NEST.get());
+                pOutput.accept(EOTWItems.DUCK_EGG.get());
+                pOutput.accept(EOTWItems.DUCK_FEATHER.get());
                 pOutput.accept(EOTWItems.VANILLA_FLOWER.get());
                 pOutput.accept(EOTWItems.VANILLA_STICK.get());
             });

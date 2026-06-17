@@ -11,6 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
@@ -109,6 +110,10 @@ public enum EOTWJadeEntityProvider implements IEntityComponentProvider, IServerD
             data.putInt("EggTime", Math.max(0, chicken.getEggTimeTicks()));
             data.putBoolean("DeliveringNestEgg", chicken.isDeliveringNestEgg());
             data.putBoolean("GuardingNest", chicken.isGuardingNest());
+        } else if (entity instanceof DuckEntity duck) {
+            data.putInt("EggTime", Math.max(0, duck.getEggTimeTicks()));
+            data.putBoolean("DeliveringNestEgg", duck.isDeliveringNestEgg());
+            data.putBoolean("GuardingNest", duck.isGuardingNest());
         }
 
         if (entity instanceof AgeableMob ageableMob && !ageableMob.isBaby()
@@ -125,6 +130,8 @@ public enum EOTWJadeEntityProvider implements IEntityComponentProvider, IServerD
     private static void addVariant(CompoundTag data, Entity entity) {
         if (entity instanceof ChickenEntity chicken) {
             data.putString("Variant", chicken.getVariant().id());
+        } else if (entity instanceof DuckEntity duck) {
+            data.putString("Variant", duck.getVariant().id());
         } else if (entity instanceof CowEntity cow) {
             data.putString("Variant", cow.getVariant().id());
         } else if (entity instanceof SheepEntity sheep) {

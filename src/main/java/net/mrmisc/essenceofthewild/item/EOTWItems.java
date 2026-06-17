@@ -38,6 +38,8 @@ public class EOTWItems {
     public static RegistryObject<Item> ICE_AXE = ITEMS.register("ice_axe", ()-> new IceAxe(new Item.Properties().durability(65)));
     public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties().stacksTo(1)));
     public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
+    public static RegistryObject<Item> DUCK_FEATHER = ITEMS.register("duck_feather", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> DUCK_EGG = ITEMS.register("duck_egg", ()-> new Item(new Item.Properties()));
 
     //Spawn Eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 0xFFFFFF, 0xFFFFFF);
@@ -45,6 +47,7 @@ public class EOTWItems {
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> MOOSHROOM_SPAWN_EGG = createSpawnEgg(EOTWEntities.MOOSHROOM, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> CHICKEN_SPAWN_EGG = createSpawnEgg(EOTWEntities.CHICKEN, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> DUCK_SPAWN_EGG = createSpawnEgg(EOTWEntities.DUCK, 0x8FCFE0, 0xF2B854);
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 14551392, 7545129);
     public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);

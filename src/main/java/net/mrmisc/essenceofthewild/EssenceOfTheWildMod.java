@@ -19,6 +19,7 @@ import net.mrmisc.essenceofthewild.config.EOTWConfig;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
@@ -73,6 +74,7 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.COW.get(), CowRenderer::new);
             EntityRenderers.register(EOTWEntities.MOOSHROOM.get(), MooshroomRenderer::new);
             EntityRenderers.register(EOTWEntities.CHICKEN.get(), ChickenRenderer::new);
+            EntityRenderers.register(EOTWEntities.DUCK.get(), DuckRenderer::new);
             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);

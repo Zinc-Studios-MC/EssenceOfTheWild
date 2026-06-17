@@ -3,6 +3,7 @@ package net.mrmisc.essenceofthewild.entity.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntity;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
+import net.mrmisc.essenceofthewild.item.EOTWItems;
 
 import java.util.Optional;
 
@@ -77,7 +80,7 @@ public class EOTWNestHelper {
     }
 
     public static void dropEggOnGround(Animal parent) {
-        parent.spawnAtLocation(Items.EGG);
+        parent.spawnAtLocation(parent instanceof DuckEntity ? EOTWItems.DUCK_EGG.get() : Items.EGG);
         playEggPlaced(parent);
     }
 
@@ -87,6 +90,13 @@ public class EOTWNestHelper {
     }
 
     public static void tryPlaceNaturalNest(ServerLevelAccessor level, BlockPos center, RandomSource random) {
+        // During chunk generation the accessor is a WorldGenRegion and reaching into the live
+        // ServerLevel (block reads/writes) from the worldgen worker thread deadlocks the chunk
+        // system. Skip nest placement then; gameplay (NATURAL) spawns still place nests safely.
+        if (level instanceof WorldGenRegion) {
+            return;
+        }
+
         ServerLevel serverLevel = level.getLevel();
         if (hasNearbyNest(serverLevel, center, 10)) {
             return;
