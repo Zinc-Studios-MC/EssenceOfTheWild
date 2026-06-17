@@ -15,6 +15,9 @@ import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowModel;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckModel;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DucklingModel;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
@@ -46,6 +49,8 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(CowModel.LAYER_LOCATION, CowModel::createBodyLayer);
         event.registerLayerDefinition(MooshroomModel.LAYER_LOCATION, MooshroomModel::createBodyLayer);
         event.registerLayerDefinition(ChickenModel.LAYER_LOCATION, ChickenModel::createBodyLayer);
+        event.registerLayerDefinition(DuckModel.LAYER_LOCATION, DuckModel::createBodyLayer);
+        event.registerLayerDefinition(DucklingModel.LAYER_LOCATION, DucklingModel::createBodyLayer);
         event.registerLayerDefinition(RabbitModel.LAYER_LOCATION, RabbitModel::createBodyLayer);
         event.registerLayerDefinition(HareModel.LAYER_LOCATION, HareModel::createBodyLayer);
         event.registerLayerDefinition(SleepingBagRenderer.HEAD, SleepingBagRenderer::createHeadLayer);
@@ -60,6 +65,7 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.COW.get(), CowEntity.createAttributes().build());
         event.put(EOTWEntities.MOOSHROOM.get(), MooshroomEntity.createAttributes().build());
         event.put(EOTWEntities.CHICKEN.get(), ChickenEntity.createAttributes().build());
+        event.put(EOTWEntities.DUCK.get(), DuckEntity.createAttributes().build());
         event.put(EOTWEntities.RABBIT.get(), RabbitEntity.createAttributes().build());
         event.put(EOTWEntities.HARE.get(), HareEntity.createAttributes().build());
         event.put(EOTWEntities.FERRET.get(), FerretEntity.createAttributes().build());

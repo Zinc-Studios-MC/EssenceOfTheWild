@@ -14,12 +14,18 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.client.event.ModelEvent;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 
 public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEntity> {
-    private static final ResourceLocation[] EGG_MODELS = {
+    private static final ResourceLocation[] CHICKEN_EGG_MODELS = {
             model("block/eggs_1"),
             model("block/eggs_2"),
             model("block/eggs_3")
+    };
+    private static final ResourceLocation[] DUCK_EGG_MODELS = {
+            model("block/duck_eggs_1"),
+            model("block/duck_eggs_2"),
+            model("block/duck_eggs_3")
     };
 
     private final BlockRenderDispatcher blockRenderer;
@@ -29,7 +35,10 @@ public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEnt
     }
 
     public static void registerAdditionalModels(ModelEvent.RegisterAdditional event) {
-        for (ResourceLocation model : EGG_MODELS) {
+        for (ResourceLocation model : CHICKEN_EGG_MODELS) {
+            event.register(model);
+        }
+        for (ResourceLocation model : DUCK_EGG_MODELS) {
             event.register(model);
         }
     }
@@ -47,9 +56,12 @@ public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEnt
         float bob = progress > 0.9F ? Mth.sin(ticks * 0.35F) * 0.018F : 0.0F;
         float scale = 1.0F + progress * 0.05F + (progress > 0.95F ? Mth.sin(ticks * 0.55F) * 0.035F : 0.0F);
 
+        ResourceLocation[] models = EOTWEntities.DUCK.getId().equals(blockEntity.getHatchEntityId())
+                ? DUCK_EGG_MODELS
+                : CHICKEN_EGG_MODELS;
         BakedModel model = blockRenderer.getBlockModelShaper()
                 .getModelManager()
-                .getModel(EGG_MODELS[Mth.clamp(eggCount, 1, EGG_MODELS.length) - 1]);
+                .getModel(models[Mth.clamp(eggCount, 1, models.length) - 1]);
 
         if (model == Minecraft.getInstance().getModelManager().getMissingModel()) {
             return;

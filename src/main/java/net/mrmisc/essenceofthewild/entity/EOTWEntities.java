@@ -8,6 +8,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
+import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
@@ -28,6 +29,8 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(MooshroomEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("mooshroom"));
     public static RegistryObject<EntityType<ChickenEntity>> CHICKEN = ENTITIES.register("chicken",
             ()-> EntityType.Builder.of(ChickenEntity::new, MobCategory.AMBIENT).sized(0.7f, 0.5f).build("chicken"));
+    public static RegistryObject<EntityType<DuckEntity>> DUCK = ENTITIES.register("duck",
+            ()-> EntityType.Builder.of(DuckEntity::new, MobCategory.CREATURE).sized(0.7f, 0.6f).build("duck"));
     public static RegistryObject<EntityType<PigEntity>> PIG = ENTITIES.register("pig",
             ()-> EntityType.Builder.of(PigEntity::new, MobCategory.AMBIENT).sized(0.6f, 1.2f).build("pig"));
     public static RegistryObject<EntityType<RabbitEntity>> RABBIT = ENTITIES.register("rabbit",
