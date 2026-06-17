@@ -117,6 +117,12 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     }
 
     @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        // Ducks float down on their wings and never take fall damage.
+        return false;
+    }
+
+    @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT, 0);
@@ -604,13 +610,13 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     }
 
     private void setupAnimationStates() {
-        if (!onGround() && Math.abs(getDeltaMovement().y) > 0.02D) {
+        if (!onGround() && !isInWaterOrBubble()) {
             flapAnimationState.startIfStopped(tickCount);
         } else {
             flapAnimationState.stop();
         }
 
-        if (isInWaterOrBubble() && getDeltaMovement().horizontalDistanceSqr() < 0.0025D) {
+        if (isInWaterOrBubble()) {
             waterIdleAnimationState.startIfStopped(tickCount);
         } else {
             waterIdleAnimationState.stop();

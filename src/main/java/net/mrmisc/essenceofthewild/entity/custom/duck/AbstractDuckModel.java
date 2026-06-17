@@ -49,17 +49,21 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
             return;
         }
 
-        if (!entity.onGround() && Math.abs(entity.getDeltaMovement().y) > 0.02D) {
-            this.animate(entity.flapAnimationState, DuckAnimations.DUCK_FLY, ageInTicks);
-            return;
-        }
-
         if (entity.isInWaterOrBubble()) {
-            if (entity.getDeltaMovement().horizontalDistanceSqr() < 0.0025D) {
+            // Use limbSwingAmount (synced walk speed), not client deltaMovement which is ~0 for
+            // remote mobs and would pin the duck to the idle branch so swim never plays.
+            if (limbSwingAmount < 0.01F) {
                 this.animate(entity.waterIdleAnimationState, DuckAnimations.DUCK_WATER_IDLE, ageInTicks);
             } else {
                 this.animateWalk(DuckAnimations.DUCK_SWIM, limbSwing, limbSwingAmount, 1.8F, 1.15F);
             }
+            return;
+        }
+
+        // Flap whenever airborne (and not floating in water). Driven by the synced onGround flag
+        // rather than client deltaMovement, which decays to ~0 mid-fall for remote entities.
+        if (!entity.onGround()) {
+            this.animate(entity.flapAnimationState, DuckAnimations.DUCK_FLY, ageInTicks);
             return;
         }
 
