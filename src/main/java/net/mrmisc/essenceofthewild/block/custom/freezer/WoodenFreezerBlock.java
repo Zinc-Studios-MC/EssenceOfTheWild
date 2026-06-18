@@ -42,8 +42,7 @@ public class WoodenFreezerBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Shapes.or(
             Block.box(3.9, 3.9, 3.9, 12.1, 12.1, 12.1), // Core
             Block.box(6.5, 1, 6.5, 9.5, 8, 9.5),        // Stem
-            Block.box(5.5, 0, 5.5, 10.5, 1, 10.5),      // Foot
-            Block.box(0.5, 1, 0.5, 15.5, 1.001, 12.5)   // Horizontal Plane
+            Block.box(5.5, 0, 5.5, 10.5, 1, 10.5)       // Foot
     );
 
     public WoodenFreezerBlock(Properties properties) {

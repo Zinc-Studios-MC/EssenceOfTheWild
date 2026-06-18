@@ -24,16 +24,21 @@ public class BurrowBlockEntity extends BlockEntity{
         super(EOTWBlockEntities.BURROW_BLOCK_ENTITY.get(), pPos, pBlockState);
     }
 
-    public void addFerret(FerretEntity entity){
+    public boolean addFerret(FerretEntity entity){
         if(canAddFerret()){
             ferretData.add(
                 new FerretData(
                     entity.getStringUUID(), 
                     entity.getVariant().id(), 
-                    entity.getOwnerUUID() == null ? "" : entity.getOwnerUUID().toString()
+                    entity.getOwnerUUID() == null ? "" : entity.getOwnerUUID().toString(),
+                    entity.saveInventoryToTag()
                 )
             );
+            setChanged();
+            return true;
         }
+
+        return false;
     }
 
     public List<FerretData> getFerretData(){
@@ -52,6 +57,7 @@ public class BurrowBlockEntity extends BlockEntity{
                 if(!fd.ownerUUID().equals("")){
                     ferret.setOwnerUUID(UUID.fromString(fd.ownerUUID()));
                 }
+                ferret.loadInventoryFromTag(fd.inventory());
                 switch (fd.variant()) {
                     case "basic":
                         ferret.setVariant(FerretVariants.BASIC);
@@ -70,6 +76,7 @@ public class BurrowBlockEntity extends BlockEntity{
             }
         }
         ferretData.clear();
+        setChanged();
     }
 
     //will do the breeding thing later
@@ -89,7 +96,12 @@ public class BurrowBlockEntity extends BlockEntity{
         super.saveAdditional(pTag);
         for(int i = 0; i < ferretData.size(); i++){
             FerretData fd = ferretData.get(i);
-            pTag.putString("Ferret"+i, fd.ferretUUID()+"|"+fd.variant()+"|"+fd.ownerUUID());
+            CompoundTag ferretTag = new CompoundTag();
+            ferretTag.putString("UUID", fd.ferretUUID());
+            ferretTag.putString("Variant", fd.variant());
+            ferretTag.putString("Owner", fd.ownerUUID());
+            ferretTag.put("Inventory", fd.inventory());
+            pTag.put("Ferret"+i, ferretTag);
         }
     }
 
@@ -97,12 +109,23 @@ public class BurrowBlockEntity extends BlockEntity{
     public void load(CompoundTag pTag) {
         super.load(pTag);
         ferretData.clear();
-        for(int i = 1; i < 3; i++){
-            Tag t = pTag.get("Ferret"+i);
-            if(t!=null){
-                String[] array = t.getAsString().split("|");
-                FerretData fd = new FerretData(array[0], array[1], array[2]);
-                ferretData.add(fd);
+        for(int i = 0; i < 2; i++){
+            String key = "Ferret"+i;
+            Tag t = pTag.get(key);
+
+            if(t instanceof CompoundTag ferretTag){
+                ferretData.add(new FerretData(
+                    ferretTag.getString("UUID"),
+                    ferretTag.getString("Variant"),
+                    ferretTag.getString("Owner"),
+                    ferretTag.getCompound("Inventory")
+                ));
+            } else if(t!=null){
+                String[] array = t.getAsString().split("\\|", -1);
+
+                if (array.length >= 3) {
+                    ferretData.add(new FerretData(array[0], array[1], array[2]));
+                }
             }
         }
     }

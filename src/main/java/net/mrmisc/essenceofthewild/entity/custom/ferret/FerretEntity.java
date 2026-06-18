@@ -4,13 +4,19 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -28,11 +34,13 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
@@ -40,12 +48,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraftforge.network.NetworkHooks;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
 
-public class FerretEntity extends TamableAnimal{
+public class FerretEntity extends TamableAnimal implements MenuProvider {
+    public static final int INVENTORY_SIZE = 9;
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
@@ -66,6 +77,14 @@ public class FerretEntity extends TamableAnimal{
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     
     public int ticks = 0;
+
+    private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE) {
+        @Override
+        public void setChanged() {
+            super.setChanged();
+            FerretEntity.this.setPersistenceRequired();
+        }
+    };
 
     public FerretEntity(EntityType<? extends TamableAnimal> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -142,10 +161,14 @@ public class FerretEntity extends TamableAnimal{
                 }
                 else if (ticks == 1){
                     this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
-                    BurrowBlockEntity bbe = (BurrowBlockEntity)level().getBlockEntity(this.getOnPos());
-                    bbe.addFerret(this);
-                    this.ticks = 0;
-                    this.remove(RemovalReason.DISCARDED);
+                    if (level().getBlockEntity(this.getOnPos()) instanceof BurrowBlockEntity bbe && bbe.addFerret(this)) {
+                        this.ticks = 0;
+                        this.remove(RemovalReason.DISCARDED);
+                    } else {
+                        this.setDiggingIn(false);
+                        this.setNoAi(false);
+                        this.ticks = 0;
+                    }
                 }else{
                     --this.ticks;
                 }
@@ -193,7 +216,6 @@ public class FerretEntity extends TamableAnimal{
 
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        Item item = itemstack.getItem();
         if (this.level().isClientSide) {
             if (this.isTame() && this.isOwnedBy(pPlayer)) {
                 return InteractionResult.SUCCESS;
@@ -217,12 +239,41 @@ public class FerretEntity extends TamableAnimal{
                     return InteractionResult.CONSUME;
                 }
             }
+
+            if (this.isTame() && this.isOwnedBy(pPlayer)) {
+                if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                    this.heal((float) itemstack.getFoodProperties(this).getNutrition());
+                    this.usePlayerItem(pPlayer, pHand, itemstack);
+                    this.setPersistenceRequired();
+                    return InteractionResult.CONSUME;
+                }
+
+                openInventory(pPlayer);
+                this.setPersistenceRequired();
+                return InteractionResult.CONSUME;
+            }
+
             InteractionResult interactionresult1 = super.mobInteract(pPlayer, pHand);
             if (interactionresult1.consumesAction()) {
                 this.setPersistenceRequired();
             }
             return interactionresult1;
         }
+    }
+
+    private void openInventory(Player player) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openScreen(serverPlayer, this, buffer -> buffer.writeInt(getId()));
+        }
+    }
+
+    public Container getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        return new FerretMenu(id, inventory, this.inventory, this);
     }
 
     public MobVariant getVariant() {
@@ -302,16 +353,77 @@ public class FerretEntity extends TamableAnimal{
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
+    public CompoundTag saveInventoryToTag() {
+        CompoundTag tag = new CompoundTag();
+        tag.put("Items", createInventoryTag());
+        return tag;
+    }
+
+    public void loadInventoryFromTag(CompoundTag tag) {
+        if (tag.contains("Items", Tag.TAG_LIST)) {
+            loadInventoryTag(tag.getList("Items", Tag.TAG_COMPOUND));
+        }
+    }
+
+    private ListTag createInventoryTag() {
+        ListTag listTag = new ListTag();
+
+        for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            ItemStack stack = inventory.getItem(slot);
+
+            if (!stack.isEmpty()) {
+                CompoundTag stackTag = stack.save(new CompoundTag());
+                stackTag.putByte("Slot", (byte) slot);
+                listTag.add(stackTag);
+            }
+        }
+
+        return listTag;
+    }
+
+    private void loadInventoryTag(ListTag listTag) {
+        inventory.clearContent();
+
+        for (int i = 0; i < listTag.size(); i++) {
+            CompoundTag stackTag = listTag.getCompound(i);
+            int slot = stackTag.contains("Slot", Tag.TAG_BYTE) ? stackTag.getByte("Slot") & 255 : i;
+
+            if (slot >= 0 && slot < inventory.getContainerSize()) {
+                inventory.setItem(slot, ItemStack.of(stackTag));
+            }
+        }
+    }
+
+    @Override
+    protected void dropEquipment() {
+        super.dropEquipment();
+
+        for (int slot = 0; slot < inventory.getContainerSize(); slot++) {
+            ItemStack stack = inventory.getItem(slot);
+
+            if (!stack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(stack)) {
+                spawnAtLocation(stack);
+            }
+
+            inventory.setItem(slot, ItemStack.EMPTY);
+        }
+    }
+
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.putString("Variant", getVariant().id());
+        pCompound.put("Inventory", createInventoryTag());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
         this.setVariantById(pCompound.getString("Variant"));
+
+        if (pCompound.contains("Inventory", Tag.TAG_LIST)) {
+            loadInventoryTag(pCompound.getList("Inventory", Tag.TAG_COMPOUND));
+        }
     }
     @Override
     public boolean isInWall() {

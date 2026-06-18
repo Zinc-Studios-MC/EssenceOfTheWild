@@ -6,6 +6,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
 import net.mrmisc.essenceofthewild.menu.freezer.WoodenFreezerMenu;
 
 public class EOTWMenuTypes {
@@ -14,4 +15,7 @@ public class EOTWMenuTypes {
 
     public static final RegistryObject<MenuType<WoodenFreezerMenu>> WOODEN_FREEZER =
             MENU_TYPES.register("wooden_freezer", () -> IForgeMenuType.create(WoodenFreezerMenu::new));
+
+    public static final RegistryObject<MenuType<FerretMenu>> FERRET =
+            MENU_TYPES.register("ferret", () -> IForgeMenuType.create(FerretMenu::new));
 }
