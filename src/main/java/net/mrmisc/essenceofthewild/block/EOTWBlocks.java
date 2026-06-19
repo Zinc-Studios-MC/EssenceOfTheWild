@@ -28,7 +28,6 @@ import net.mrmisc.essenceofthewild.block.custom.misc.MangoBlock;
 import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryBushBlock;
 import net.mrmisc.essenceofthewild.block.custom.nest.NestBlock;
 import net.mrmisc.essenceofthewild.block.custom.sleeping_bag.SleepingBagBlock;
-import net.mrmisc.essenceofthewild.block.custom.sleeping_bag.SleepingBagPart;
 import net.mrmisc.essenceofthewild.block.custom.wood.*;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
@@ -44,22 +43,22 @@ public class EOTWBlocks {
 
     public static RegistryObject<Block> WOODEN_FREEZER = registerBlock("wooden_freezer",
             ()-> new WoodenFreezerBlock(BlockBehaviour.Properties.of().noOcclusion().noParticlesOnBreak()));
-    public static RegistryObject<Block> WHITE_SLEEPING_BAG = registerBlock("white_sleeping_bag",()-> sleepingBagBlock(DyeColor.WHITE));
-    public static RegistryObject<Block> YELLOW_SLEEPING_BAG = registerBlock("yellow_sleeping_bag",()-> sleepingBagBlock(DyeColor.YELLOW));
-    public static RegistryObject<Block> BLACK_SLEEPING_BAG = registerBlock("black_sleeping_bag",()-> sleepingBagBlock(DyeColor.BLACK));
-    public static RegistryObject<Block> BLUE_SLEEPING_BAG = registerBlock("blue_sleeping_bag",()-> sleepingBagBlock(DyeColor.BLUE));
-    public static RegistryObject<Block> BROWN_SLEEPING_BAG = registerBlock("brown_sleeping_bag",()-> sleepingBagBlock(DyeColor.BROWN));
-    public static RegistryObject<Block> CYAN_SLEEPING_BAG = registerBlock("cyan_sleeping_bag",()-> sleepingBagBlock(DyeColor.CYAN));
-    public static RegistryObject<Block> GRAY_SLEEPING_BAG = registerBlock("gray_sleeping_bag",()-> sleepingBagBlock(DyeColor.GRAY));
-    public static RegistryObject<Block> LIGHT_BLUE_SLEEPING_BAG = registerBlock("light_blue_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIGHT_BLUE));
-    public static RegistryObject<Block> LIGHT_GRAY_SLEEPING_BAG = registerBlock("light_gray_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIGHT_GRAY));
-    public static RegistryObject<Block> LIME_SLEEPING_BAG = registerBlock("lime_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIME));
-    public static RegistryObject<Block> MAGENTA_SLEEPING_BAG = registerBlock("magenta_sleeping_bag",()-> sleepingBagBlock(DyeColor.MAGENTA));
-    public static RegistryObject<Block> ORANGE_SLEEPING_BAG = registerBlock("orange_sleeping_bag",()-> sleepingBagBlock(DyeColor.ORANGE));
-    public static RegistryObject<Block> PINK_SLEEPING_BAG = registerBlock("pink_sleeping_bag",()-> sleepingBagBlock(DyeColor.PINK));
-    public static RegistryObject<Block> PURPLE_SLEEPING_BAG = registerBlock("purple_sleeping_bag",()-> sleepingBagBlock(DyeColor.PURPLE));
-    public static RegistryObject<Block> RED_SLEEPING_BAG = registerBlock("red_sleeping_bag",()-> sleepingBagBlock(DyeColor.RED));
-    public static RegistryObject<Block> GREEN_SLEEPING_BAG = registerBlock("green_sleeping_bag",()-> sleepingBagBlock(DyeColor.GREEN));
+    public static RegistryObject<Block> WHITE_SLEEPING_BAG = registerBlock("white_sleeping_bag",()-> sleepingBagBlock(DyeColor.WHITE, EOTWBlocks.WHITE_SLEEPING_BAG));
+    public static RegistryObject<Block> YELLOW_SLEEPING_BAG = registerBlock("yellow_sleeping_bag",()-> sleepingBagBlock(DyeColor.YELLOW, EOTWBlocks.YELLOW_SLEEPING_BAG));
+    public static RegistryObject<Block> BLACK_SLEEPING_BAG = registerBlock("black_sleeping_bag",()-> sleepingBagBlock(DyeColor.BLACK, EOTWBlocks.BLACK_SLEEPING_BAG));
+    public static RegistryObject<Block> BLUE_SLEEPING_BAG = registerBlock("blue_sleeping_bag",()-> sleepingBagBlock(DyeColor.BLUE, EOTWBlocks.BLUE_SLEEPING_BAG));
+    public static RegistryObject<Block> BROWN_SLEEPING_BAG = registerBlock("brown_sleeping_bag",()-> sleepingBagBlock(DyeColor.BROWN, EOTWBlocks.BROWN_SLEEPING_BAG));
+    public static RegistryObject<Block> CYAN_SLEEPING_BAG = registerBlock("cyan_sleeping_bag",()-> sleepingBagBlock(DyeColor.CYAN, EOTWBlocks.CYAN_SLEEPING_BAG));
+    public static RegistryObject<Block> GRAY_SLEEPING_BAG = registerBlock("gray_sleeping_bag",()-> sleepingBagBlock(DyeColor.GRAY, EOTWBlocks.GRAY_SLEEPING_BAG));
+    public static RegistryObject<Block> LIGHT_BLUE_SLEEPING_BAG = registerBlock("light_blue_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIGHT_BLUE, EOTWBlocks.LIGHT_BLUE_SLEEPING_BAG));
+    public static RegistryObject<Block> LIGHT_GRAY_SLEEPING_BAG = registerBlock("light_gray_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIGHT_GRAY, EOTWBlocks.LIGHT_GRAY_SLEEPING_BAG));
+    public static RegistryObject<Block> LIME_SLEEPING_BAG = registerBlock("lime_sleeping_bag",()-> sleepingBagBlock(DyeColor.LIME, EOTWBlocks.LIME_SLEEPING_BAG));
+    public static RegistryObject<Block> MAGENTA_SLEEPING_BAG = registerBlock("magenta_sleeping_bag",()-> sleepingBagBlock(DyeColor.MAGENTA, EOTWBlocks.MAGENTA_SLEEPING_BAG));
+    public static RegistryObject<Block> ORANGE_SLEEPING_BAG = registerBlock("orange_sleeping_bag",()-> sleepingBagBlock(DyeColor.ORANGE, EOTWBlocks.ORANGE_SLEEPING_BAG));
+    public static RegistryObject<Block> PINK_SLEEPING_BAG = registerBlock("pink_sleeping_bag",()-> sleepingBagBlock(DyeColor.PINK, EOTWBlocks.PINK_SLEEPING_BAG));
+    public static RegistryObject<Block> PURPLE_SLEEPING_BAG = registerBlock("purple_sleeping_bag",()-> sleepingBagBlock(DyeColor.PURPLE, EOTWBlocks.PURPLE_SLEEPING_BAG));
+    public static RegistryObject<Block> RED_SLEEPING_BAG = registerBlock("red_sleeping_bag",()-> sleepingBagBlock(DyeColor.RED, EOTWBlocks.RED_SLEEPING_BAG));
+    public static RegistryObject<Block> GREEN_SLEEPING_BAG = registerBlock("green_sleeping_bag",()-> sleepingBagBlock(DyeColor.GREEN, EOTWBlocks.GREEN_SLEEPING_BAG));
 
     public static RegistryObject<Block> CHEESE_MAKER = registerBlock("cheese_maker",
             ()-> new CheeseMakerBlock(BlockBehaviour.Properties.of().noOcclusion()));
@@ -268,7 +267,7 @@ public class EOTWBlocks {
         return sb;
     }
 
-    private static SleepingBagBlock sleepingBagBlock(DyeColor pColor) {
-        return new SleepingBagBlock(pColor, BlockBehaviour.Properties.of().mapColor((state) -> state.getValue(SleepingBagBlock.PART) == BedPart.FOOT ? pColor.getMapColor() : MapColor.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY));
+    private static SleepingBagBlock sleepingBagBlock(DyeColor pColor, RegistryObject<Block> bagBlock) {
+        return new SleepingBagBlock(pColor, BlockBehaviour.Properties.of().mapColor((state) -> state.getValue(SleepingBagBlock.PART) == BedPart.FOOT ? pColor.getMapColor() : MapColor.WOOL).sound(SoundType.WOOD).strength(0.2F).noOcclusion().ignitedByLava().pushReaction(PushReaction.DESTROY), bagBlock);
     }
 }

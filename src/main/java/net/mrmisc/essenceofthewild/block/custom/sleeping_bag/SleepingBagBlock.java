@@ -1,7 +1,6 @@
 package net.mrmisc.essenceofthewild.block.custom.sleeping_bag;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -10,6 +9,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
@@ -18,11 +19,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.storage.loot.LootParams.Builder;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.server.SleepingBagBlockEntity;
 import net.mrmisc.essenceofthewild.capability.custom.sleeping_bag.SleepingBagSpawnProvider;
 
@@ -31,9 +34,11 @@ import java.util.List;
 public class SleepingBagBlock extends BedBlock {
     private final DyeColor color;
     private static final VoxelShape SLEEPING_BAG_SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
-    public SleepingBagBlock(DyeColor pColor, Properties pProperties) {
+    private final RegistryObject<Block> type;
+    public SleepingBagBlock(DyeColor pColor, Properties pProperties, RegistryObject<Block> bagBlock) {
         super(pColor, pProperties);
         this.color = pColor;
+        this.type = bagBlock;
     }
 
     @Override
@@ -116,5 +121,13 @@ public class SleepingBagBlock extends BedBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new SleepingBagBlockEntity(color, pPos, pState);
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState pState, Builder pParams) {
+        if(pState.getValue(PART) == BedPart.HEAD){
+            return List.of(Items.AIR.asItem().getDefaultInstance());
+        }
+        return List.of(type.get().asItem().getDefaultInstance());
     }
 }
