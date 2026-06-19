@@ -243,19 +243,15 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     }
 
     private DuckVariant pickVariant(Level level, BlockPos pos) {
-        if (level.getBiome(pos).is(Biomes.SWAMP) || level.getBiome(pos).is(Biomes.MANGROVE_SWAMP)) {
-            return DuckVariants.REDNECK;
+        var biome = level.getBiome(pos);
+        if (biome.is(Biomes.MANGROVE_SWAMP)) {
+            return level.random.nextBoolean() ? DuckVariants.BLUE : DuckVariants.REDNECK;
         }
-        if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
-            return level.random.nextBoolean() ? DuckVariants.GRAY : DuckVariants.BLUE;
+        if (biome.is(Biomes.JUNGLE) || biome.is(Biomes.BAMBOO_JUNGLE) || biome.is(Biomes.SPARSE_JUNGLE)) {
+            return level.random.nextBoolean() ? DuckVariants.BROWN : DuckVariants.CREST;
         }
-        if (level.getBiome(pos).is(Biomes.FOREST)
-                || level.getBiome(pos).is(Biomes.BIRCH_FOREST)
-                || level.getBiome(pos).is(Biomes.FLOWER_FOREST)) {
-            return DuckVariants.CREST;
-        }
-        if (level.getBiome(pos).is(Tags.Biomes.IS_HOT)) {
-            return DuckVariants.BROWN;
+        if (biome.is(Tags.Biomes.IS_RIVER) || biome.is(Biomes.SWAMP)) {
+            return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.GRAY;
         }
         return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.BROWN;
     }
