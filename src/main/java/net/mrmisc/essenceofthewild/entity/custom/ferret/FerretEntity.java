@@ -29,12 +29,19 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowParentGoal;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -105,7 +112,10 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         return Animal.createLivingAttributes()
         .add(Attributes.MAX_HEALTH, 14)
         .add(Attributes.MOVEMENT_SPEED, (double)0.5F)
-        .add(Attributes.FOLLOW_RANGE, 25);
+        .add(Attributes.FOLLOW_RANGE, 25)
+        .add(Attributes.ATTACK_DAMAGE, 4)
+        .add(Attributes.ATTACK_KNOCKBACK, 1)
+        .add(Attributes.ATTACK_SPEED, 1);
     }
 
     @Override
@@ -113,15 +123,21 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
         this.goalSelector.addGoal(1, new PanicGoal(this, 0.4D));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
 
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(Items.RABBIT), false));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
 
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 0.7D));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
 
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(6, new FerretFollowOwnerGoal(this, 1.0D, 10.0F, 5.0F, false));
+        this.goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Monster.class, false));
     }
 
     @Override
