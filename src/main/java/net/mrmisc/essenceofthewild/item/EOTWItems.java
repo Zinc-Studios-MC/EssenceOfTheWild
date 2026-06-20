@@ -47,9 +47,9 @@ public class EOTWItems {
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> MOOSHROOM_SPAWN_EGG = createSpawnEgg(EOTWEntities.MOOSHROOM, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> CHICKEN_SPAWN_EGG = createSpawnEgg(EOTWEntities.CHICKEN, 0xFFFFFF, 0xFFFFFF);
-    public static RegistryObject<Item> DUCK_SPAWN_EGG = createSpawnEgg(EOTWEntities.DUCK, 0x8FCFE0, 0xF2B854);
+    public static RegistryObject<Item> DUCK_SPAWN_EGG = createSpawnEgg(EOTWEntities.DUCK, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
-    public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 14551392, 7545129);
+    public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);
 
     //Tree
