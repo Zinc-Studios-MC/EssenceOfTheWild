@@ -57,7 +57,6 @@ import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
 import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
-import net.minecraft.world.entity.animal.Cow;
 
 public class FerretEntity extends TamableAnimal implements MenuProvider {
     public static final int INVENTORY_SIZE = 9;
@@ -135,6 +134,11 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     public boolean isFood(ItemStack pStack) {
         return pStack.is(Items.RABBIT);
     }
+    @Override
+    public void finalizeSpawnChildFromBreeding(ServerLevel pLevel, Animal pAnimal, AgeableMob pBaby) {
+        super.finalizeSpawnChildFromBreeding(pLevel, pAnimal, pBaby);
+        pBaby.setAge(-18000);
+    }
 
     @Override
     public void tick() {
@@ -170,7 +174,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
                 this.diggingTicks = 30;
             }
             else if (diggingTicks == 1){
-                this.level().destroyBlock(pos, false);
+                this.level().destroyBlock(pos, true);
                 this.setDiggingIn(false);
                 this.setShouldDig(false);
                 --this.diggingTicks;

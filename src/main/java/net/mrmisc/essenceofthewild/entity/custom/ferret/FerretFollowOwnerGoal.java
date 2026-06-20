@@ -2,13 +2,17 @@ package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
 import java.util.EnumSet;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 //I'm not 100% sure If I will keep it like this, this is just the first way I can think of
 public class FerretFollowOwnerGoal extends Goal{
@@ -86,6 +90,57 @@ public class FerretFollowOwnerGoal extends Goal{
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10);
             this.navigation.moveTo(this.owner, this.speedModifier);
+            this.timeToRecalcPath = this.adjustedTickDelay(10);
+            if (this.tamable.distanceToSqr(this.owner) >= 250.0D) {
+                this.teleportToOwner();
+            } else {
+                this.navigation.moveTo(this.owner, this.speedModifier);
+            }
         }
+    }
+
+   private void teleportToOwner() {
+      BlockPos blockpos = this.owner.blockPosition();
+
+      for(int i = 0; i < 10; ++i) {
+         int j = this.randomIntInclusive(-3, 3);
+         int k = this.randomIntInclusive(-1, 1);
+         int l = this.randomIntInclusive(-3, 3);
+         boolean flag = this.maybeTeleportTo(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+         if (flag) {
+            return;
+         }
+      }
+
+   }
+
+    private boolean maybeTeleportTo(int pX, int pY, int pZ) {
+        if (Math.abs((double)pX - this.owner.getX()) < 2.0D && Math.abs((double)pZ - this.owner.getZ()) < 2.0D) {
+            return false;
+        } else if (!this.canTeleportTo(new BlockPos(pX, pY, pZ))) {
+            return false;
+        } else {
+            this.tamable.moveTo((double)pX + 0.5D, (double)pY, (double)pZ + 0.5D, this.tamable.getYRot(), this.tamable.getXRot());
+            this.navigation.stop();
+            return true;
+        }
+    }
+
+    private boolean canTeleportTo(BlockPos pPos) {
+        BlockPathTypes blockpathtypes = WalkNodeEvaluator.getBlockPathTypeStatic(this.tamable.level(), pPos.mutable());
+        if (blockpathtypes != BlockPathTypes.WALKABLE) {
+            return false;
+        } else {
+            BlockState blockstate = this.tamable.level().getBlockState(pPos.below());
+            if (blockstate.getBlock() instanceof LeavesBlock) {
+                return false;
+            } else {
+                BlockPos blockpos = pPos.subtract(this.tamable.blockPosition());
+                return this.tamable.level().noCollision(this.tamable, this.tamable.getBoundingBox().move(blockpos));
+            }
+        }
+    }
+    private int randomIntInclusive(int pMin, int pMax) {
+        return this.tamable.getRandom().nextInt(pMax - pMin + 1) + pMin;
     }
 }
