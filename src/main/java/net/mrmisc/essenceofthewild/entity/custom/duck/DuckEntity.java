@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -30,7 +31,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.EOTWNestHelper;
 import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
@@ -250,7 +250,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         if (biome.is(Biomes.JUNGLE) || biome.is(Biomes.BAMBOO_JUNGLE) || biome.is(Biomes.SPARSE_JUNGLE)) {
             return level.random.nextBoolean() ? DuckVariants.BROWN : DuckVariants.CREST;
         }
-        if (biome.is(Tags.Biomes.IS_RIVER) || biome.is(Biomes.SWAMP)) {
+        if (biome.is(BiomeTags.IS_RIVER) || biome.is(Biomes.SWAMP)) {
             return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.GRAY;
         }
         return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.BROWN;
