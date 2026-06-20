@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -44,6 +45,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -54,6 +56,8 @@ import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
+import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
+import net.minecraft.world.entity.animal.Cow;
 
 public class FerretEntity extends TamableAnimal implements MenuProvider {
     public static final int INVENTORY_SIZE = 9;
@@ -75,8 +79,16 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_OUT =
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<BlockPos> TO_DIG =
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BLOCK_POS);
+    private static final EntityDataAccessor<Boolean> PRIMED_TO_DIG =
+        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static BlockPos foundBurrow = null;
+    private static boolean wasDigging = false;
     
     public int ticks = 0;
+    public int diggingTicks = 0;
 
     private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE) {
         @Override
@@ -105,7 +117,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
 
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(Items.RABBIT), false));
 
-        this.goalSelector.addGoal(3, new FollowParentGoal(this, 0.5D));
+        this.goalSelector.addGoal(3, new FollowParentGoal(this, 0.7D));
 
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
@@ -120,12 +132,6 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     }
 
     @Override
-    public boolean canBreed() {
-        //false cause no baby
-        return false;
-    }
-
-    @Override
     public boolean isFood(ItemStack pStack) {
         return pStack.is(Items.RABBIT);
     }
@@ -137,24 +143,86 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
             setupAnimationStates();
         }
         if(!this.level().isClientSide()){
-            if(this.level().isDay()){
-                if(ticks == 0 && this.isDiggingOut()){
-                    this.setDiggingOut(false);
-                    this.setNoAi(false);
-                }else if(ticks > 0 && this.isDiggingOut()){
-                    this.setNoAi(true);
-                    this.moveTo(this.getX(), this.getY()+0.05, this.getZ(), 0, 0);
-                    --ticks;
-                }
-                else{
-                    --ticks;
+            if(!this.isBaby()){
+                dayTick();
+                nightTicks();
+                shouldDigTicks();
+            }
+        }
+    }
+
+    private void shouldDigTicks(){
+        if(this.shouldDig()){
+            BlockPos pos = this.getBlockToDig();
+            if(pos.getX() == 0 && pos.getY() == 0 && pos.getZ() == 0){
+                return;
+            }
+            if(!(this.level().getBlockState(pos).is(Blocks.SUSPICIOUS_SAND) || this.level().getBlockState(pos).is(Blocks.SUSPICIOUS_GRAVEL))){
+                return;
+            }
+            AABB bound = this.getBoundingBox().inflate(1);
+            if(!bound.contains(pos.getX(), pos.getY(), pos.getZ())){
+                this.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), 1);
+                return;
+            }
+            if(diggingTicks <= 0){
+                this.setDiggingIn(true);
+                this.diggingTicks = 30;
+            }
+            else if (diggingTicks == 1){
+                this.level().destroyBlock(pos, false);
+                this.setDiggingIn(false);
+                this.setShouldDig(false);
+                --this.diggingTicks;
+            }else{
+                --this.diggingTicks;
+            }
+        }
+    }
+
+    private void dayTick(){
+        if(this.level().isDay()){
+            if(ticks == 0 && this.isDiggingOut()){
+                this.setDiggingOut(false);
+                this.setNoAi(false);
+            }else if(ticks > 0 && this.isDiggingOut()){
+                this.setNoAi(true);
+                this.moveTo(this.getX(), this.getY()+0.05, this.getZ(), 0, 0);
+                --ticks;
+            }
+            else{
+                --ticks;
+            }
+        }
+    }
+
+    private void nightTicks(){
+        if (this.level().isNight()) {
+            if(foundBurrow == null){
+                AABB aabb = this.getBoundingBox().inflate(20);
+                for (BlockPos pos : BlockPos.betweenClosed(
+                        Mth.floor(aabb.minX), Mth.floor(aabb.minY), Mth.floor(aabb.minZ),
+                        Mth.floor(aabb.maxX), Mth.floor(aabb.maxY), Mth.floor(aabb.maxZ))
+                    ) {
+                    BlockState state = this.level().getBlockState(pos);
+                    if (state.is(EOTWBlocks.DIRT_BURROW_BLOCK.get()) ||
+                        state.is(EOTWBlocks.SAND_BURROW_BLOCK.get()) ||
+                        state.is(EOTWBlocks.MUD_BURROW_BLOCK.get())
+                    ) {
+                        BurrowBlockEntity be = (BurrowBlockEntity)level().getBlockEntity(pos);
+                        if(be.canAddFerret()){
+                            foundBurrow = pos.immutable();
+                            break;
+                        }
+                    }
                 }
             }
-            if (this.level().isNight()) {
+            if(foundBurrow == null){
                 if(ticks <= 0){
                     this.setDiggingIn(true);
                     this.ticks = 30;
                     this.setNoAi(true);//become a vegitable to let the digging animation play nice
+                    wasDigging = true;
                 }else if(this.ticks > 1 && this.ticks < 25){
                     this.moveTo(this.getX(), this.getY()-0.02, this.getZ(), 0, 0);
                     --this.ticks;
@@ -171,6 +239,34 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
                     }
                 }else{
                     --this.ticks;
+                }
+            }else{
+                if(wasDigging){
+                    this.setDiggingIn(false);
+                    this.setNoAi(false);
+                    this.ticks = 0;
+                    wasDigging = true;
+                }
+                AABB bound = this.getBoundingBox().inflate(1);
+                if(!bound.contains(foundBurrow.getX(), foundBurrow.getY(), foundBurrow.getZ())){
+                    this.getNavigation().moveTo(foundBurrow.getX(), foundBurrow.getY(), foundBurrow.getZ(), 1);
+                    return;
+                }
+                if(diggingTicks <= 0){
+                    this.setDiggingIn(true);
+                    this.diggingTicks = 30;
+                }
+                else if (diggingTicks == 1){
+                    if (level().getBlockEntity(foundBurrow) instanceof BurrowBlockEntity bbe && bbe.addFerret(this)) {
+                        foundBurrow = null;
+                        this.ticks = 0;
+                        this.setDiggingIn(false);
+                        this.setShouldDig(false);
+                        this.remove(RemovalReason.DISCARDED);
+                    }
+                    --this.diggingTicks;
+                }else{
+                    --this.diggingTicks;
                 }
             }
         }
@@ -247,9 +343,14 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
                     this.setPersistenceRequired();
                     return InteractionResult.CONSUME;
                 }
-
-                openInventory(pPlayer);
+                if(!itemstack.is(Items.STICK)){
+                    openInventory(pPlayer);
+                }
                 this.setPersistenceRequired();
+                if(itemstack.is(Items.STICK)){
+                    EOTWEntityUtils.setFerretClicked(this, pPlayer);
+                    this.setShouldDig(true);
+                }
                 return InteractionResult.CONSUME;
             }
 
@@ -342,6 +443,8 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         this.entityData.define(VARIANT, 0);
         this.entityData.define(DIGGING_IN, false);
         this.entityData.define(DIGGING_OUT, false);
+        this.entityData.define(TO_DIG, new BlockPos(0,0,0));
+        this.entityData.define(PRIMED_TO_DIG, false);
     }
 
     @Override
@@ -445,5 +548,18 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
             return !blockstate.isAir() && blockstate.isSuffocating(this.level(), p_201942_) && Shapes.joinIsNotEmpty(blockstate.getCollisionShape(this.level(), p_201942_).move((double)p_201942_.getX(), (double)p_201942_.getY(), (double)p_201942_.getZ()), Shapes.create(aabb), BooleanOp.AND);
          });
       }
+    }
+
+    public void setBlockToDig(BlockPos pos){
+        this.entityData.set(TO_DIG, pos);
+    }
+    public BlockPos getBlockToDig(){
+        return this.entityData.get(TO_DIG);
+    }
+    public void setShouldDig(boolean bool){
+        this.entityData.set(PRIMED_TO_DIG, bool);
+    }
+    public boolean shouldDig(){
+        return this.entityData.get(PRIMED_TO_DIG);
     }
 }

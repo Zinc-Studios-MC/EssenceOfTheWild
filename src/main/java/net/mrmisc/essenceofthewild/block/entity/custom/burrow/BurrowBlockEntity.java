@@ -7,6 +7,8 @@ import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,6 +21,7 @@ import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretVariants;
 public class BurrowBlockEntity extends BlockEntity{
 
     private ArrayList<FerretData> ferretData = new ArrayList<>();
+    private ArrayList<FerretEntity> ferretEntities = new ArrayList<>();
 
     public BurrowBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(EOTWBlockEntities.BURROW_BLOCK_ENTITY.get(), pPos, pBlockState);
@@ -31,7 +34,9 @@ public class BurrowBlockEntity extends BlockEntity{
                     entity.getStringUUID(), 
                     entity.getVariant().id(), 
                     entity.getOwnerUUID() == null ? "" : entity.getOwnerUUID().toString(),
-                    entity.saveInventoryToTag()
+                    entity.saveInventoryToTag(),
+                    entity.isTame(),
+                    entity.isInLove()
                 )
             );
             setChanged();
@@ -71,8 +76,21 @@ public class BurrowBlockEntity extends BlockEntity{
                 }
                 ferret.ticks = 28;
                 ferret.setDiggingOut(true);
+                ferret.setTame(fd.isTamed());
+                ferret.setInLove((Player)ferret.getOwner());
                 ferret.moveTo(this.getBlockPos(), 0, 0);
                 this.getLevel().addFreshEntity(ferret);
+                ferretEntities.add(ferret);
+            }
+        }
+        if(ferretEntities.size()>1){
+            FerretEntity en1 = ferretEntities.get(0);
+            FerretEntity en2 = ferretEntities.get(1);
+            if(en1.canMate(en2)){
+                int bound = en1.getRandom().nextInt(1, 4);
+                for(int i = 0; i < bound; i++){
+                    en1.spawnChildFromBreeding((ServerLevel)en1.level(), en2);
+                }
             }
         }
         ferretData.clear();
@@ -101,6 +119,8 @@ public class BurrowBlockEntity extends BlockEntity{
             ferretTag.putString("Variant", fd.variant());
             ferretTag.putString("Owner", fd.ownerUUID());
             ferretTag.put("Inventory", fd.inventory());
+            ferretTag.putBoolean("isTame", fd.isTamed());
+            ferretTag.putBoolean("isInLove", fd.isInLove());
             pTag.put("Ferret"+i, ferretTag);
         }
     }
@@ -118,13 +138,15 @@ public class BurrowBlockEntity extends BlockEntity{
                     ferretTag.getString("UUID"),
                     ferretTag.getString("Variant"),
                     ferretTag.getString("Owner"),
-                    ferretTag.getCompound("Inventory")
+                    ferretTag.getCompound("Inventory"),
+                    ferretTag.getBoolean("isTame"),
+                    ferretTag.getBoolean("isInLove")
                 ));
             } else if(t!=null){
                 String[] array = t.getAsString().split("\\|", -1);
 
-                if (array.length >= 3) {
-                    ferretData.add(new FerretData(array[0], array[1], array[2]));
+                if (array.length >= 5) {
+                    ferretData.add(new FerretData(array[0], array[1], array[2], Boolean.getBoolean(array[3]), Boolean.getBoolean(array[4])));
                 }
             }
         }

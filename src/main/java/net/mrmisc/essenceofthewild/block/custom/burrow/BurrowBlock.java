@@ -1,6 +1,7 @@
 package net.mrmisc.essenceofthewild.block.custom.burrow;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 
@@ -29,5 +31,12 @@ public class BurrowBlock extends BaseEntityBlock{
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pBlockEntityType == EOTWBlockEntities.BURROW_BLOCK_ENTITY.get() ? BurrowBlockEntity::tick : null;
+    }
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if(!level.isClientSide()){
+            bbe.extractFerrets();
+        }
+        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
     }
 }

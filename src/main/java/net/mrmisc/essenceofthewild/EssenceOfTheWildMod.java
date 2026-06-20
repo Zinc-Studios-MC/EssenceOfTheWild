@@ -1,11 +1,16 @@
 package net.mrmisc.essenceofthewild;
 
+import java.util.List;
+
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -20,6 +25,7 @@ import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
@@ -30,6 +36,7 @@ import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrowRenderer;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
 import net.mrmisc.essenceofthewild.screen.ferret.FerretScreen;
 import net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;
+import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -50,6 +57,8 @@ public class EssenceOfTheWildMod
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+
+        MinecraftForge.EVENT_BUS.register(new ServerInteractionListener());
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
@@ -84,6 +93,29 @@ public class EssenceOfTheWildMod
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
             MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
+        }
+    }
+    @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public class ServerInteractionListener {
+        @SubscribeEvent
+        public void onInteract(PlayerInteractEvent.RightClickBlock event) {
+            if (event.getLevel().isClientSide()) return;
+            Player p = event.getEntity();
+            if(!event.getItemStack().is(Items.STICK)){
+                return;
+            }
+            String uuid = EOTWEntityUtils.getPlayerClicked(p);
+            if(uuid == null){
+                return;
+            }
+            List<FerretEntity> lfe = event.getLevel().getEntitiesOfClass(FerretEntity.class, p.getBoundingBox().inflate(200), (e) ->{
+                return e.getStringUUID().equals(uuid);
+            });
+            if(lfe.isEmpty()){
+                return;
+            }
+            FerretEntity fe = lfe.get(0);
+            fe.setBlockToDig(event.getPos());
         }
     }
 }
