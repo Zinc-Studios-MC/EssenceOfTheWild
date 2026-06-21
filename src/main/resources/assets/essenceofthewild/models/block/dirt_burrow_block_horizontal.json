@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "end": "essenceofthewild:block/dirt_burrow_top",
-    "side": "essenceofthewild:block/dirt_burrow_side",
-    "particle": "essenceofthewild:block/dirt_burrow_side"
-  }
-}

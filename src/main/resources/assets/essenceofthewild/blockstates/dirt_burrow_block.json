@@ -1,5 +1,7 @@
 {
   "variants": {
-    "": { "model": "essenceofthewild:block/dirt_burrow_block" }
+    "": { 
+      "model": "essenceofthewild:block/dirt_burrow_block" 
+    }
   }
 }

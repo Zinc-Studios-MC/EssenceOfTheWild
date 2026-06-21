@@ -101,11 +101,14 @@ public class EssenceOfTheWildMod
         public void onInteract(PlayerInteractEvent.RightClickBlock event) {
             if (event.getLevel().isClientSide()) return;
             Player p = event.getEntity();
+            if(!p.getPersistentData().contains("OwnsFerret")){
+                return;
+            }
             if(!event.getItemStack().is(Items.STICK)){
                 return;
             }
             String uuid = EOTWEntityUtils.getPlayerClicked(p);
-            if(uuid == null){
+            if(uuid.equals("")){
                 return;
             }
             List<FerretEntity> lfe = event.getLevel().getEntitiesOfClass(FerretEntity.class, p.getBoundingBox().inflate(200), (e) ->{

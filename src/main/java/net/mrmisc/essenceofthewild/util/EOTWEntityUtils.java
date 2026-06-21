@@ -1,27 +1,21 @@
 package net.mrmisc.essenceofthewild.util;
 
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 
 public class EOTWEntityUtils {
 
-    public static final EntityDataAccessor<String> CLICKED = SynchedEntityData.defineId(Player.class, EntityDataSerializers.STRING);
-
-    private static boolean defined = false;
+    private static String key = "ClickedFerret";
 
     public static void setFerretClicked(FerretEntity fe, Player p){
-        SynchedEntityData enData = p.getEntityData();
-        if(!defined){
-            enData.define(CLICKED, "");
-            defined = true;
-        }
-        enData.set(CLICKED, fe.getStringUUID());
-        enData.packDirty();
+        CompoundTag tag = p.getPersistentData();
+        tag.putString(key, fe.getStringUUID());
     }
     public static String getPlayerClicked(Player p){
-        return p.getEntityData().get(CLICKED);
+        return p.getPersistentData().getString(key);
+    }
+    public static void removeFerretClicked(Player p){
+        p.getPersistentData().remove(key);
     }
 }

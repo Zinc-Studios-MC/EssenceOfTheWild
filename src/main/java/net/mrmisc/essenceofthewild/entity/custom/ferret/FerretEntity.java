@@ -1,7 +1,11 @@
 package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
+import java.util.Set;
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -9,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -18,6 +23,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
@@ -41,6 +47,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -53,8 +60,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.network.NetworkHooks;
@@ -165,6 +178,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         if(!this.level().isClientSide()){
             if(!this.isBaby()){
                 dayTick();
+                //TODO: move these to their own goals, I'm too lazy to do it right now
                 nightTicks();
                 shouldDigTicks();
             }
@@ -177,8 +191,11 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
             if(pos.getX() == 0 && pos.getY() == 0 && pos.getZ() == 0){
                 return;
             }
-            if(!(this.level().getBlockState(pos).is(Blocks.SUSPICIOUS_SAND) || this.level().getBlockState(pos).is(Blocks.SUSPICIOUS_GRAVEL))){
-                return;
+            BlockState state = this.level().getBlockState(pos);
+            if(!(this.inventory.hasAnyOf(Set.of(Items.GOLDEN_CARROT)))){
+                if(!(state.is(Blocks.SUSPICIOUS_SAND) || state.is(Blocks.SUSPICIOUS_GRAVEL))){
+                    return;
+                }
             }
             AABB bound = this.getBoundingBox().inflate(1);
             if(!bound.contains(pos.getX(), pos.getY(), pos.getZ())){
@@ -190,7 +207,55 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
                 this.diggingTicks = 30;
             }
             else if (diggingTicks == 1){
-                this.level().destroyBlock(pos, true);
+                if(state.is(Blocks.SUSPICIOUS_SAND) || state.is(Blocks.SUSPICIOUS_GRAVEL)){
+                    BrushableBlockEntity be = (BrushableBlockEntity)this.level().getBlockEntity(pos);
+
+                    ItemStack stack = new ItemStack(Items.AIR);
+
+                    be.saveToItem(stack);
+
+                    String tagString = stack.getTag().get("BlockEntityTag").getAsString();
+
+                    String s = tagString.substring(tagString.indexOf("\"")+1, tagString.indexOf("\","));
+
+                    LootTable loottable = this.level().getServer().getLootData().getLootTable(ResourceLocation.tryParse(s));
+
+                    ObjectArrayList<ItemStack> items = loottable.getRandomItems((new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.getOnPos().above())).withLuck(((Player)this.getOwner()).getLuck()).withParameter(LootContextParams.THIS_ENTITY, (Player)this.getOwner()).create(LootContextParamSets.CHEST));
+                    ItemStack itemstack;
+                    switch (items.size()) {
+                        case 0:
+                        itemstack = ItemStack.EMPTY;
+                        break;
+                        case 1:
+                        itemstack = items.get(0);
+                        break;
+                        default:
+                        itemstack = items.get(0);
+                    }
+                    this.level().destroyBlock(pos, false);
+                    if(state.is(Blocks.SUSPICIOUS_SAND)){
+                        this.level().setBlock(pos, Blocks.SAND.defaultBlockState(), 2);
+                    }
+                    else if(state.is(Blocks.SUSPICIOUS_GRAVEL)){
+                        this.level().setBlock(pos, Blocks.GRAVEL.defaultBlockState(), 2);
+                    }
+                    for(int i = 0; i < this.getInventory().getContainerSize(); i++){
+                        ItemStack it = this.getInventory().getItem(i);
+                        if(it.is(Items.AIR)){
+                            this.getInventory().setItem(i, itemstack);
+                            break;
+                        }else if(it.is(itemstack.getItem())){
+                            it.setCount(it.getCount()+itemstack.getCount());
+                            break;
+                        }
+                    }
+                    if(!this.getInventory().hasAnyOf(Set.of(itemstack.getItem()))){
+                        ItemEntity ite = new ItemEntity(this.level(), this.getX(), this.getY()+1, this.getZ(), itemstack);
+                        this.level().addFreshEntity(ite);
+                    }
+                }else{
+                    this.level().destroyBlock(pos, true);
+                }
                 this.setDiggingIn(false);
                 this.setShouldDig(false);
                 --this.diggingTicks;
@@ -248,7 +313,18 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
                     --this.ticks;
                 }
                 else if (ticks == 1){
-                    this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
+                    if(this.level().getBlockState(this.getOnPos()).is(Blocks.DIRT)){
+                        this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
+                    }
+                    else if(this.level().getBlockState(this.getOnPos()).is(Blocks.SAND)){
+                        this.level().setBlock(this.getOnPos(), EOTWBlocks.SAND_BURROW_BLOCK.get().defaultBlockState(), 2);
+                    }
+                    else if(this.level().getBlockState(this.getOnPos()).is(Blocks.MUD)){
+                        this.level().setBlock(this.getOnPos(), EOTWBlocks.MUD_BURROW_BLOCK.get().defaultBlockState(), 2);
+                    }
+                    else{
+                        this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
+                    }
                     if (level().getBlockEntity(this.getOnPos()) instanceof BurrowBlockEntity bbe && bbe.addFerret(this)) {
                         this.ticks = 0;
                         this.remove(RemovalReason.DISCARDED);
@@ -581,5 +657,17 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     }
     public boolean shouldDig(){
         return this.entityData.get(PRIMED_TO_DIG);
+    }
+    @Override
+    public void die(DamageSource pCause) {
+        if(this.getOwner()!=null){
+            this.getOwner().getPersistentData().remove("OwnsFerret");
+        }
+        super.die(pCause);
+    }
+    @Override
+    public void setOwnerUUID(UUID pUuid) {
+        super.setOwnerUUID(pUuid);
+        this.getOwner().getPersistentData().putBoolean("OwnsFerret", true);
     }
 }
