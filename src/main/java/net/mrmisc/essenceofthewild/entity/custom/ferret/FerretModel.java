@@ -14,10 +14,9 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
-public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
+public class FerretModel extends HierarchicalModel<FerretEntity> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "ferret"), "main");
 	private final ModelPart body;
@@ -38,7 +37,7 @@ public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
 		this.back_right_leg = this.body.getChild("back_right_leg");
 		this.bone = this.body.getChild("bone");
 		this.tail = this.bone.getChild("tail");
-		this.mainPart = this.bone.getChild("mainPart");
+		this.mainPart = this.bone.getChild("main part");
 		this.head = this.mainPart.getChild("head");
 		this.right_ear_cube = this.head.getChild("right_ear_cube");
 		this.left_ear_cube = this.head.getChild("left_ear_cube");
@@ -64,7 +63,7 @@ public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
 		.texOffs(10, 44).addBox(-1.5F, -1.5F, 9.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
 		.texOffs(26, 12).addBox(-0.5F, 1.5F, 0.0F, 1.0F, 2.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, 3.0F));
 
-		PartDefinition mainPart = bone.addOrReplaceChild("mainPart", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 5.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, -6.0F));
+		PartDefinition mainPart = bone.addOrReplaceChild("main part", CubeListBuilder.create().texOffs(0, 0).addBox(-2.0F, -2.0F, -9.0F, 4.0F, 5.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -3.0F, -6.0F));
 
 		PartDefinition head = mainPart.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, -3.0F, -3.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(-0.01F))
 		.texOffs(26, 23).addBox(-2.5F, -5.99F, -4.0F, 5.0F, 3.0F, 5.0F, new CubeDeformation(0.0F))
@@ -82,14 +81,14 @@ public class FerretModel<T extends Entity> extends HierarchicalModel<T> {
 	}
 
 	@Override
-	public void setupAnim(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+	public void setupAnim(FerretEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.applyHeadRotation((FerretEntity)entity, netHeadYaw, headPitch, ageInTicks);
 
-		this.animateWalk(((FerretEntity)entity).isRunning() ? FerretAnimation.run : FerretAnimation.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
-		this.animate(((FerretEntity)entity).idleAnimationState, FerretAnimation.idle, ageInTicks, 1);
-		this.animate(((FerretEntity)entity).diggingInAnimationState, FerretAnimation.dig, ageInTicks, 1);
-		this.animate(((FerretEntity)entity).diggingOutAnimationState, FerretAnimation.digOut, ageInTicks, 1);
+		this.animateWalk(entity.isRunning() ? FerretAnimation.run : FerretAnimation.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
+		this.animate(entity.idleAnimationState, FerretAnimation.idle, ageInTicks, 1);
+		this.animate(entity.diggingInAnimationState, FerretAnimation.dig, ageInTicks, 1);
+		this.animate(entity.diggingOutAnimationState, FerretAnimation.digOut, ageInTicks, 1);
 	}
 
 	private void applyHeadRotation(FerretEntity pEntity, float pNetHeadYaw, float pHeadPitch, float pAgeInTicks){

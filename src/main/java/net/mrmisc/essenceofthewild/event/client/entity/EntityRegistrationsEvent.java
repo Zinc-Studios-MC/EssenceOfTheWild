@@ -18,6 +18,7 @@ import net.mrmisc.essenceofthewild.entity.custom.cow.CowModel;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckModel;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DucklingModel;
+import net.mrmisc.essenceofthewild.entity.custom.ferret.BabyFerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
@@ -56,6 +57,7 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(SleepingBagRenderer.HEAD, SleepingBagRenderer::createHeadLayer);
         event.registerLayerDefinition(SleepingBagRenderer.FOOT, SleepingBagRenderer::createFootLayer);
         event.registerLayerDefinition(FerretModel.LAYER_LOCATION, FerretModel::createBodyLayer);
+        event.registerLayerDefinition(BabyFerretModel.LAYER_LOCATION, BabyFerretModel::createBodyLayer);
     }
 
     @SubscribeEvent
