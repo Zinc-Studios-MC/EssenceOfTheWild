@@ -135,7 +135,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
-        this.goalSelector.addGoal(1, new PanicGoal(this, 0.4D));
+        this.goalSelector.addGoal(1, new FerretPanicGoal(this, 1));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
 
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(Items.RABBIT), false));
