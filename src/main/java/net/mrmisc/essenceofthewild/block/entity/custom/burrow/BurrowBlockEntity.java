@@ -7,6 +7,7 @@ import java.util.UUID;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -97,7 +98,6 @@ public class BurrowBlockEntity extends BlockEntity{
         setChanged();
     }
 
-    //will do the breeding thing later
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity blockEntity) {
         if(!(blockEntity instanceof BurrowBlockEntity bbe)){
             return;

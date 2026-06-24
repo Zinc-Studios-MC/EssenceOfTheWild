@@ -16,7 +16,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -38,7 +37,6 @@ import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -72,7 +70,6 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraftforge.network.NetworkHooks;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
-import net.mrmisc.essenceofthewild.block.entity.custom.burrow.BurrowBlockEntity;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
@@ -102,9 +99,6 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> PRIMED_TO_DIG =
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
-
-    private static BlockPos foundBurrow = null;
-    private static boolean wasDigging = false;
     
     public int ticks = 0;
     public int diggingTicks = 0;
@@ -136,13 +130,16 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
         this.goalSelector.addGoal(1, new FerretPanicGoal(this, 1));
+        this.goalSelector.addGoal(1, new FindOrDigBurrowsGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
 
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(Items.RABBIT), false));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
 
         this.goalSelector.addGoal(3, new FollowParentGoal(this, 0.7D));
         this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)).setAlertOthers());
+        this.goalSelector.addGoal(3, new AttackRabbitGoal(this, 1, true));
 
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.5D));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 3f));
@@ -179,7 +176,6 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
             if(!this.isBaby()){
                 dayTick();
                 //TODO: move these to their own goals, I'm too lazy to do it right now
-                nightTicks();
                 shouldDigTicks();
             }
         }
@@ -277,93 +273,6 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
             }
             else{
                 --ticks;
-            }
-        }
-    }
-
-    private void nightTicks(){
-        if (this.level().isNight()) {
-            if(foundBurrow == null){
-                AABB aabb = this.getBoundingBox().inflate(20);
-                for (BlockPos pos : BlockPos.betweenClosed(
-                        Mth.floor(aabb.minX), Mth.floor(aabb.minY), Mth.floor(aabb.minZ),
-                        Mth.floor(aabb.maxX), Mth.floor(aabb.maxY), Mth.floor(aabb.maxZ))
-                    ) {
-                    BlockState state = this.level().getBlockState(pos);
-                    if (state.is(EOTWBlocks.DIRT_BURROW_BLOCK.get()) ||
-                        state.is(EOTWBlocks.SAND_BURROW_BLOCK.get()) ||
-                        state.is(EOTWBlocks.MUD_BURROW_BLOCK.get())
-                    ) {
-                        BurrowBlockEntity be = (BurrowBlockEntity)level().getBlockEntity(pos);
-                        if(be.canAddFerret()){
-                            foundBurrow = pos.immutable();
-                            break;
-                        }
-                    }
-                }
-            }
-            if(foundBurrow == null){
-                if(ticks <= 0){
-                    this.setDiggingIn(true);
-                    this.ticks = 30;
-                    this.setNoAi(true);//become a vegitable to let the digging animation play nice
-                    wasDigging = true;
-                }else if(this.ticks > 1 && this.ticks < 25){
-                    this.moveTo(this.getX(), this.getY()-0.02, this.getZ(), 0, 0);
-                    --this.ticks;
-                }
-                else if (ticks == 1){
-                    if(this.level().getBlockState(this.getOnPos()).is(Blocks.DIRT)){
-                        this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
-                    }
-                    else if(this.level().getBlockState(this.getOnPos()).is(Blocks.SAND)){
-                        this.level().setBlock(this.getOnPos(), EOTWBlocks.SAND_BURROW_BLOCK.get().defaultBlockState(), 2);
-                    }
-                    else if(this.level().getBlockState(this.getOnPos()).is(Blocks.MUD)){
-                        this.level().setBlock(this.getOnPos(), EOTWBlocks.MUD_BURROW_BLOCK.get().defaultBlockState(), 2);
-                    }
-                    else{
-                        this.level().setBlock(this.getOnPos(), EOTWBlocks.DIRT_BURROW_BLOCK.get().defaultBlockState(), 2);
-                    }
-                    if (level().getBlockEntity(this.getOnPos()) instanceof BurrowBlockEntity bbe && bbe.addFerret(this)) {
-                        this.ticks = 0;
-                        this.remove(RemovalReason.DISCARDED);
-                    } else {
-                        this.setDiggingIn(false);
-                        this.setNoAi(false);
-                        this.ticks = 0;
-                    }
-                }else{
-                    --this.ticks;
-                }
-            }else{
-                if(wasDigging){
-                    this.setDiggingIn(false);
-                    this.setNoAi(false);
-                    this.ticks = 0;
-                    wasDigging = true;
-                }
-                AABB bound = this.getBoundingBox().inflate(1);
-                if(!bound.contains(foundBurrow.getX(), foundBurrow.getY(), foundBurrow.getZ())){
-                    this.getNavigation().moveTo(foundBurrow.getX(), foundBurrow.getY(), foundBurrow.getZ(), 1);
-                    return;
-                }
-                if(diggingTicks <= 0){
-                    this.setDiggingIn(true);
-                    this.diggingTicks = 30;
-                }
-                else if (diggingTicks == 1){
-                    if (level().getBlockEntity(foundBurrow) instanceof BurrowBlockEntity bbe && bbe.addFerret(this)) {
-                        foundBurrow = null;
-                        this.ticks = 0;
-                        this.setDiggingIn(false);
-                        this.setShouldDig(false);
-                        this.remove(RemovalReason.DISCARDED);
-                    }
-                    --this.diggingTicks;
-                }else{
-                    --this.diggingTicks;
-                }
             }
         }
     }
