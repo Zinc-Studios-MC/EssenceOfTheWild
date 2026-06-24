@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -56,6 +57,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
@@ -68,6 +70,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.network.NetworkHooks;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
@@ -390,18 +393,28 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
-        if (level.getBiome(pos).is(Biomes.FOREST) || 
-            level.getBiome(pos).is(Biomes.BIRCH_FOREST) ||
-            level.getBiome(pos).is(Biomes.FLOWER_FOREST)
+        Holder<Biome> biome = level.getBiome(pos);
+        if (biome.is(Biomes.FOREST) || 
+            biome.is(Biomes.BIRCH_FOREST) ||
+            biome.is(Biomes.FLOWER_FOREST)
             ) {
             return FerretVariants.BASIC;
         } else if (
-            level.getBiome(pos).is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
-            level.getBiome(pos).is(Biomes.OLD_GROWTH_PINE_TAIGA)) {
+            biome.is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
+            biome.is(Biomes.OLD_GROWTH_PINE_TAIGA)) {
             return FerretVariants.RED_FERRET;
         } else if (
-            level.getBiome(pos).is(Biomes.TAIGA) || 
-            level.getBiome(pos).is(Biomes.SNOWY_TAIGA)) {
+            biome.is(Biomes.TAIGA) || 
+            biome.is(Biomes.SNOWY_TAIGA)) {
+            return FerretVariants.WHITE_FERRET;
+        }
+        if(biome.is(Tags.Biomes.IS_PLAINS)){
+            return FerretVariants.BASIC;
+        }
+        if(biome.is(Tags.Biomes.IS_HOT)){
+            return FerretVariants.RED_FERRET;
+        }
+        if(biome.is(Tags.Biomes.IS_COLD)){
             return FerretVariants.WHITE_FERRET;
         }
         return level.random.nextBoolean() ? FerretVariants.BASIC : FerretVariants.RED_FERRET;
