@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class FerretRenderer extends MobRenderer<FerretEntity, FerretModel> {
 
@@ -23,17 +22,8 @@ public class FerretRenderer extends MobRenderer<FerretEntity, FerretModel> {
 
     @Override
     public ResourceLocation getTextureLocation(FerretEntity pEntity) {
-        if(pEntity.isBaby()){
-            String path = pEntity.getVariant().location().getPath();
-
-            int index = path.lastIndexOf('/') + 1;
-
-            String babyPath = path.substring(0, index)
-                    + "baby_"
-                    + path.substring(index);
-            return ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, babyPath);
-        }
-        return pEntity.getVariant().location();
+        FerretVariant variant = pEntity.getVariant();
+        return pEntity.isBaby() ? variant.babyLocation() : variant.adultLocation();
     }
 
     @Override

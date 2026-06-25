@@ -67,11 +67,11 @@ public class BurrowBlockEntity extends BlockEntity{
                     case "basic":
                         ferret.setVariant(FerretVariants.BASIC);
                         break;
-                    case "red_ferret":
-                        ferret.setVariant(FerretVariants.RED_FERRET);
+                    case "red":
+                        ferret.setVariant(FerretVariants.RED);
                         break;
-                    case "white_ferret":
-                        ferret.setVariant(FerretVariants.WHITE_FERRET);
+                    case "white":
+                        ferret.setVariant(FerretVariants.WHITE);
                         break;
                 }
                 ferret.ticks = 28;

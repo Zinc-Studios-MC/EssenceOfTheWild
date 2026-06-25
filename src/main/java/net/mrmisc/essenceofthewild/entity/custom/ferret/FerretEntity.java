@@ -74,11 +74,11 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.network.NetworkHooks;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
-import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
 import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 
-public class FerretEntity extends TamableAnimal implements MenuProvider {
+public class FerretEntity extends TamableAnimal implements MenuProvider, VariantCarrier {
     public static final int INVENTORY_SIZE = 9;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -90,10 +90,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
 
     private static final EntityDataAccessor<Boolean> RUNNING = 
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
-    
-    private static final EntityDataAccessor<Integer> VARIANT =
-        SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
-    
+        
     private static final EntityDataAccessor<Boolean> DIGGING_IN =
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIGGING_OUT =
@@ -102,6 +99,9 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> PRIMED_TO_DIG =
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private static final EntityDataAccessor<Integer> VARIANT =
+            SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
     
     public int ticks = 0;
     public int diggingTicks = 0;
@@ -156,7 +156,9 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     @Override
     @Nullable
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        return EOTWEntities.FERRET.get().create(pLevel);
+        FerretEntity child = new FerretEntity(EOTWEntities.FERRET.get(), pLevel);
+        child.setVariant(this.getVariant());
+        return child;
     }
 
     @Override
@@ -384,61 +386,12 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new FerretMenu(id, inventory, this.inventory, this);
     }
-
-    public MobVariant getVariant() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < FerretVariants.ALL.size())
-                ? FerretVariants.ALL.get(i)
-                : FerretVariants.ALL.get(0);
-    }
-
-    private MobVariant pickVariant(Level level, BlockPos pos) {
-        Holder<Biome> biome = level.getBiome(pos);
-        if (biome.is(Biomes.FOREST) || 
-            biome.is(Biomes.BIRCH_FOREST) ||
-            biome.is(Biomes.FLOWER_FOREST)
-            ) {
-            return FerretVariants.BASIC;
-        } else if (
-            biome.is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
-            biome.is(Biomes.OLD_GROWTH_PINE_TAIGA)) {
-            return FerretVariants.RED_FERRET;
-        } else if (
-            biome.is(Biomes.TAIGA) || 
-            biome.is(Biomes.SNOWY_TAIGA)) {
-            return FerretVariants.WHITE_FERRET;
-        }
-        if(biome.is(Tags.Biomes.IS_PLAINS)){
-            return FerretVariants.BASIC;
-        }
-        if(biome.is(Tags.Biomes.IS_HOT)){
-            return FerretVariants.RED_FERRET;
-        }
-        if(biome.is(Tags.Biomes.IS_COLD)){
-            return FerretVariants.WHITE_FERRET;
-        }
-        return level.random.nextBoolean() ? FerretVariants.BASIC : FerretVariants.RED_FERRET;
-    }
-
+    
     public void setRunning(boolean running){
         this.entityData.set(RUNNING, running);
     }
     public boolean isRunning(){
         return this.entityData.get(RUNNING);
-    }
-
-    public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, FerretVariants.ALL.indexOf(variant));
-    }
-
-    private void setVariantById(String id) {
-        for (int i = 0; i < FerretVariants.ALL.size(); i++) {
-            if (FerretVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
     }
 
     public void setDiggingIn(boolean bool){
@@ -458,19 +411,21 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     protected void defineSynchedData(){
         super.defineSynchedData();
         this.entityData.define(RUNNING, false);
-        this.entityData.define(VARIANT, 0);
         this.entityData.define(DIGGING_IN, false);
         this.entityData.define(DIGGING_OUT, false);
         this.entityData.define(TO_DIG, new BlockPos(0,0,0));
         this.entityData.define(PRIMED_TO_DIG, false);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
             MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        if (pDataTag == null || !pDataTag.contains("Variant")) {
-            this.setVariant(pickVariant(pLevel.getLevel(), this.blockPosition()));
+        if (pDataTag != null && pDataTag.contains("Variant")) {
+            setVariantById(pDataTag.getString("Variant"));
+            return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         }
+        setVariant(pickVariant(pLevel.getLevel(), blockPosition()));
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
@@ -533,18 +488,18 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putString("Variant", getVariant().id());
         pCompound.put("Inventory", createInventoryTag());
+        pCompound.putString("Variant", getVariantId());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        this.setVariantById(pCompound.getString("Variant"));
 
         if (pCompound.contains("Inventory", Tag.TAG_LIST)) {
             loadInventoryTag(pCompound.getList("Inventory", Tag.TAG_COMPOUND));
         }
+        setVariantById(pCompound.getString("Variant"));
     }
     @Override
     public boolean isInWall() {
@@ -591,5 +546,66 @@ public class FerretEntity extends TamableAnimal implements MenuProvider {
     public void setOwnerUUID(UUID pUuid) {
         super.setOwnerUUID(pUuid);
         this.getOwner().getPersistentData().putBoolean("OwnsFerret", true);
+    }
+
+    public FerretVariant getVariant() {
+        int index = this.entityData.get(VARIANT);
+        return index >= 0 && index < FerretVariants.ALL.size()
+                ? FerretVariants.ALL.get(index)
+                : FerretVariants.ALL.get(0);
+    }
+
+    public void setVariant(FerretVariant variant) {
+        this.entityData.set(VARIANT, FerretVariants.ALL.indexOf(variant));
+    }
+
+    @Override
+    public String getVariantId() {
+        return getVariant().id();
+    }
+
+    @Override
+    public void setVariantById(String id) {
+        for (int i = 0; i < FerretVariants.ALL.size(); i++) {
+            if (FerretVariants.ALL.get(i).id().equals(id)) {
+                this.entityData.set(VARIANT, i);
+                return;
+            }
+        }
+        this.entityData.set(VARIANT, 0);
+    }
+
+    private FerretVariant pickVariant(Level level, BlockPos pos) {
+        Holder<Biome> biome = level.getBiome(pos);
+        if (biome.is(Biomes.FOREST) || 
+            biome.is(Biomes.BIRCH_FOREST) ||
+            biome.is(Biomes.FLOWER_FOREST)
+            ) {
+            return FerretVariants.BASIC;
+        } else if (
+            level.getBiome(pos).is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
+            level.getBiome(pos).is(Biomes.OLD_GROWTH_PINE_TAIGA) ||
+            biome.is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
+            biome.is(Biomes.OLD_GROWTH_PINE_TAIGA)
+        ) {
+            return FerretVariants.RED;
+        } else if (
+            level.getBiome(pos).is(Biomes.TAIGA) || 
+            level.getBiome(pos).is(Biomes.SNOWY_TAIGA) ||
+            biome.is(Biomes.TAIGA) || 
+            biome.is(Biomes.SNOWY_TAIGA)
+        ) {
+            return FerretVariants.WHITE;
+        }
+        if(biome.is(Tags.Biomes.IS_PLAINS)){
+            return FerretVariants.BASIC;
+        }
+        if(biome.is(Tags.Biomes.IS_HOT)){
+            return FerretVariants.RED;
+        }
+        if(biome.is(Tags.Biomes.IS_COLD)){
+            return FerretVariants.WHITE;
+        }
+        return level.random.nextBoolean() ? FerretVariants.BASIC : FerretVariants.RED;
     }
 }
