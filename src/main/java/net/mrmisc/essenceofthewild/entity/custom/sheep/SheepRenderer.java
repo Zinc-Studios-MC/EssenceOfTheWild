@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild.entity.custom.sheep;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +16,16 @@ public class SheepRenderer extends MobRenderer<SheepEntity, SheepModel> {
 
     @Override
     public ResourceLocation getTextureLocation(SheepEntity pEntity) {
-        return pEntity.getVariant().location();
+        SheepVariant variant = pEntity.getVariant();
+        return pEntity.isBaby() ? variant.babyLocation() : variant.adultLocation();
+    }
+
+    @Override
+    public void render(SheepEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
+            MultiBufferSource pBuffer, int pPackedLight) {
+        if (pEntity.isBaby()) {
+            pPoseStack.scale(0.5F, 0.5F, 0.5F);
+        }
+        super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
     }
 }

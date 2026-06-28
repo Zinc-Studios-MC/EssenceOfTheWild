@@ -25,6 +25,7 @@ import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +33,7 @@ import java.util.Objects;
 
 import static net.minecraft.world.item.Items.*;
 
-public class SheepEntity extends Sheep implements IForgeShearable {
+public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrier {
 
     private static final EntityDataAccessor<Byte> WOOL_ID =
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BYTE);
@@ -72,15 +73,6 @@ public class SheepEntity extends Sheep implements IForgeShearable {
         }
     }
 
-    private MobVariant pickVariant(Level level, BlockPos pos) {
-        if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
-            return SheepVariants.COLD;
-        } else if (level.getBiome(pos).is(Tags.Biomes.IS_HOT)) {
-            return SheepVariants.WARM;
-        }
-        return level.random.nextBoolean() ? SheepVariants.BASIC : SheepVariants.BASIC_GREY;
-    }
-
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
         float f;
@@ -91,13 +83,6 @@ public class SheepEntity extends Sheep implements IForgeShearable {
         }
 
         this.walkAnimation.update(f, 0.2f);
-    }
-
-    public MobVariant getVariant() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < SheepVariants.ALL.size())
-                ? SheepVariants.ALL.get(i)
-                : SheepVariants.ALL.get(0);
     }
 
     @Override
@@ -136,16 +121,6 @@ public class SheepEntity extends Sheep implements IForgeShearable {
         return this.entityData.get(EATING);
     }
 
-    private void setVariantById(String id) {
-        for (int i = 0; i < SheepVariants.ALL.size(); i++) {
-            if (SheepVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
-    }
-
     @Override
     protected void registerGoals() {
         super.registerGoals();
@@ -168,10 +143,11 @@ public class SheepEntity extends Sheep implements IForgeShearable {
                                                  SpawnGroupData spawnData,
                                                  CompoundTag dataTag) {
         this.setColor(DyeColor.WHITE);
-        if (dataTag == null || !dataTag.contains("Variant")) {
-            this.setVariant(pickVariant(level.getLevel(), this.blockPosition()));
+        if (dataTag != null && dataTag.contains("Variant")) {
+            setVariantById(dataTag.getString("Variant"));
+            return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
         }
-
+        setVariant(pickVariant(level.getLevel(), blockPosition()));
         return Objects.requireNonNull(super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag));
     }
 
@@ -193,7 +169,6 @@ public class SheepEntity extends Sheep implements IForgeShearable {
     @Override
     public Sheep getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
         SheepEntity child = new SheepEntity(EOTWEntities.SHEEP.get(), level);
-        child.setColor(this.getColor());
         child.setVariant(this.getVariant());
         return child;
     }
@@ -210,5 +185,40 @@ public class SheepEntity extends Sheep implements IForgeShearable {
         this.entityData.set(WOOL_ID, (byte)(b & 240 | color.getId() & 15));
     }
 
+    public SheepVariant getVariant() {
+        int index = this.entityData.get(VARIANT);
+        return index >= 0 && index < SheepVariants.ALL.size()
+                ? SheepVariants.ALL.get(index)
+                : SheepVariants.ALL.get(0);
+    }
 
+    public void setVariant(SheepVariant variant) {
+        this.entityData.set(VARIANT, SheepVariants.ALL.indexOf(variant));
+    }
+
+    @Override
+    public String getVariantId() {
+        return getVariant().id();
+    }
+
+    @Override
+    public void setVariantById(String id) {
+        for (int i = 0; i < SheepVariants.ALL.size(); i++) {
+            if (SheepVariants.ALL.get(i).id().equals(id)) {
+                this.entityData.set(VARIANT, i);
+                return;
+            }
+        }
+        this.entityData.set(VARIANT, 0);
+    }
+
+    private SheepVariant pickVariant(Level level, BlockPos pos) {
+        if(level.getBiome(pos).is(Tags.Biomes.IS_COLD)){
+            return SheepVariants.COLD;
+        }
+        if(level.getBiome(pos).is(Tags.Biomes.IS_HOT)){
+            return SheepVariants.WARM;
+        }
+        return level.random.nextBoolean() ? SheepVariants.BASIC : SheepVariants.BASIC_GREY;
+    }
 }
