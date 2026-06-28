@@ -6,10 +6,10 @@ import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import java.util.List;
 
 public class CowVariants {
-    public static final CowVariant BASIC = variant("basic", "cow.png", "cow.png");
-    public static final CowVariant BASIC_BROWN = variant("basic_brown", "cow_brown.png", "cow_brown.png");
-    public static final CowVariant COLD = variant("cold", "cold_cow.png", "cold_cow.png");
-    public static final CowVariant WARM = variant("warm", "warm_cow.png", "warm_cow.png");
+    public static final CowVariant BASIC = variant("basic", "cow.png", "baby_cow.png");
+    public static final CowVariant BASIC_BROWN = variant("basic_brown", "cow_brown.png", "baby_cow_brown.png");
+    public static final CowVariant COLD = variant("cold", "cold_cow.png", "baby_cold_cow.png");
+    public static final CowVariant WARM = variant("warm", "warm_cow.png", "baby_warm_cow.png");
 
     public static final List<CowVariant> ALL = List.of(BASIC, BASIC_BROWN, COLD, WARM);
 

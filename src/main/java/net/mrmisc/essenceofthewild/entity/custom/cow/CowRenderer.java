@@ -8,8 +8,12 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 public class CowRenderer extends MobRenderer<CowEntity, CowModel> {
+    public CowModel adult;
+    public BabyCowModel baby;
     public CowRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new CowModel(pContext.bakeLayer(CowModel.LAYER_LOCATION)), 0.8f);
+        this.adult = new CowModel(pContext.bakeLayer(CowModel.LAYER_LOCATION));
+        this.baby = new BabyCowModel(pContext.bakeLayer(BabyCowModel.LAYER_LOCATION));
     }
 
     @Override
@@ -22,7 +26,11 @@ public class CowRenderer extends MobRenderer<CowEntity, CowModel> {
     public void render(CowEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
             MultiBufferSource pBuffer, int pPackedLight) {
         if (pEntity.isBaby()) {
-            pPoseStack.scale(0.5F, 0.5F, 0.5F);
+            this.model = baby;
+            pPoseStack.scale(0.9F, 0.9F, 0.9F);
+        }
+        else {
+            this.model = adult;
         }
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
     }
