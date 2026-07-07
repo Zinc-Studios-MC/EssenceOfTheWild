@@ -11,8 +11,8 @@
     {
       "type": "essenceofthewild:duck",
       "weight": 9,
-      "minCount": 6,
-      "maxCount": 8
+      "minCount": 3,
+      "maxCount": 4
     },
     {
       "type": "essenceofthewild:cow",

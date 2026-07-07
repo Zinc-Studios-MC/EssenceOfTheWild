@@ -72,6 +72,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState flapAnimationState = new AnimationState();
     public final AnimationState waterIdleAnimationState = new AnimationState();
+    public final AnimationState swimAnimationState = new AnimationState();
     public final AnimationState diveAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
@@ -274,7 +275,10 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         }
 
         if (duckGroupData == null) {
-            duckGroupData = new DuckGroupData(pickVariant(level.getLevel(), blockPosition()).id(), 5 + this.random.nextInt(3));
+            // Most flocks are all adults; only occasionally is a group a mother with a brood of ducklings.
+            boolean brood = this.random.nextInt(5) == 0;
+            int ducklings = brood ? 2 + this.random.nextInt(3) : 0;
+            duckGroupData = new DuckGroupData(pickVariant(level.getLevel(), blockPosition()).id(), ducklings);
         }
 
         setVariantById(duckGroupData.variantId);
@@ -285,7 +289,10 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             }
         } else {
             duckGroupData.motherSpawned = true;
-            EOTWNestHelper.tryPlaceNaturalNest(level, this.blockPosition(), this.random);
+            // The nest full of eggs only makes sense alongside a mother tending a brood.
+            if (duckGroupData.ducklingsRemaining > 0) {
+                EOTWNestHelper.tryPlaceNaturalNest(level, this.blockPosition(), this.random);
+            }
         }
 
         return duckGroupData;
@@ -614,8 +621,10 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
         if (isInWaterOrBubble()) {
             waterIdleAnimationState.startIfStopped(tickCount);
+            swimAnimationState.startIfStopped(tickCount);
         } else {
             waterIdleAnimationState.stop();
+            swimAnimationState.stop();
         }
 
         if (isDivingAnimationActive()) {
