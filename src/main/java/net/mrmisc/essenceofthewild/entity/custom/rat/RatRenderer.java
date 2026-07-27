@@ -3,19 +3,33 @@ package net.mrmisc.essenceofthewild.entity.custom.rat;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class RatRenderer extends MobRenderer<RatEntity, RatModel> {
 
+    // All baby rats share one texture, regardless of variant.
+    private static final ResourceLocation BABY_TEXTURE = ResourceLocation.fromNamespaceAndPath(
+            EssenceOfTheWildMod.MOD_ID, "textures/entity/rat/baby_rat.png");
+
+    private final RatModel adult;
+    private final BabyRatModel baby;
+
     public RatRenderer(Context context) {
         super(context, new RatModel(context.bakeLayer(RatModel.LAYER_LOCATION)), 0.3f);
+        this.adult = new RatModel(context.bakeLayer(RatModel.LAYER_LOCATION));
+        this.baby = new BabyRatModel(context.bakeLayer(BabyRatModel.LAYER_LOCATION));
         this.addLayer(new RatCollarLayer(this, context.getModelSet()));
     }
 
     @Override
     public ResourceLocation getTextureLocation(RatEntity entity) {
+        if (entity.isBaby()) {
+            return BABY_TEXTURE;
+        }
         // Easter egg: a rat named "fishguy" wears the fishguy texture regardless of its variant.
         if (entity.hasCustomName()) {
             String name = ChatFormatting.stripFormatting(entity.getName().getString());
@@ -30,10 +44,9 @@ public class RatRenderer extends MobRenderer<RatEntity, RatModel> {
     }
 
     @Override
-    protected void scale(RatEntity entity, PoseStack poseStack, float partialTick) {
-        if (entity.isBaby()) {
-            poseStack.scale(0.55f, 0.55f, 0.55f);
-        }
-        super.scale(entity, poseStack, partialTick);
+    public void render(RatEntity entity, float entityYaw, float partialTicks, PoseStack poseStack,
+            MultiBufferSource buffer, int packedLight) {
+        this.model = entity.isBaby() ? this.baby : this.adult;
+        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
     }
 }

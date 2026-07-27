@@ -11,6 +11,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -211,6 +213,50 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             getNavigation().stop();
             settleOntoNest(nestTarget);
         }
+
+        if (!level().isClientSide) {
+            tickSteadyFloat();
+        }
+    }
+
+    // How far the duck's feet sit below the water surface while floating.
+    private static final double FLOAT_SUBMERGE = 0.5D;
+
+    /**
+     * Holds the duck at a steady height on the water surface so it never bobs up and down.
+     * Only vertical position is controlled; horizontal swimming is untouched, and while diving
+     * for fish the duck is left to move freely.
+     */
+    private void tickSteadyFloat() {
+        // Leave the duck free to move vertically while diving for or chasing fish.
+        if (!isInWater() || isDivingAnimationActive() || nestTarget != null || fishTargetId >= 0) {
+            return;
+        }
+        double targetY = computeFloatY();
+        if (Double.isNaN(targetY)) {
+            return;
+        }
+        // Move toward the surface line at a capped rate, then hold there with no vertical velocity.
+        double step = Mth.clamp(targetY - getY(), -0.15D, 0.15D);
+        setPos(getX(), getY() + step, getZ());
+        Vec3 dm = getDeltaMovement();
+        setDeltaMovement(dm.x, 0.0D, dm.z);
+        this.fallDistance = 0.0F;
+    }
+
+    /** The Y the duck's feet should rest at to float on the local water surface, or NaN if not floating. */
+    private double computeFloatY() {
+        int x = Mth.floor(getX());
+        int z = Mth.floor(getZ());
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(x, Mth.floor(getY()), z);
+        if (!level().getFluidState(cursor).is(FluidTags.WATER)) {
+            return Double.NaN;
+        }
+        while (level().getFluidState(cursor).is(FluidTags.WATER)) {
+            cursor.move(0, 1, 0);
+        }
+        // cursor is now the first non-water block above the column; its bottom is the water surface.
+        return cursor.getY() - FLOAT_SUBMERGE;
     }
 
     @Override
@@ -698,8 +744,8 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         }
 
         if (idleAnimationTimeout <= 0) {
-            idleAnimationTimeout = random.nextInt(40) + 80;
-            idleAnimationState.startIfStopped(tickCount);
+            idleAnimationTimeout = random.nextInt(40) + 40;
+            idleAnimationState.start(tickCount);
         } else {
             idleAnimationTimeout--;
         }

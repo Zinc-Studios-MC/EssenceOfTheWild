@@ -88,7 +88,7 @@ public class NestBlockEntityRenderer implements BlockEntityRenderer<NestBlockEnt
                 1.0F,
                 1.0F,
                 1F,
-                packedLight,
+                light,
                 packedOverlay
         );
         poseStack.popPose();
