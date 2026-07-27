@@ -25,11 +25,14 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.NeutralMob;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
@@ -205,6 +208,36 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             player.addEffect(new MobEffectInstance(EOTWEffects.RABIES.get(), RabiesEffect.TOTAL_DURATION));
         }
         return flag;
+    }
+
+    /** A tamed rat never targets another tamed/owned mob. */
+    @Override
+    public boolean canAttack(LivingEntity pTarget) {
+        if (this.isTame() && isTamedMob(pTarget)) {
+            return false;
+        }
+        return super.canAttack(pTarget);
+    }
+
+    @Override
+    public boolean wantsToAttack(LivingEntity pTarget, LivingEntity pOwner) {
+        if (isTamedMob(pTarget)) {
+            return false;
+        }
+        return super.wantsToAttack(pTarget, pOwner);
+    }
+
+    private static boolean isTamedMob(LivingEntity target) {
+        if (target instanceof TamableAnimal tamable) {
+            return tamable.isTame();
+        }
+        if (target instanceof AbstractHorse horse) {
+            return horse.isTamed();
+        }
+        if (target instanceof OwnableEntity ownable) {
+            return ownable.getOwnerUUID() != null;
+        }
+        return false;
     }
 
     // --------------------------------------------------------------------

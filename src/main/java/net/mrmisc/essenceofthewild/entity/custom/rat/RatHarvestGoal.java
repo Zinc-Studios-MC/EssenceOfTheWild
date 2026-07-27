@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.item.Item;
@@ -72,7 +74,15 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 1. Carrying produce -> take it to a chest.
+        // 1. Empty a ready composter, carrying the bone meal away (needs room to hold it).
+        if (isComposterReady() && hasBufferSpace()) {
+            if (moveWithinReach(composter)) {
+                collectBonemeal(composter);
+            }
+            return;
+        }
+
+        // 2. Carrying produce -> take it to a chest.
         if (hasBufferMatching(false)) {
             BlockPos chest = findContainer();
             if (chest != null) {
@@ -84,7 +94,7 @@ public class RatHarvestGoal extends Goal {
             // No chest available: leave produce in the buffer and keep working.
         }
 
-        // 2. Carrying seeds -> compost them.
+        // 3. Carrying seeds -> compost them.
         if (hasBufferMatching(true)) {
             if (moveWithinReach(composter)) {
                 compostSeeds(composter);
@@ -92,7 +102,7 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 3. Harvest a mature crop.
+        // 4. Harvest a mature crop.
         BlockPos crop = findMatureCrop();
         if (crop != null) {
             if (moveWithinReach(crop)) {
@@ -101,7 +111,7 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 4. Nothing to do: stay near the composter.
+        // 5. Nothing to do: stay near the composter.
         if (isFarFromComposter()) {
             this.rat.getNavigation().moveTo(composter.getX() + 0.5, composter.getY(), composter.getZ() + 0.5, 1.0D);
         }
@@ -112,7 +122,31 @@ public class RatHarvestGoal extends Goal {
     // ------------------------------------------------------------------
 
     private boolean hasWork() {
-        return !bufferIsEmpty() || findMatureCrop() != null;
+        return isComposterReady() || !bufferIsEmpty() || findMatureCrop() != null;
+    }
+
+    private boolean isComposterReady() {
+        BlockPos c = this.rat.getComposterPos();
+        if (c == null) {
+            return false;
+        }
+        BlockState s = this.rat.level().getBlockState(c);
+        return s.is(net.minecraft.world.level.block.Blocks.COMPOSTER)
+                && s.getValue(ComposterBlock.LEVEL) == 8;
+    }
+
+    /** Room to hold at least one more bone meal. */
+    private boolean hasBufferSpace() {
+        for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
+            ItemStack s = this.rat.harvestInventory.getItem(i);
+            if (s.isEmpty()) {
+                return true;
+            }
+            if (s.is(Items.BONE_MEAL) && s.getCount() < s.getMaxStackSize()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isFarFromComposter() {
@@ -274,6 +308,25 @@ public class RatHarvestGoal extends Goal {
     // ------------------------------------------------------------------
     // Composting seeds
     // ------------------------------------------------------------------
+
+    private void collectBonemeal(BlockPos composterPos) {
+        if (!(this.rat.level() instanceof ServerLevel server)) {
+            return;
+        }
+        BlockState state = server.getBlockState(composterPos);
+        if (!state.is(net.minecraft.world.level.block.Blocks.COMPOSTER)
+                || state.getValue(ComposterBlock.LEVEL) != 8) {
+            return;
+        }
+        ItemStack leftover = addToBuffer(new ItemStack(Items.BONE_MEAL));
+        server.setBlock(composterPos, state.setValue(ComposterBlock.LEVEL, 0), 3);
+        server.playSound(null, composterPos, SoundEvents.COMPOSTER_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (!leftover.isEmpty()) {
+            net.minecraft.world.entity.item.ItemEntity ie = new net.minecraft.world.entity.item.ItemEntity(
+                    server, composterPos.getX() + 0.5, composterPos.getY() + 1, composterPos.getZ() + 0.5, leftover);
+            server.addFreshEntity(ie);
+        }
+    }
 
     private void compostSeeds(BlockPos composterPos) {
         if (!(this.rat.level() instanceof ServerLevel server)) {
