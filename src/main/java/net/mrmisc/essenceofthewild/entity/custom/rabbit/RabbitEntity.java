@@ -9,9 +9,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +22,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class RabbitEntity extends Rabbit {
+    // Above this move-speed multiplier the rabbit runs (smooth glide); below it, it walks (small hops).
+    private static final double RUN_SPEED_MODIFIER = 1.5D;
+
     public RabbitEntity(EntityType<? extends Rabbit> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        // Replace the vanilla rabbit's jump-based move control with smooth ground movement.
+        this.moveControl = new MoveControl(this);
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -29,6 +36,10 @@ public class RabbitEntity extends Rabbit {
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(RabbitEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> RUNNING =
+            SynchedEntityData.defineId(RabbitEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> MOVING =
+            SynchedEntityData.defineId(RabbitEntity.class, EntityDataSerializers.BOOLEAN);
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 3.0D).add(Attributes.MOVEMENT_SPEED, (double)0.3F);
@@ -41,6 +52,43 @@ public class RabbitEntity extends Rabbit {
         if(this.level().isClientSide()) {
             setupAnimationStates();
         }
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (!this.level().isClientSide()) {
+            double hSpeed = this.getDeltaMovement().horizontalDistance();
+            boolean moving = hSpeed > 0.025D;
+            boolean running = moving && this.getMoveControl().getSpeedModifier() > RUN_SPEED_MODIFIER;
+            this.entityData.set(MOVING, moving);
+            this.entityData.set(RUNNING, running);
+        }
+    }
+
+    // Smooth ground movement for both walk and run (so the walk/run animations actually play);
+    // only jump to climb obstacles/up-paths or out of water.
+    @Override
+    public void startJumping() {
+        if (shouldJumpObstacle()) {
+            super.startJumping();
+        }
+    }
+
+    private boolean shouldJumpObstacle() {
+        if (this.horizontalCollision || this.isInWaterOrBubble()) {
+            return true;
+        }
+        Path path = this.getNavigation().getPath();
+        return path != null && !path.isDone() && path.getNextEntityPos(this).y > this.getY() + 0.5D;
+    }
+
+    public boolean isRunning() {
+        return this.entityData.get(RUNNING);
+    }
+
+    public boolean isMoving() {
+        return this.entityData.get(MOVING);
     }
 
     private void setupAnimationStates() {
@@ -64,6 +112,8 @@ public class RabbitEntity extends Rabbit {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(RUNNING, false);
+        this.entityData.define(MOVING, false);
     }
 
     @Override

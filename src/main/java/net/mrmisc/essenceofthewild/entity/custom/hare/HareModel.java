@@ -44,9 +44,9 @@ public class HareModel extends HierarchicalModel<HareEntity> {
 		this.left_whiskers = this.head.getChild("left_whiskers");
 		this.right_ear = this.head.getChild("right_ear");
 		this.right_whiskers = this.head.getChild("right_whiskers");
-		this.left_arm = this.bone.getChild("left_arm");
-		this.right_arm = this.bone.getChild("right_arm");
 		this.tail = this.bone.getChild("tail");
+		this.left_arm = this.body.getChild("left_arm");
+		this.right_arm = this.body.getChild("right_arm");
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -55,13 +55,13 @@ public class HareModel extends HierarchicalModel<HareEntity> {
 
 		PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 19.0F, 7.0F));
 
-		PartDefinition left_thigh = body.addOrReplaceChild("left_thigh", CubeListBuilder.create().texOffs(14, 31).addBox(-1.0F, -2.0F, 1.0F, 2.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, -4.5F));
+		PartDefinition left_thigh = body.addOrReplaceChild("left_thigh", CubeListBuilder.create().texOffs(14, 31).addBox(-1.0F, -2.0F, -2.0F, 2.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(3.0F, 0.0F, -1.5F));
 
-		PartDefinition left_foot = left_thigh.addOrReplaceChild("left_foot", CubeListBuilder.create().texOffs(20, 15).addBox(-1.0F, 5.5F, -3.7F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.5F, 1.7F));
+		PartDefinition left_foot = left_thigh.addOrReplaceChild("left_foot", CubeListBuilder.create().texOffs(20, 15).addBox(-1.0F, 0.0F, -6.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.0F, 1.5F));
 
-		PartDefinition right_thigh = body.addOrReplaceChild("right_thigh", CubeListBuilder.create().texOffs(26, 31).addBox(-1.0F, -2.0F, 1.0F, 2.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, -4.5F));
+		PartDefinition right_thigh = body.addOrReplaceChild("right_thigh", CubeListBuilder.create().texOffs(26, 31).addBox(-1.0F, -2.0F, -2.0F, 2.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(-3.0F, 0.0F, -1.5F));
 
-		PartDefinition right_foot = right_thigh.addOrReplaceChild("right_foot", CubeListBuilder.create().texOffs(20, 23).addBox(-1.0F, 5.5F, -3.7F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.5F, 1.7F));
+		PartDefinition right_foot = right_thigh.addOrReplaceChild("right_foot", CubeListBuilder.create().texOffs(20, 23).addBox(-1.0F, 0.0F, -6.5F, 2.0F, 1.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 4.0F, 1.5F));
 
 		PartDefinition bone = body.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -6.0F, -8.0F, 6.0F, 5.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, -2.0F));
 
@@ -77,11 +77,11 @@ public class HareModel extends HierarchicalModel<HareEntity> {
 
 		PartDefinition right_whiskers = head.addOrReplaceChild("right_whiskers", CubeListBuilder.create().texOffs(0, 60).mirror().addBox(-4.0F, -2.5F, 0.0F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.001F)).mirror(false), PartPose.offset(-1.5F, -1.0F, -5.0F));
 
-		PartDefinition left_arm = bone.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 32).addBox(-1.01F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -1.0F, -7.0F));
-
-		PartDefinition right_arm = bone.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-0.99F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -1.0F, -7.0F));
-
 		PartDefinition tail = bone.addOrReplaceChild("tail", CubeListBuilder.create().texOffs(0, 25).addBox(-2.0F, -2.25F, -1.0F, 4.0F, 4.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -5.75F, 1.5F));
+
+		PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(0, 32).addBox(-1.01F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 1.0F, -9.0F));
+
+		PartDefinition right_arm = body.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(32, 0).addBox(-0.99F, 0.0F, -0.99F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 1.0F, -9.0F));
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
@@ -98,6 +98,14 @@ public class HareModel extends HierarchicalModel<HareEntity> {
 
 	@Override
 	public void setupAnim(HareEntity pEntity, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		if (!pEntity.isMoving()) {
+			this.animate(pEntity.idleAnimationState, HareAnimations.idle, pAgeInTicks);
+		} else if (pEntity.isRunning()) {
+			// Deliberately well below the clip's natural rate (3.5) for a slower run cycle.
+			this.animateWalk(HareAnimations.run, pLimbSwing, pLimbSwingAmount, 1.0F, 2.5F);
+		} else {
+			this.animateWalk(HareAnimations.walk, pLimbSwing, pLimbSwingAmount, 2.2F, 1.3F);
+		}
 	}
 }

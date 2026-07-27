@@ -101,16 +101,15 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 	@Override
 	public void setupAnim(RabbitEntity pEntity, float limbSwing, float limbSwingAmount, float ageInTicks, float pNetHeadYaw, float pHeadPitch) {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
-		if (limbSwingAmount < 0.01F) {
+		if (!pEntity.isMoving()) {
 			this.animate(pEntity.idleAnimationState, RabbitAnimations.idle, ageInTicks);
+		} else if (pEntity.isRunning()) {
+			// Deliberately well below the clip's natural rate (3.5) for a slower run cycle.
+			this.animateWalk(RabbitAnimations.run, limbSwing, limbSwingAmount, 1.0F, 2.5F);
 		} else {
-			double speed = pEntity.getDeltaMovement().horizontalDistance();
-
-			if (speed > 0.2D) {
-				this.animateWalk(RabbitAnimations.run, limbSwing, limbSwingAmount, 3.5F, 2.5F);
-			} else {
-				this.animateWalk(RabbitAnimations.walk, limbSwing, limbSwingAmount, 1.6F, 1.3F);
-			}
+			// 2.2 rather than 1.6 because the walk clip grew from 0.667s to 0.917s; the speed
+			// multiplier scales with clip length to keep the original stride cadence.
+			this.animateWalk(RabbitAnimations.walk, limbSwing, limbSwingAmount, 2.2F, 1.3F);
 		}
 	}
 }
