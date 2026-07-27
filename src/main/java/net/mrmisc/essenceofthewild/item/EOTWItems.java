@@ -51,6 +51,7 @@ public class EOTWItems {
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0x6E6E6E, 0xC58C85);
 
     //Tree
     public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));

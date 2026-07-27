@@ -21,6 +21,7 @@
   "item.essenceofthewild.rabbit_spawn_egg" : "Rabbit Spawn Egg",
   "item.essenceofthewild.hare_spawn_egg" : "Hare Spawn Egg",
   "item.essenceofthewild.ferret_spawn_egg" : "Ferret Spawn Egg",
+  "item.essenceofthewild.rat_spawn_egg" : "Rat Spawn Egg",
 
   "item.essenceofthewild.sheep_cheese" : "Sheep Cheese",
   "item.essenceofthewild.sheep_cheese_wedge" : "Sheep Cheese Wedge",
@@ -39,8 +40,12 @@
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
   "entity.essenceofthewild.rabbit" : "Rabbit",
   "entity.essenceofthewild.ferret" : "Ferret",
+  "entity.essenceofthewild.rat" : "Rat",
 
   "entity.essenceofthewild.underwater_arrow" : "Underwater Arrow",
+
+  "message.essenceofthewild.rat.assign_prompt" : "Right-click a composter to assign this rat to it",
+  "message.essenceofthewild.rat.assigned" : "Rat assigned to composter",
 
   "block.essenceofthewild.wooden_freezer" : "Wooden Freezer",
   "block.essenceofthewild.cheese_maker" : "Cheese Maker",

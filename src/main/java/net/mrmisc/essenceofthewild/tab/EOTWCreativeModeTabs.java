@@ -30,6 +30,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.RABBIT_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.HARE_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.FERRET_SPAWN_EGG.get());
+                pOutput.accept(EOTWItems.RAT_SPAWN_EGG.get());
             });
 
     public static RegistryObject<CreativeModeTab> FOOD_TAB =

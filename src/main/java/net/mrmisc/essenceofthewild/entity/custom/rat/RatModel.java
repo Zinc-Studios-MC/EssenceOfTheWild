@@ -11,6 +11,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class RatModel extends HierarchicalModel<RatEntity> {
@@ -87,11 +88,23 @@ public class RatModel extends HierarchicalModel<RatEntity> {
 
 	@Override
 	public ModelPart root() {
-		return null;
+		return this.body;
 	}
 
 	@Override
-	public void setupAnim(RatEntity ratEntity, float v, float v1, float v2, float v3, float v4) {
+	public void setupAnim(RatEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+		this.applyHeadRotation(netHeadYaw, headPitch);
 
+		this.animateWalk(entity.isRunning() ? RatAnimations.run : RatAnimations.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
+		this.animate(entity.idleAnimationState, RatAnimations.idle, ageInTicks, 1f);
+	}
+
+	private void applyHeadRotation(float netHeadYaw, float headPitch) {
+		netHeadYaw = Mth.clamp(netHeadYaw, -30f, 30f);
+		headPitch = Mth.clamp(headPitch, -25f, 45f);
+
+		this.head.yRot = netHeadYaw * ((float) Math.PI / 180f);
+		this.head.xRot = headPitch * ((float) Math.PI / 180f);
 	}
 }

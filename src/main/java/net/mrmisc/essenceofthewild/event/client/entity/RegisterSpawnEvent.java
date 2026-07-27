@@ -8,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class RegisterSpawnEvent {
@@ -61,6 +62,13 @@ public class RegisterSpawnEvent {
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE
+        );
+        event.register(
+                EOTWEntities.RAT.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                RatEntity::checkRatSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.REPLACE
         );
     }

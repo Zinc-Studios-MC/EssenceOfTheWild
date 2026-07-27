@@ -31,6 +31,8 @@ import net.mrmisc.essenceofthewild.entity.custom.hare.HareRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
 import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrowRenderer;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
@@ -90,6 +92,7 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
             EntityRenderers.register(EOTWEntities.FERRET.get(), FerretRenderer::new);
+            EntityRenderers.register(EOTWEntities.RAT.get(), RatRenderer::new);
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
             MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
@@ -101,10 +104,27 @@ public class EssenceOfTheWildMod
         public void onInteract(PlayerInteractEvent.RightClickBlock event) {
             if (event.getLevel().isClientSide()) return;
             Player p = event.getEntity();
-            if(!p.getPersistentData().contains("OwnsFerret")){
+            if(!event.getItemStack().is(Items.STICK)){
                 return;
             }
-            if(!event.getItemStack().is(Items.STICK)){
+
+            // Rat -> composter assignment.
+            String ratUuid = EOTWEntityUtils.getRatClicked(p);
+            if(!ratUuid.isEmpty()
+                    && event.getLevel().getBlockState(event.getPos()).is(net.minecraft.world.level.block.Blocks.COMPOSTER)){
+                List<RatEntity> lre = event.getLevel().getEntitiesOfClass(RatEntity.class, p.getBoundingBox().inflate(200),
+                        (e) -> e.getStringUUID().equals(ratUuid));
+                if(!lre.isEmpty()){
+                    lre.get(0).assignComposter(event.getPos());
+                    EOTWEntityUtils.removeRatClicked(p);
+                    p.displayClientMessage(
+                            net.minecraft.network.chat.Component.translatable("message.essenceofthewild.rat.assigned"), true);
+                    return;
+                }
+            }
+
+            // Ferret -> dig-block assignment.
+            if(!p.getPersistentData().contains("OwnsFerret")){
                 return;
             }
             String uuid = EOTWEntityUtils.getPlayerClicked(p);

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:stronghold",
+  "biomes": "#minecraft:has_structure/stronghold",
+  "spawn_overrides": {
+    "monster": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "essenceofthewild:rat",
+          "weight": 40,
+          "minCount": 1,
+          "maxCount": 2
+        }
+      ]
+    }
+  },
+  "step": "surface_structures",
+  "terrain_adaptation": "bury"
+}

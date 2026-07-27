@@ -32,6 +32,9 @@ import net.mrmisc.essenceofthewild.entity.custom.pig.PigModel;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigSaddleModel;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitModel;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatCollarModel;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
+import net.mrmisc.essenceofthewild.entity.custom.rat.RatModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.BabySheepModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.ShearedSheepModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
@@ -62,6 +65,8 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(BabyFerretModel.LAYER_LOCATION, BabyFerretModel::createBodyLayer);
         event.registerLayerDefinition(BabyCowModel.LAYER_LOCATION, BabyCowModel::createBodyLayer);
         event.registerLayerDefinition(BabySheepModel.LAYER_LOCATION, BabySheepModel::createBodyLayer);
+        event.registerLayerDefinition(RatModel.LAYER_LOCATION, RatModel::createBodyLayer);
+        event.registerLayerDefinition(RatCollarModel.LAYER_LOCATION, RatCollarModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -75,6 +80,7 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.RABBIT.get(), RabbitEntity.createAttributes().build());
         event.put(EOTWEntities.HARE.get(), HareEntity.createAttributes().build());
         event.put(EOTWEntities.FERRET.get(), FerretEntity.createAttributes().build());
+        event.put(EOTWEntities.RAT.get(), RatEntity.createAttributes().build());
     }
 
     @SubscribeEvent
