@@ -15,6 +15,9 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,7 +25,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.config.EOTWConfig;
+import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
+import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.Nullable;
 
 public class NestBlockEntity extends BlockEntity {
@@ -93,6 +98,25 @@ public class NestBlockEntity extends BlockEntity {
 
     public int getEggCount() {
         return eggCount;
+    }
+
+    /**
+     * Removes the whole clutch and returns it as an egg item stack (duck eggs for duck clutches,
+     * vanilla eggs otherwise). Returns {@link ItemStack#EMPTY} if the nest is empty.
+     */
+    public ItemStack collectEggs() {
+        if (!hasEggs()) {
+            return ItemStack.EMPTY;
+        }
+        Item eggItem = isDuckClutch() ? EOTWItems.DUCK_EGG.get() : Items.EGG;
+        ItemStack stack = new ItemStack(eggItem, eggCount);
+        clearClutch();
+        return stack;
+    }
+
+    private boolean isDuckClutch() {
+        EntityType<?> type = hatchEntityId == null ? null : ForgeRegistries.ENTITY_TYPES.getValue(hatchEntityId);
+        return type == EOTWEntities.DUCK.get();
     }
 
     public int getHatchProgress() {

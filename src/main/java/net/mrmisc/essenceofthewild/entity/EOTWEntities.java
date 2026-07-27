@@ -16,6 +16,7 @@ import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
+import net.mrmisc.essenceofthewild.entity.misc.ThrownDuckEgg;
 import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrow;
 
 public class EOTWEntities {
@@ -44,4 +45,6 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(RatEntity::new, MobCategory.CREATURE).sized(0.6f, 0.5f).build("rat"));
     public static RegistryObject<EntityType<UnderwaterArrow>> UNDERWATER_ARROW = ENTITIES.register("underwater_arrow",
             ()-> EntityType.Builder.<UnderwaterArrow>of(UnderwaterArrow::new, MobCategory.MISC).sized(0.5f, 0.9f).clientTrackingRange(5).build("underwater_arrow"));
+    public static RegistryObject<EntityType<ThrownDuckEgg>> THROWN_DUCK_EGG = ENTITIES.register("thrown_duck_egg",
+            ()-> EntityType.Builder.<ThrownDuckEgg>of(ThrownDuckEgg::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(10).build("thrown_duck_egg"));
 }

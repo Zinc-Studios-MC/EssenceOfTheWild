@@ -13,6 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.item.custom.DuckEggItem;
 import net.mrmisc.essenceofthewild.item.custom.icecream.EffectIceCream;
 import net.mrmisc.essenceofthewild.item.custom.icecream.IceCream;
 import net.mrmisc.essenceofthewild.item.custom.tools.IceAxe;
@@ -39,7 +40,7 @@ public class EOTWItems {
     public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties().stacksTo(1)));
     public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
     public static RegistryObject<Item> DUCK_FEATHER = ITEMS.register("duck_feather", ()-> new Item(new Item.Properties()));
-    public static RegistryObject<Item> DUCK_EGG = ITEMS.register("duck_egg", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> DUCK_EGG = ITEMS.register("duck_egg", ()-> new DuckEggItem(new Item.Properties().stacksTo(16)));
 
     //Spawn Eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 0xFFFFFF, 0xFFFFFF);

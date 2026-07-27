@@ -6,6 +6,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
@@ -93,6 +94,7 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
             EntityRenderers.register(EOTWEntities.FERRET.get(), FerretRenderer::new);
             EntityRenderers.register(EOTWEntities.RAT.get(), RatRenderer::new);
+            EntityRenderers.register(EOTWEntities.THROWN_DUCK_EGG.get(), ThrownItemRenderer::new);
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
             MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());

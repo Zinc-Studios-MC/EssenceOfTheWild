@@ -33,7 +33,7 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     private static final int LAY_NEST_SEARCH_TICKS = 1200;
     private static final int DELIVERY_TIMEOUT_TICKS = 2400;
     private static final int NEST_SIT_TICKS = 7 * 20;
-    private static final double NEST_CAPTURE_DISTANCE_SQR = 6.25D;
+    private static final double NEST_CAPTURE_DISTANCE_SQR = 2.0D;
     private static final double NEST_NAV_REPATH_DISTANCE_SQR = 0.16D;
     private static final double NEST_SEAT_Y_OFFSET = 0.25D;
     private static final double NEST_CENTERING_STEP = 0.18D;

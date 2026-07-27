@@ -40,12 +40,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.UUID;
 
 public class DuckEntity extends Chicken implements VariantCarrier {
     private static final int LAY_NEST_SEARCH_TICKS = 1200;
     private static final int DELIVERY_TIMEOUT_TICKS = 2400;
     private static final int NEST_SIT_TICKS = 7 * 20;
-    private static final double NEST_CAPTURE_DISTANCE_SQR = 6.25D;
+    private static final double NEST_CAPTURE_DISTANCE_SQR = 2.0D;
     private static final double NEST_NAV_REPATH_DISTANCE_SQR = 0.16D;
     private static final double NEST_SEAT_Y_OFFSET = 0.25D;
     private static final double NEST_CENTERING_STEP = 0.18D;
@@ -89,6 +90,11 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     private int fishSearchCooldown;
     private int fishHuntCooldown;
 
+    private static final double IMPRINT_RADIUS = 12.0D;
+    @Nullable
+    private UUID imprintUuid;
+    private boolean imprinted;
+
     public DuckEntity(EntityType<? extends Chicken> entityType, Level level) {
         super(entityType, level);
     }
@@ -105,7 +111,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(Items.COD), false));
-        this.goalSelector.addGoal(4, new FollowParentGoal(this, 1.1D));
+        this.goalSelector.addGoal(4, new DuckImprintFollowGoal(this, 1.1D));
         this.goalSelector.addGoal(5, new RandomSwimmingGoal(this, 1.0D, 40));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
@@ -136,12 +142,18 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putString("Variant", getVariantId());
+        tag.putBoolean("Imprinted", this.imprinted);
+        if (this.imprintUuid != null) {
+            tag.putUUID("Imprint", this.imprintUuid);
+        }
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         setVariantById(tag.getString("Variant"));
+        this.imprinted = tag.getBoolean("Imprinted");
+        this.imprintUuid = tag.hasUUID("Imprint") ? tag.getUUID("Imprint") : null;
     }
 
     @Override
@@ -188,6 +200,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             tickNestDelivery();
             tickNestGuarding();
             tickFishHunting();
+            tickImprinting();
         }
 
         super.aiStep();
@@ -320,6 +333,57 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
     public boolean isDivingAnimationActive() {
         return entityData.get(DIVING);
+    }
+
+    /** Force this duckling to imprint on a specific entity (used when hatched from a thrown egg). */
+    public void imprintOn(LivingEntity entity) {
+        this.imprintUuid = entity.getUUID();
+        this.imprinted = true;
+    }
+
+    @Nullable
+    public LivingEntity getImprintTarget() {
+        if (this.imprintUuid == null || !(level() instanceof ServerLevel serverLevel)) {
+            return null;
+        }
+        Entity entity = serverLevel.getEntity(this.imprintUuid);
+        return entity instanceof LivingEntity living ? living : null;
+    }
+
+    /** A newly hatched duckling bonds with the first nearby creature it sees (mother or player). */
+    private void tickImprinting() {
+        if (!isBaby() || this.imprinted) {
+            return;
+        }
+        LivingEntity candidate = findImprintCandidate();
+        if (candidate != null) {
+            this.imprintUuid = candidate.getUUID();
+            this.imprinted = true;
+        }
+    }
+
+    @Nullable
+    private LivingEntity findImprintCandidate() {
+        LivingEntity best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (Entity entity : level().getEntities(this, getBoundingBox().inflate(IMPRINT_RADIUS), this::isImprintCandidate)) {
+            double dist = distanceToSqr(entity);
+            if (dist < bestDist) {
+                bestDist = dist;
+                best = (LivingEntity) entity;
+            }
+        }
+        return best;
+    }
+
+    private boolean isImprintCandidate(Entity entity) {
+        if (entity == this) {
+            return false;
+        }
+        if (entity instanceof Player player) {
+            return !player.isSpectator();
+        }
+        return entity instanceof Animal animal && !animal.isBaby();
     }
 
     private void tickFishHunting() {
