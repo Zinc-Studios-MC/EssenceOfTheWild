@@ -13,6 +13,7 @@ import net.mrmisc.essenceofthewild.block.entity.custom.cheesemaker.CheeseMakerBl
 import net.mrmisc.essenceofthewild.block.entity.custom.freezer.WoodenFreezerBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.server.SleepingBagBlockEntity;
+import net.mrmisc.essenceofthewild.block.entity.custom.util.EOTWHangingSignBlockEntity;
 import net.mrmisc.essenceofthewild.block.entity.custom.util.EOTWSignBlockEntity;
 
 import java.util.Set;
@@ -32,10 +33,16 @@ public class EOTWBlockEntities {
             ()-> new BlockEntityType<>(BurrowBlockEntity::new, Set.of(EOTWBlocks.DIRT_BURROW_BLOCK.get(), EOTWBlocks.SAND_BURROW_BLOCK.get(), EOTWBlocks.MUD_BURROW_BLOCK.get()), null));
 
 
+    // Split the way vanilla splits BlockEntityType.SIGN from BlockEntityType.HANGING_SIGN: the two
+    // need different renderers, so they cannot share one type.
     public static final RegistryObject<BlockEntityType<EOTWSignBlockEntity>> MANGO_SIGN =
             BLOCK_ENTITY.register("mango_sign", () ->
                     BlockEntityType.Builder.of(EOTWSignBlockEntity::new,
-                            EOTWBlocks.MANGO_SIGN.get(), EOTWBlocks.MANGO_WALL_SIGN.get(),
+                            EOTWBlocks.MANGO_SIGN.get(), EOTWBlocks.MANGO_WALL_SIGN.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<EOTWHangingSignBlockEntity>> MANGO_HANGING_SIGN =
+            BLOCK_ENTITY.register("mango_hanging_sign", () ->
+                    BlockEntityType.Builder.of(EOTWHangingSignBlockEntity::new,
                             EOTWBlocks.MANGO_HANGING_SIGN.get(), EOTWBlocks.MANGO_WALL_HANGING_SIGN.get()).build(null));
 
     public static RegistryObject<BlockEntityType<CheeseMakerBlockEntity>> CHEESE_MAKER = BLOCK_ENTITY.register("cheese_maker",

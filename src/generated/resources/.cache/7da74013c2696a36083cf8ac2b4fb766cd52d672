@@ -1,4 +1,9 @@
-// 1.20.1	2026-06-03T21:18:18.7378415	Tags for minecraft:block mod id essenceofthewild
+// 1.20.1	2026-07-28T00:34:13.3565784	Tags for minecraft:block mod id essenceofthewild
+b9e3510796f4fd8dea7edb9281b86563be229f3c data/minecraft/tags/blocks/ceiling_hanging_signs.json
 c7a9ba877c89dd5d96f35876c3dfb9da4a0f2bc3 data/minecraft/tags/blocks/fences.json
 988684f0bcb35037408e1fc5c4db7d158077151a data/minecraft/tags/blocks/fence_gates.json
 c4b94f97b8beb95b70b09056db22b8c1d2e3f8d4 data/minecraft/tags/blocks/logs_that_burn.json
+b568f0ef125a31ce6beb3960bd7344c34a77ff00 data/minecraft/tags/blocks/mineable/axe.json
+760ef91f1981c930e528b2e51aa679a66ac76a85 data/minecraft/tags/blocks/standing_signs.json
+a703a963d353a659167ff03cdcac7cad6fbf2019 data/minecraft/tags/blocks/wall_hanging_signs.json
+dcc7366d19e4868c85f78c8520b6e6fdf548a4b8 data/minecraft/tags/blocks/wall_signs.json

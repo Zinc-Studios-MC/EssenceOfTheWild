@@ -1,6 +1,8 @@
-// 1.20.1	2026-05-28T15:18:34.869816	Item Models: essenceofthewild
+// 1.20.1	2026-07-28T00:34:13.3582504	Item Models: essenceofthewild
 28ad0e8c9f5d7548ae6588510a45fd82135f4f90 assets/essenceofthewild/models/item/chocolate_icecream.json
 9a99d132db65592cbd8a95b4abbfb1464a7dcab7 assets/essenceofthewild/models/item/cone.json
+60d88d8ba066b21cf600b5177ed42267519cb030 assets/essenceofthewild/models/item/duck_egg.json
+353c057b95b32c9330b91f2c04d8dfa7172c295e assets/essenceofthewild/models/item/duck_feather.json
 7376755f8d2e85c1831f8e2684123659074d3f43 assets/essenceofthewild/models/item/fire_resistance_icecream.json
 3646305f764990f16330eab507fe03a5c1deb914 assets/essenceofthewild/models/item/ice_axe.json
 5eccd7b641fc0ebaae50c10a0f60d71734ee269d assets/essenceofthewild/models/item/ice_cubes.json

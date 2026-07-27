@@ -5,7 +5,7 @@ import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.WoodType;
-import net.mrmisc.essenceofthewild.block.entity.custom.util.EOTWSignBlockEntity;
+import net.mrmisc.essenceofthewild.block.entity.custom.util.EOTWHangingSignBlockEntity;
 
 public class EOTWHangingSign extends CeilingHangingSignBlock {
     public EOTWHangingSign(Properties pProperties, WoodType pType) {
@@ -14,6 +14,6 @@ public class EOTWHangingSign extends CeilingHangingSignBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new EOTWSignBlockEntity(pPos, pState);
+        return new EOTWHangingSignBlockEntity(pPos, pState);
     }
 }

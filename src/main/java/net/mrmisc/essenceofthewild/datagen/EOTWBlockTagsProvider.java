@@ -26,5 +26,18 @@ public class EOTWBlockTagsProvider extends BlockTagsProvider {
 
         this.tag(BlockTags.FENCES).add(EOTWBlocks.MANGO_FENCE.get());
         this.tag(BlockTags.FENCE_GATES).add(EOTWBlocks.MANGO_FENCE_GATE.get());
+
+        // The umbrella tags (SIGNS, ALL_HANGING_SIGNS, ALL_SIGNS) are unions of these four,
+        // so populating the leaves is enough.
+        this.tag(BlockTags.STANDING_SIGNS).add(EOTWBlocks.MANGO_SIGN.get());
+        this.tag(BlockTags.WALL_SIGNS).add(EOTWBlocks.MANGO_WALL_SIGN.get());
+        this.tag(BlockTags.CEILING_HANGING_SIGNS).add(EOTWBlocks.MANGO_HANGING_SIGN.get());
+        this.tag(BlockTags.WALL_HANGING_SIGNS).add(EOTWBlocks.MANGO_WALL_HANGING_SIGN.get());
+
+        this.tag(BlockTags.MINEABLE_WITH_AXE)
+                .add(EOTWBlocks.MANGO_SIGN.get())
+                .add(EOTWBlocks.MANGO_WALL_SIGN.get())
+                .add(EOTWBlocks.MANGO_HANGING_SIGN.get())
+                .add(EOTWBlocks.MANGO_WALL_HANGING_SIGN.get());
     }
 }

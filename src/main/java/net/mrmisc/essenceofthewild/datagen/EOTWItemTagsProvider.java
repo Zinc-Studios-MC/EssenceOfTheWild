@@ -20,5 +20,7 @@ public class EOTWItemTagsProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider pProvider) {
         this.tag(ItemTags.ARROWS).add(EOTWItems.UNDERWATER_ARROW.get());
+        this.tag(ItemTags.SIGNS).add(EOTWItems.MANGO_SIGN.get());
+        this.tag(ItemTags.HANGING_SIGNS).add(EOTWItems.MANGO_HANGING_SIGN.get());
     }
 }
