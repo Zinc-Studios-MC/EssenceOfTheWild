@@ -221,6 +221,8 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
     // How far the duck's feet sit below the water surface while floating.
     private static final double FLOAT_SUBMERGE = 0.5D;
+    // Smallest gap kept between a floating duck's eyes and the water surface so it is never treated as submerged.
+    private static final double EYE_FLOAT_CLEARANCE = 0.05D;
 
     /**
      * Holds the duck at a steady height on the water surface so it never bobs up and down.
@@ -256,7 +258,14 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             cursor.move(0, 1, 0);
         }
         // cursor is now the first non-water block above the column; its bottom is the water surface.
-        return cursor.getY() - FLOAT_SUBMERGE;
+        double surface = cursor.getY();
+        double floatFeet = surface - FLOAT_SUBMERGE;
+        // A duckling's hitbox is half-size, so the fixed submerge depth would sink its eyes below the
+        // surface; the game then reads it as underwater and slowly drowns it. Never float so low that
+        // the eyes dip under — keep them a touch above the waterline. Full-grown ducks clear this easily
+        // and are unaffected.
+        double eyesAboveSurface = surface - getEyeHeight() + EYE_FLOAT_CLEARANCE;
+        return Math.max(floatFeet, eyesAboveSurface);
     }
 
     @Override
