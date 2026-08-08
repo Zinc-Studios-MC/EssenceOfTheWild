@@ -1,15 +1,11 @@
-package net.mrmisc.essenceofthewild.entity.custom.chicken;// Save this class in your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.chicken;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-/**
- * Made with Blockbench 5.1.3
- * Exported for Minecraft version 1.19 or later with Mojang mappings
- * @author Author
- */
+// blockbench export
 public class ChickenAnimations {
 	public static final AnimationDefinition chicken_idle = AnimationDefinition.Builder.withLength(1.5F).looping()
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,

@@ -5,10 +5,8 @@ import java.util.EnumSet;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 
-/**
- * A duckling follows the entity it imprinted on at hatch time (its mother, another animal, or a
- * player). Only active while the duck is still a baby.
- */
+// duckling follows whatever it imprinted on when it hatched, mother or another animal or a player
+// only runs while its still a baby
 public class DuckImprintFollowGoal extends Goal {
 
     private static final double START_FOLLOW_DIST_SQR = 3.0D * 3.0D;

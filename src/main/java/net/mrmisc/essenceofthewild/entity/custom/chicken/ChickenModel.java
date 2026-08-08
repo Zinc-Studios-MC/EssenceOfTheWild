@@ -1,6 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.chicken;// Made with Blockbench 5.1.1
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.chicken;
+// blockbench export
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -18,7 +17,7 @@ public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEnt
 	private static final float DEG_TO_RAD = ((float) Math.PI / 180F);
 	private static final double RUN_SPEED_THRESHOLD = 0.22D;
 
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "chicken"), "main");
 	private final ModelPart body;
 	private final ModelPart head;

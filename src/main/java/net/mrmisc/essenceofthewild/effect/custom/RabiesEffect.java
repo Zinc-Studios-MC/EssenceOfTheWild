@@ -15,7 +15,7 @@ import java.util.List;
 public class RabiesEffect extends MobEffect {
 
 
-    //TODO: Change * 1 to * 6
+    //TODO: change the * 1 back to * 6
     public static final int TOTAL_DURATION = 20 * 60 * 6;
     private static int NAUSEA_INTERVAL = 20 * 45;
 

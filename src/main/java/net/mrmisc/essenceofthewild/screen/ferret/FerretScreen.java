@@ -70,6 +70,6 @@ public class FerretScreen extends AbstractContainerScreen<FerretMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-            // Empty on purpose!!
+            // empty on purpose
     }
 }

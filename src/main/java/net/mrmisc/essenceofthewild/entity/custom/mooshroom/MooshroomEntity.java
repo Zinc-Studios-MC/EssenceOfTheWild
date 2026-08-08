@@ -10,13 +10,18 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -32,16 +37,37 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowVariants;
-import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class MooshroomEntity extends MushroomCow {
+public class MooshroomEntity extends MushroomCow implements GeoEntity {
+
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.mooshroom.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.mooshroom.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.mooshroom.run");
+
+    // ticks a mooshroom keeps running after one hit
+    private static final int PANIC_DURATION = 60;
+
+    // calves reuse the adult clips but move faster for their size, so speed the playback up or their legs slide
+    private static final double BABY_GAIT_SPEED = 1.5D;
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
     @Nullable
     private UUID lastLightningBoltUUID;
     @Nullable
@@ -49,9 +75,67 @@ public class MooshroomEntity extends MushroomCow {
     private int effectDuration;
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.INT);
+    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
+    private static final EntityDataAccessor<Boolean> PANICKING =
+            SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private int panicTicks;
 
     public MooshroomEntity(EntityType<? extends MushroomCow> type, Level level) {
         super(type, level);
+    }
+
+    // copy of vanilla MushroomCow#checkMushroomSpawnRules, the normal animal rule wants grass and
+    // mushroom fields has none, so it would reject every spot there
+    public static boolean checkMooshroomSpawnRules(EntityType<? extends MooshroomEntity> type, LevelAccessor level,
+                                                  MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        return level.getBlockState(pos.below()).is(BlockTags.MOOSHROOMS_SPAWNABLE_ON) && isBrightEnoughToSpawn(level, pos);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
+                .setAnimationSpeedHandler(MooshroomEntity::gaitSpeed));
+    }
+
+    private PlayState movementController(AnimationState<MooshroomEntity> state) {
+        if (!state.isMoving()) {
+            return state.setAndContinue(IDLE);
+        }
+        // go by hurt, not speed, one walking to grass moves about as fast as one running from a wolf
+        return state.setAndContinue(this.isPanicking() ? RUN : WALK);
+    }
+
+    private static double gaitSpeed(MooshroomEntity mooshroom) {
+        return mooshroom.isBaby() ? BABY_GAIT_SPEED : 1.0D;
+    }
+
+    public boolean isPanicking() {
+        return this.entityData.get(PANICKING);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
+        boolean hurt = super.hurt(source, amount);
+        if (hurt && !this.level().isClientSide) {
+            this.panicTicks = PANIC_DURATION;
+            this.entityData.set(PANICKING, true);
+        }
+        return hurt;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide && this.panicTicks > 0 && --this.panicTicks == 0) {
+            this.entityData.set(PANICKING, false);
+        }
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     @Override
@@ -120,17 +204,18 @@ public class MooshroomEntity extends MushroomCow {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, 0); // 0 = red, 1 = brown
+        this.entityData.define(VARIANT, 0); // 0 is red, 1 is brown
+        this.entityData.define(PANICKING, false);
     }
 
-    public MobVariant getVariantMooshroom() {
+    public MooshroomVariant getVariantMooshroom() {
         int i = this.entityData.get(VARIANT);
         return (i >= 0 && i < MooshroomVariants.ALL.size())
                 ? MooshroomVariants.ALL.get(i)
                 : MooshroomVariants.ALL.get(0);
     }
 
-    public void setVariant(MobVariant variant) {
+    public void setVariant(MooshroomVariant variant) {
         this.entityData.set(VARIANT, MooshroomVariants.ALL.indexOf(variant));
     }
 
@@ -200,7 +285,7 @@ public class MooshroomEntity extends MushroomCow {
     }
 
     public BlockState getBlockToDrop(){
-        MobVariant variant = this.getVariantMooshroom();
+        MooshroomVariant variant = this.getVariantMooshroom();
         if(variant == MooshroomVariants.RED){
             return Blocks.RED_MUSHROOM.defaultBlockState();
         }
@@ -224,10 +309,10 @@ public class MooshroomEntity extends MushroomCow {
         return mushroomcow;
     }
 
-    private MobVariant getOffspringType(MooshroomEntity pMate) {
-        MobVariant mushroomcow$mushroomtype = this.getVariantMooshroom();
-        MobVariant mushroomcow$mushroomtype1 = pMate.getVariantMooshroom();
-        MobVariant mushroomcow$mushroomtype2;
+    private MooshroomVariant getOffspringType(MooshroomEntity pMate) {
+        MooshroomVariant mushroomcow$mushroomtype = this.getVariantMooshroom();
+        MooshroomVariant mushroomcow$mushroomtype1 = pMate.getVariantMooshroom();
+        MooshroomVariant mushroomcow$mushroomtype2;
         if (mushroomcow$mushroomtype == mushroomcow$mushroomtype1 && this.random.nextInt(1024) == 0) {
             mushroomcow$mushroomtype2 = mushroomcow$mushroomtype == MooshroomVariants.BROWN ? MooshroomVariants.RED : MooshroomVariants.BROWN;
         } else {

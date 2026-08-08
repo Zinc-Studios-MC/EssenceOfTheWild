@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.common.IForgeShearable;
 import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
@@ -29,11 +30,32 @@ import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.NotNull;
 
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
 import java.util.Objects;
 
 import static net.minecraft.world.item.Items.*;
 
-public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrier {
+public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrier, GeoEntity {
+
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.sheep.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.sheep.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.sheep.run");
+    private static final RawAnimation EAT = RawAnimation.begin().thenLoop("animation.sheep.eat");
+
+    // ticks a sheep keeps running after one hit
+    private static final int PANIC_DURATION = 60;
+
+    // lambs reuse the adult clips but move faster for their size, so speed the playback up or their
+    // legs slide, eating is left alone since the goal paces that not the movement speed
+    private static final double BABY_GAIT_SPEED = 1.5D;
 
     private static final EntityDataAccessor<Byte> WOOL_ID =
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BYTE);
@@ -44,9 +66,13 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
     private static final EntityDataAccessor<Boolean> EATING =
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState eatAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
+    private static final EntityDataAccessor<Boolean> PANICKING =
+            SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    private int panicTicks;
 
     public SheepEntity(EntityType<? extends Sheep> type, Level level) {
         super(type, level);
@@ -58,6 +84,7 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
         this.entityData.define(WOOL_ID, (byte) 0);
         this.entityData.define(VARIANT, 0);
         this.entityData.define(EATING, false);
+        this.entityData.define(PANICKING, false);
     }
 
     @Override
@@ -86,26 +113,58 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
     }
 
     @Override
-    public void tick() {
-        super.tick();
-
-        if(this.level().isClientSide()) {
-            setupAnimationStates();
-        }
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
+                .setAnimationSpeedHandler(SheepEntity::gaitSpeed));
+        // eating gets its own controller so it can play on top of whatever the legs are doing
+        controllers.add(new AnimationController<>(this, "eat", 3, this::eatController));
     }
 
-    private void setupAnimationStates() {
-        if (this.isEating()) {
-            this.eatAnimationState.startIfStopped(this.tickCount);
-        } else {
-            this.eatAnimationState.stop();
+    private PlayState movementController(AnimationState<SheepEntity> state) {
+        if (!state.isMoving()) {
+            return state.setAndContinue(IDLE);
         }
+        // go by hurt, not speed, a sheep walking to grass moves about as fast as one running from a wolf
+        return state.setAndContinue(this.isPanicking() ? RUN : WALK);
+    }
 
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.startIfStopped(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
+    private PlayState eatController(AnimationState<SheepEntity> state) {
+        if (!this.isEating()) {
+            state.getController().forceAnimationReset();
+            return PlayState.STOP;
+        }
+        return state.setAndContinue(EAT);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
+
+    private static double gaitSpeed(SheepEntity sheep) {
+        return sheep.isBaby() ? BABY_GAIT_SPEED : 1.0D;
+    }
+
+    public boolean isPanicking() {
+        return this.entityData.get(PANICKING);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
+        boolean hurt = super.hurt(source, amount);
+        if (hurt && !this.level().isClientSide) {
+            this.panicTicks = PANIC_DURATION;
+            this.entityData.set(PANICKING, true);
+        }
+        return hurt;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide && this.panicTicks > 0 && --this.panicTicks == 0) {
+            this.entityData.set(PANICKING, false);
         }
     }
 

@@ -6,7 +6,7 @@ import net.minecraft.util.Mth;
 
 public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
     protected static final float DEG_TO_RAD = ((float) Math.PI / 180F);
-    // Matches the authored DUCK_SWIM leg arc: 1.0s (20 tick) loop, legs sweeping 10° -> -35°.
+    // matches the DUCK_SWIM leg arc, 20 tick loop with the legs going from 10 to -35 degrees
     private static final float PADDLE_PHASE_PER_TICK = (float) (Math.PI * 2.0 / 20.0);
     private static final float PADDLE_CENTER = -12.5F * DEG_TO_RAD;
     private static final float PADDLE_SWEEP = 22.5F * DEG_TO_RAD;
@@ -51,28 +51,27 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
 
         if (entity.isDivingAnimationActive()) {
             this.animate(entity.diveAnimationState, DuckAnimations.DUCK_DIVING, ageInTicks);
-            // DUCK_DIVING has no leg channels; kick hard while chasing fish underwater.
+            // DUCK_DIVING has no leg keyframes, so kick hard while chasing fish down there
             applyPaddle(ageInTicks, 1.0F);
             return;
         }
 
         if (entity.isInWaterOrBubble()) {
-            // Water travel is slow (~0.03 blocks/tick), so limbSwingAmount tops out around ~0.1
-            // here. animateWalk() scales both keyframe amplitude and playback speed by it, which
-            // squashed the swim loop to a near-frozen pose — drive the authored loop on the
-            // animation-state clock instead and use the walk signal only to pick swim vs drift.
+            // swimming is slow so limbSwingAmount barely gets past 0.1, and animateWalk scales both
+            // the amplitude and the speed by it which basically froze the swim loop, so run the clip
+            // off the animation state clock and only use the walk signal to pick swim vs drift
             if (limbSwingAmount > 0.02F) {
                 this.animate(entity.swimAnimationState, DuckAnimations.DUCK_SWIM, ageInTicks);
             } else {
                 this.animate(entity.waterIdleAnimationState, DuckAnimations.DUCK_WATER_IDLE, ageInTicks);
-                // DUCK_WATER_IDLE has no leg channels; tread water lazily so the feet never freeze.
+                // DUCK_WATER_IDLE has no leg keyframes either, paddle slowly so the feet dont freeze
                 applyPaddle(ageInTicks, 0.4F);
             }
             return;
         }
 
-        // Flap whenever airborne (and not floating in water). Driven by the synced onGround flag
-        // rather than client deltaMovement, which decays to ~0 mid-fall for remote entities.
+        // flap any time its in the air, using the synced onGround flag since client deltaMovement
+        // drops to about 0 mid fall for entities that arent yours
         if (!entity.onGround()) {
             this.animate(entity.flapAnimationState, DuckAnimations.DUCK_FLY, ageInTicks);
             return;
@@ -90,8 +89,8 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
         }
     }
 
-    // Procedural alternating leg stroke at a constant rate, mirroring the authored DUCK_SWIM
-    // arc at strength 1 so handoffs between the water branches don't pop.
+    // alternating leg stroke at a fixed rate, matches the DUCK_SWIM arc at strength 1 so swapping
+    // between the water branches doesnt pop
     private void applyPaddle(float ageInTicks, float strength) {
         float phase = ageInTicks * PADDLE_PHASE_PER_TICK;
         float sweep = PADDLE_SWEEP * strength;

@@ -23,7 +23,7 @@ public class EOTWItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(ForgeRegistries.ITEMS, EssenceOfTheWildMod.MOD_ID);
 
-    //Icecream
+    //icecream
     public static RegistryObject<Item> VANILLA_ICECREAM = createIceCream("vanilla");
     public static RegistryObject<Item> CHOCOLATE_ICECREAM = createIceCream("chocolate");
     public static RegistryObject<Item> STRAWBERRY_ICECREAM = createIceCream("strawberry");
@@ -31,7 +31,7 @@ public class EOTWItems {
     public static RegistryObject<Item> JUMP_BOOST_ICECREAM = createEffectIceCream("jump_boost", MobEffects.JUMP);
     public static RegistryObject<Item> SPEED_ICECREAM = createEffectIceCream("speed", MobEffects.MOVEMENT_SPEED);
 
-    //Items
+    //items
     public static RegistryObject<Item> CONE = ITEMS.register("cone", ()-> new Item(new Item.Properties().stacksTo(8)));
     public static RegistryObject<Item> SHEEP_CHEESE = ITEMS.register("sheep_cheese", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.2f).build())));
@@ -42,7 +42,7 @@ public class EOTWItems {
     public static RegistryObject<Item> DUCK_FEATHER = ITEMS.register("duck_feather", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> DUCK_EGG = ITEMS.register("duck_egg", ()-> new DuckEggItem(new Item.Properties().stacksTo(16)));
 
-    //Spawn Eggs
+    //spawn eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> PIG_SPAWN_EGG = createSpawnEgg(EOTWEntities.PIG, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 0xFFFFFF, 0xFFFFFF);
@@ -52,9 +52,12 @@ public class EOTWItems {
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);
-    public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0x6E6E6E, 0xC58C85);
+    // white like all the other eggs here, they use a custom sprite instead of the vanilla two layer
+    // template and the colour handler multiplies layer0 by the background, so anything but white just
+    // darkens the art
+    public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0xFFFFFF, 0xFFFFFF);
 
-    //Tree
+    //tree
     public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> VANILLA_STICK = ITEMS.register("vanilla_stick", ()-> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MANGO_SIGN = ITEMS.register("mango_sign",

@@ -1,81 +1,41 @@
 package net.mrmisc.essenceofthewild.entity.custom.sheep;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoRenderer;
 
+// the shorn body, drawn once the fleece is gone, tinted the same way so dyed sheep stay dyed
 @OnlyIn(Dist.CLIENT)
-public class ShearedSheepLayer extends RenderLayer<SheepEntity, SheepModel> {
+public class ShearedSheepLayer extends SheepOverlayLayer {
 
-    public static final ResourceLocation SHEARED_SHEEP_LOCATION = ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "textures/entity/sheep/sheared_sheep.png");
-
-    public ShearedSheepModel model;
-
-    public ShearedSheepLayer(RenderLayerParent<SheepEntity, SheepModel> pRenderer, EntityModelSet modelSet) {
-        super(pRenderer);
-        this.model = new ShearedSheepModel(modelSet.bakeLayer(ShearedSheepModel.LAYER_LOCATION));
+    public ShearedSheepLayer(GeoRenderer<SheepEntity> renderer) {
+        super(renderer, new ShearedGeoModel());
     }
 
     @Override
-    public void render(PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, SheepEntity pLivingEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTicks, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch) {
-        if (pLivingEntity.isSheared()) {
-            this.getParentModel().copyPropertiesTo(this.model);
-            this.model.setupAnim(pLivingEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-            if (pLivingEntity.isInvisible()) {
-                Minecraft minecraft = Minecraft.getInstance();
-                boolean flag = minecraft.shouldEntityAppearGlowing(pLivingEntity);
-                if (flag) {
-                    this.getParentModel().copyPropertiesTo(this.model);
-                    this.model.prepareMobModel(pLivingEntity, pLimbSwing, pLimbSwingAmount, pPartialTicks);
-                    this.model.setupAnim(pLivingEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-                    VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.outline(SHEARED_SHEEP_LOCATION));
-                    this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, LivingEntityRenderer.getOverlayCoords(pLivingEntity, 0.0F), 0.0F, 0.0F, 0.0F, 1.0F);
-                }
+    protected boolean appliesTo(SheepEntity sheep) {
+        return sheep.isSheared();
+    }
 
-            } else {
-                float f;
-                float f1;
-                float f2;
-                if (pLivingEntity.hasCustomName() && "jeb_".equals(pLivingEntity.getName().getString())) {
-                    int i = pLivingEntity.tickCount / 25 + pLivingEntity.getId();
-                    int j = DyeColor.values().length;
-                    int k = i % j;
-                    int l = (i + 1) % j;
-                    float f3 = ((float)(pLivingEntity.tickCount % 25) + pPartialTicks) / 25.0F;
-                    float[] afloat1 = Sheep.getColorArray(DyeColor.byId(k));
-                    float[] afloat2 = Sheep.getColorArray(DyeColor.byId(l));
-                    f = afloat1[0] * (1.0F - f3) + afloat2[0] * f3;
-                    f1 = afloat1[1] * (1.0F - f3) + afloat2[1] * f3;
-                    f2 = afloat1[2] * (1.0F - f3) + afloat2[2] * f3;
-                } else {
-                    float[] afloat = Sheep.getColorArray(pLivingEntity.getColor());
-                    float saturation = 0.9F;
-                    float brightness = 1.1F;
+    private static class ShearedGeoModel extends GeoModel<SheepEntity> {
+        private static final ResourceLocation MODEL = SheepGeoModel.path("geo/entity/sheared_sheep.geo.json");
+        private static final ResourceLocation TEXTURE = SheepGeoModel.path("textures/entity/sheep/sheared_sheep.png");
 
-                    float gray = (afloat[0] + afloat[1] + afloat[2]) / 3.0F;
+        @Override
+        public ResourceLocation getModelResource(SheepEntity animatable) {
+            return MODEL;
+        }
 
-                    f = (gray + (afloat[0] - gray) * saturation) * brightness;
-                    f1 = (gray + (afloat[1] - gray) * saturation) * brightness;
-                    f2 = (gray + (afloat[2] - gray) * saturation) * brightness;
-                    f = Math.min(f, 1.0F);
-                    f1 = Math.min(f1, 1.0F);
-                    f2 = Math.min(f2, 1.0F);
-                }
+        @Override
+        public ResourceLocation getTextureResource(SheepEntity animatable) {
+            return TEXTURE;
+        }
 
-                coloredCutoutModelCopyLayerRender(this.getParentModel(), this.model, SHEARED_SHEEP_LOCATION, pPoseStack, pBuffer, pPackedLight, pLivingEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch, pPartialTicks, f, f1, f2);
-            }
+        @Override
+        public ResourceLocation getAnimationResource(SheepEntity animatable) {
+            return SheepGeoModel.ANIMATIONS;
         }
     }
 }

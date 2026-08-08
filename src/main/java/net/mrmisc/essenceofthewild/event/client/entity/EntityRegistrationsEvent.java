@@ -13,9 +13,7 @@ import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.client.Sleep
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
-import net.mrmisc.essenceofthewild.entity.custom.cow.BabyCowModel;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
-import net.mrmisc.essenceofthewild.entity.custom.cow.CowModel;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckModel;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DucklingModel;
@@ -25,7 +23,6 @@ import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareModel;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
-import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomModel;
 import net.mrmisc.essenceofthewild.entity.custom.pig.BabyPigModel;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigModel;
@@ -36,25 +33,16 @@ import net.mrmisc.essenceofthewild.entity.custom.rat.BabyRatModel;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatCollarModel;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatModel;
-import net.mrmisc.essenceofthewild.entity.custom.sheep.BabySheepModel;
-import net.mrmisc.essenceofthewild.entity.custom.sheep.ShearedSheepModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
-import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepModel;
-import net.mrmisc.essenceofthewild.entity.custom.sheep.WoolModel;
 
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegistrationsEvent {
 
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(SheepModel.LAYER_LOCATION, SheepModel::createBodyLayer);
-        event.registerLayerDefinition(WoolModel.LAYER_LOCATION, WoolModel::createBodyLayer);
-        event.registerLayerDefinition(ShearedSheepModel.LAYER_LOCATION, ShearedSheepModel::createBodyLayer);
         event.registerLayerDefinition(PigModel.LAYER_LOCATION, PigModel::createBodyLayer);
         event.registerLayerDefinition(BabyPigModel.LAYER_LOCATION, BabyPigModel::createBodyLayer);
         event.registerLayerDefinition(PigSaddleModel.LAYER_LOCATION, PigSaddleModel::createBodyLayer);
-        event.registerLayerDefinition(CowModel.LAYER_LOCATION, CowModel::createBodyLayer);
-        event.registerLayerDefinition(MooshroomModel.LAYER_LOCATION, MooshroomModel::createBodyLayer);
         event.registerLayerDefinition(ChickenModel.LAYER_LOCATION, ChickenModel::createBodyLayer);
         event.registerLayerDefinition(DuckModel.LAYER_LOCATION, DuckModel::createBodyLayer);
         event.registerLayerDefinition(DucklingModel.LAYER_LOCATION, DucklingModel::createBodyLayer);
@@ -64,8 +52,6 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(SleepingBagRenderer.FOOT, SleepingBagRenderer::createFootLayer);
         event.registerLayerDefinition(FerretModel.LAYER_LOCATION, FerretModel::createBodyLayer);
         event.registerLayerDefinition(BabyFerretModel.LAYER_LOCATION, BabyFerretModel::createBodyLayer);
-        event.registerLayerDefinition(BabyCowModel.LAYER_LOCATION, BabyCowModel::createBodyLayer);
-        event.registerLayerDefinition(BabySheepModel.LAYER_LOCATION, BabySheepModel::createBodyLayer);
         event.registerLayerDefinition(RatModel.LAYER_LOCATION, RatModel::createBodyLayer);
         event.registerLayerDefinition(BabyRatModel.LAYER_LOCATION, BabyRatModel::createBodyLayer);
         event.registerLayerDefinition(RatCollarModel.LAYER_LOCATION, RatCollarModel::createBodyLayer);

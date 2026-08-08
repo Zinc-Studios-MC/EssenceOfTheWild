@@ -1,0 +1,193 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.sheared_sheep",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          1,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "bone",
+          "pivot": [
+            0,
+            -3,
+            0
+          ]
+        },
+        {
+          "name": "leg1",
+          "parent": "bone",
+          "pivot": [
+            -3,
+            9,
+            7
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                6
+              ],
+              "size": [
+                3,
+                9,
+                3
+              ],
+              "uv": [
+                36,
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg2",
+          "parent": "bone",
+          "pivot": [
+            3,
+            9,
+            7
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                6
+              ],
+              "size": [
+                3,
+                9,
+                3
+              ],
+              "uv": [
+                0,
+                34
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg3",
+          "parent": "bone",
+          "pivot": [
+            -3,
+            9,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                0,
+                -7
+              ],
+              "size": [
+                3,
+                9,
+                3
+              ],
+              "uv": [
+                12,
+                34
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg4",
+          "parent": "bone",
+          "pivot": [
+            3,
+            9,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                -7
+              ],
+              "size": [
+                3,
+                9,
+                3
+              ],
+              "uv": [
+                24,
+                25
+              ]
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "parent": "bone",
+          "pivot": [
+            0,
+            16,
+            2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.5,
+                9,
+                -7
+              ],
+              "size": [
+                7,
+                9,
+                16
+              ],
+              "uv": [
+                0,
+                0
+              ],
+              "inflate": 0.01
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            15,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2.5,
+                15,
+                -11
+              ],
+              "size": [
+                5,
+                4,
+                5
+              ],
+              "uv": [
+                0,
+                55
+              ],
+              "inflate": 0.01
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

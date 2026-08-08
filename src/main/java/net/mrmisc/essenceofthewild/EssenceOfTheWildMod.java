@@ -40,17 +40,18 @@ import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepRenderer;
 import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrowRenderer;
+import net.mrmisc.essenceofthewild.item.EOTWItemProperties;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
 import net.mrmisc.essenceofthewild.screen.ferret.FerretScreen;
 import net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;
 import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
-// The value here should match an entry in the META-INF/mods.toml file
+// this has to match an entry in META-INF/mods.toml
 @Mod(EssenceOfTheWildMod.MOD_ID)
 public class EssenceOfTheWildMod
 {
-    // Define mod id in a common place for everything to reference
+    // mod id lives here so everything else can just point at it
     public static final String MOD_ID = "essenceofthewild";
 
 
@@ -59,10 +60,10 @@ public class EssenceOfTheWildMod
         IEventBus modEventBus = context.getModEventBus();
         context.registerConfig(ModConfig.Type.COMMON, EOTWConfig.COMMON_SPEC);
         EOTWUtils.modInit(modEventBus);
-        // Register the commonSetup method for modloading
+        // hook up commonSetup for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // Register ourselves for server and other game events we are interested in
+        // sign us up for the server and game events we care about
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new ServerInteractionListener());
@@ -72,13 +73,13 @@ public class EssenceOfTheWildMod
     {
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    // SubscribeEvent lets the event bus find methods to call on its own
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    // EventBusSubscriber auto registers every static method in here marked with SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
@@ -95,7 +96,6 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
-            EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
             EntityRenderers.register(EOTWEntities.FERRET.get(), FerretRenderer::new);
             EntityRenderers.register(EOTWEntities.RAT.get(), RatRenderer::new);
             EntityRenderers.register(EOTWEntities.THROWN_DUCK_EGG.get(), ThrownItemRenderer::new);
@@ -104,6 +104,7 @@ public class EssenceOfTheWildMod
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
             MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
+            event.enqueueWork(EOTWItemProperties::register);
         }
     }
     @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -116,7 +117,7 @@ public class EssenceOfTheWildMod
                 return;
             }
 
-            // Rat -> composter assignment.
+            // assigning a rat to a composter
             String ratUuid = EOTWEntityUtils.getRatClicked(p);
             if(!ratUuid.isEmpty()
                     && event.getLevel().getBlockState(event.getPos()).is(net.minecraft.world.level.block.Blocks.COMPOSTER)){
@@ -131,7 +132,7 @@ public class EssenceOfTheWildMod
                 }
             }
 
-            // Ferret -> dig-block assignment.
+            // assigning a ferret its dig block
             if(!p.getPersistentData().contains("OwnsFerret")){
                 return;
             }

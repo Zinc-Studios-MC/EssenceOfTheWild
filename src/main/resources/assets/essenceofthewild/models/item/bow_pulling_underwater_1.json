@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "essenceofthewild:item/bow_pulling_underwater_1"
+  }
+}

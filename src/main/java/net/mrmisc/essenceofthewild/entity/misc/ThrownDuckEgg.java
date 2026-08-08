@@ -11,11 +11,8 @@ import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 
-/**
- * A thrown duck egg. Behaves like a vanilla thrown chicken egg: harmless on hit, breaks on impact,
- * and has a small chance to hatch a duckling (rarely a small brood). Any duckling that hatches
- * imprints on whoever threw the egg.
- */
+// acts like a thrown chicken egg, doesnt hurt anything, breaks on impact and has a small chance to
+// hatch a duckling or rarely a few, and whatever hatches imprints on whoever threw it
 public class ThrownDuckEgg extends ThrowableItemProjectile {
 
     public ThrownDuckEgg(EntityType<? extends ThrownDuckEgg> type, Level level) {

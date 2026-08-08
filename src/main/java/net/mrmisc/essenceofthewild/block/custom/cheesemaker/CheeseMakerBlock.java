@@ -38,16 +38,16 @@ public class CheeseMakerBlock extends BaseEntityBlock {
     public static final IntegerProperty CONTENT = IntegerProperty.create("state", EMPTY, CHEESE);
 
     private static final VoxelShape SHAPE = Shapes.or(
-            Block.box(0, 4, 0, 16, 6, 16),      // Base Plate
-            Block.box(0, 0, 12, 4, 4, 16),     // Leg 1
-            Block.box(12, 0, 12, 16, 4, 16),   // Leg 2
-            Block.box(0, 0, 0, 4, 4, 4),       // Leg 3
-            Block.box(12, 0, 0, 16, 4, 4),     // Leg 4
-            Block.box(0, 6, 0, 16, 13, 2),     // Wall N
-            Block.box(0, 6, 14, 16, 13, 16),   // Wall S
-            Block.box(14, 6, 2, 16, 13, 14),   // Wall E
-            Block.box(0, 6, 2, 2, 13, 14),     // Wall W
-            Block.box(2, 9, 2, 14, 11, 14)     // Content
+            Block.box(0, 4, 0, 16, 6, 16),      // base plate
+            Block.box(0, 0, 12, 4, 4, 16),     // leg 1
+            Block.box(12, 0, 12, 16, 4, 16),   // leg 2
+            Block.box(0, 0, 0, 4, 4, 4),       // leg 3
+            Block.box(12, 0, 0, 16, 4, 4),     // leg 4
+            Block.box(0, 6, 0, 16, 13, 2),     // wall n
+            Block.box(0, 6, 14, 16, 13, 16),   // wall s
+            Block.box(14, 6, 2, 16, 13, 14),   // wall e
+            Block.box(0, 6, 2, 2, 13, 14),     // wall w
+            Block.box(2, 9, 2, 14, 11, 14)     // content
     );
 
     public CheeseMakerBlock(Properties pProperties) {

@@ -11,10 +11,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.mrmisc.essenceofthewild.entity.misc.ThrownDuckEgg;
 
-/**
- * A duck egg that throws just like a vanilla chicken egg (see {@link net.minecraft.world.item.EggItem}),
- * launching a {@link ThrownDuckEgg} that can hatch a duckling.
- */
+// duck egg that throws exactly like a vanilla chicken egg, it just launches a ThrownDuckEgg that
+// might hatch a duckling
 public class DuckEggItem extends Item {
 
     public DuckEggItem(Properties properties) {

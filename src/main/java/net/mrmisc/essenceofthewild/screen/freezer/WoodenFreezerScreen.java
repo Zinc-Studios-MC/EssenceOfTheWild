@@ -131,7 +131,7 @@ public class WoodenFreezerScreen extends AbstractContainerScreen<WoodenFreezerMe
             { 92, 25 }
     };
 
-    // Hides the cone outlines cuz for some reason the texture has them built-in
+    // hides the cone outlines cuz for some reason the texture has them baked in
     private static final int[][] CONE_OUTLINE_MASK = {
             { 2, 9, 13 },
             { 3, 8, 8 },
@@ -209,7 +209,7 @@ public class WoodenFreezerScreen extends AbstractContainerScreen<WoodenFreezerMe
 
     @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
-        // Intentionally empty Dont Touch !!
+        // empty on purpose, dont touch
     }
 
     private void hideFilledConeOutlines(GuiGraphics guiGraphics, int guiX, int guiY) {

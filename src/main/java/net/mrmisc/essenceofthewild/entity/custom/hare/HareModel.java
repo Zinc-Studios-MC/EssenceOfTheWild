@@ -1,6 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.hare;// Made with Blockbench 5.1.3
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.hare;
+// blockbench export
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,7 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class HareModel extends HierarchicalModel<HareEntity> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "hare"), "main");
 	private final ModelPart body;
 	private final ModelPart left_thigh;
@@ -102,7 +101,7 @@ public class HareModel extends HierarchicalModel<HareEntity> {
 		if (!pEntity.isMoving()) {
 			this.animate(pEntity.idleAnimationState, HareAnimations.idle, pAgeInTicks);
 		} else if (pEntity.isRunning()) {
-			// Deliberately well below the clip's natural rate (3.5) for a slower run cycle.
+			// way under the clip's natural 3.5 on purpose, makes the run cycle slower
 			this.animateWalk(HareAnimations.run, pLimbSwing, pLimbSwingAmount, 1.0F, 2.5F);
 		} else {
 			this.animateWalk(HareAnimations.walk, pLimbSwing, pLimbSwingAmount, 2.2F, 1.3F);

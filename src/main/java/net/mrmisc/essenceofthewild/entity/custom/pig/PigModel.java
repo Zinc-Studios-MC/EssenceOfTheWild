@@ -1,6 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.pig;// Made with Blockbench 5.1.4
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.pig;
+// blockbench export
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class PigModel extends HierarchicalModel<PigEntity> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "pig"), "main");
 	private final ModelPart root;
 	private final ModelPart body;

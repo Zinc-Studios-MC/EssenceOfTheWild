@@ -127,7 +127,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
     @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
-        // Ducks float down on their wings and never take fall damage.
+        // ducks glide down on their wings so no fall damage ever
         return false;
     }
 
@@ -219,18 +219,15 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         }
     }
 
-    // How far the duck's feet sit below the water surface while floating.
+    // how far under the surface the feet sit while floating
     private static final double FLOAT_SUBMERGE = 0.5D;
-    // Smallest gap kept between a floating duck's eyes and the water surface so it is never treated as submerged.
+    // smallest gap to keep between the eyes and the surface so the game never counts it as submerged
     private static final double EYE_FLOAT_CLEARANCE = 0.05D;
 
-    /**
-     * Holds the duck at a steady height on the water surface so it never bobs up and down.
-     * Only vertical position is controlled; horizontal swimming is untouched, and while diving
-     * for fish the duck is left to move freely.
-     */
+    // pins the duck at a steady height on the water so it doesnt bob, only touches the y, swimming
+    // around is left alone and diving ducks are skipped entirely
     private void tickSteadyFloat() {
-        // Leave the duck free to move vertically while diving for or chasing fish.
+        // let it move up and down freely while diving or chasing a fish
         if (!isInWater() || isDivingAnimationActive() || nestTarget != null || fishTargetId >= 0) {
             return;
         }
@@ -238,7 +235,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         if (Double.isNaN(targetY)) {
             return;
         }
-        // Move toward the surface line at a capped rate, then hold there with no vertical velocity.
+        // ease toward the surface line, then sit there with no vertical velocity
         double step = Mth.clamp(targetY - getY(), -0.15D, 0.15D);
         setPos(getX(), getY() + step, getZ());
         Vec3 dm = getDeltaMovement();
@@ -246,7 +243,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         this.fallDistance = 0.0F;
     }
 
-    /** The Y the duck's feet should rest at to float on the local water surface, or NaN if not floating. */
+    // y the feet should sit at to float on the water here, NaN if its not in water
     private double computeFloatY() {
         int x = Mth.floor(getX());
         int z = Mth.floor(getZ());
@@ -257,13 +254,11 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         while (level().getFluidState(cursor).is(FluidTags.WATER)) {
             cursor.move(0, 1, 0);
         }
-        // cursor is now the first non-water block above the column; its bottom is the water surface.
+        // cursor is the first non water block above the column now, its bottom is the surface
         double surface = cursor.getY();
         double floatFeet = surface - FLOAT_SUBMERGE;
-        // A duckling's hitbox is half-size, so the fixed submerge depth would sink its eyes below the
-        // surface; the game then reads it as underwater and slowly drowns it. Never float so low that
-        // the eyes dip under — keep them a touch above the waterline. Full-grown ducks clear this easily
-        // and are unaffected.
+        // ducklings have a half size hitbox so the flat submerge depth put their eyes under the water
+        // and slowly drowned them, so never float low enough for the eyes to dip under, adults are already fine
         double eyesAboveSurface = surface - getEyeHeight() + EYE_FLOAT_CLEARANCE;
         return Math.max(floatFeet, eyesAboveSurface);
     }
@@ -343,7 +338,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         }
 
         if (duckGroupData == null) {
-            // Most flocks are all adults; only occasionally is a group a mother with a brood of ducklings.
+            // most flocks are just adults, every now and then you get a mother with ducklings
             boolean brood = this.random.nextInt(5) == 0;
             int ducklings = brood ? 2 + this.random.nextInt(3) : 0;
             duckGroupData = new DuckGroupData(pickVariant(level.getLevel(), blockPosition()).id(), ducklings);
@@ -357,7 +352,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             }
         } else {
             duckGroupData.motherSpawned = true;
-            // The nest full of eggs only makes sense alongside a mother tending a brood.
+            // a nest full of eggs only makes sense if theres a mother with a brood
             if (duckGroupData.ducklingsRemaining > 0) {
                 EOTWNestHelper.tryPlaceNaturalNest(level, this.blockPosition(), this.random);
             }
@@ -390,7 +385,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         return entityData.get(DIVING);
     }
 
-    /** Force this duckling to imprint on a specific entity (used when hatched from a thrown egg). */
+    // force this duckling to imprint on something, used when it hatches from a thrown egg
     public void imprintOn(LivingEntity entity) {
         this.imprintUuid = entity.getUUID();
         this.imprinted = true;
@@ -405,7 +400,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         return entity instanceof LivingEntity living ? living : null;
     }
 
-    /** A newly hatched duckling bonds with the first nearby creature it sees (mother or player). */
+    // a fresh duckling latches onto the first thing it sees nearby, mother or player
     private void tickImprinting() {
         if (!isBaby() || this.imprinted) {
             return;
@@ -760,9 +755,8 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         }
     }
 
-    // Must extend AgeableMobGroupData: the vanilla AgeableMob.finalizeSpawn casts the incoming
-    // SpawnGroupData to AgeableMobGroupData, so the data we hand back across a spawn pack has to
-    // be one. super(false) stops vanilla from rolling its own babies — we manage ducklings here.
+    // has to extend AgeableMobGroupData because vanilla finalizeSpawn casts the SpawnGroupData to it,
+    // and super(false) keeps vanilla from rolling its own babies since we handle ducklings ourselves
     private static class DuckGroupData extends AgeableMob.AgeableMobGroupData {
         private final String variantId;
         private int ducklingsRemaining;

@@ -20,9 +20,8 @@ import net.mrmisc.essenceofthewild.worldgen.registry.EOTWTrunkPlacers;
 
 public class EOTWUtils {
 
-    // Both names must carry the mod namespace. Sheets#createSignMaterial parses WoodType#name as a
-    // ResourceLocation to build the entity/signs texture path, so a bare "mango" would look for the
-    // sign texture under minecraft: instead of essenceofthewild:.
+    // both names need the mod namespace on them, createSignMaterial parses the WoodType name as a
+    // ResourceLocation for the texture path so a plain "mango" would look under minecraft: instead of ours
     public static final BlockSetType MANGO =
             BlockSetType.register(new BlockSetType(EssenceOfTheWildMod.MOD_ID + ":mango"));
     public static final WoodType MANGO_WOOD =

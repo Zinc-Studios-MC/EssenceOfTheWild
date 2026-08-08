@@ -70,7 +70,7 @@ public class NestBlock extends BaseEntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        // Empty-handed right-click collects any eggs currently in the nest.
+        // right click with an empty hand grabs whatever eggs are in the nest
         if (!player.getItemInHand(hand).isEmpty()) {
             return InteractionResult.PASS;
         }

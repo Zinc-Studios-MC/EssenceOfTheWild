@@ -7,6 +7,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,17 +21,86 @@ import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class CowEntity extends Cow implements VariantCarrier{
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
+
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.cow.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.cow.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.cow.run");
+
+    // ticks a cow keeps running after one hit
+    private static final int PANIC_DURATION = 60;
+
+    // calves reuse the adult clips but move faster for their size, so speed the playback up or their legs slide
+    private static final double BABY_GAIT_SPEED = 1.5D;
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
+    private int panicTicks;
 
     public CowEntity(EntityType<? extends Cow> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
+                .setAnimationSpeedHandler(CowEntity::gaitSpeed));
+    }
+
+    private PlayState movementController(AnimationState<CowEntity> state) {
+        if (!state.isMoving()) {
+            return state.setAndContinue(IDLE);
+        }
+        // go by hurt, not speed, a cow walking to grass moves about as fast as one running from a wolf
+        return state.setAndContinue(this.isPanicking() ? RUN : WALK);
+    }
+
+    private static double gaitSpeed(CowEntity cow) {
+        return cow.isBaby() ? BABY_GAIT_SPEED : 1.0D;
+    }
+
+    public boolean isPanicking() {
+        return this.entityData.get(PANICKING);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource source, float amount) {
+        boolean hurt = super.hurt(source, amount);
+        if (hurt && !this.level().isClientSide) {
+            this.panicTicks = PANIC_DURATION;
+            this.entityData.set(PANICKING, true);
+        }
+        return hurt;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level().isClientSide && this.panicTicks > 0 && --this.panicTicks == 0) {
+            this.entityData.set(PANICKING, false);
+        }
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
+
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.INT);
+    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
+    private static final EntityDataAccessor<Boolean> PANICKING =
+            SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.BOOLEAN);
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.2F);
@@ -40,6 +110,7 @@ public class CowEntity extends Cow implements VariantCarrier{
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(PANICKING, false);
     }
 
     @Override
@@ -56,24 +127,6 @@ public class CowEntity extends Cow implements VariantCarrier{
         }
         setVariant(pickVariant(pLevel.getLevel(), blockPosition()));
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        if(this.level().isClientSide()) {
-            setupAnimationStates();
-        }
-    }
-
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.startIfStopped(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
     }
 
     @Override
@@ -121,9 +174,6 @@ public class CowEntity extends Cow implements VariantCarrier{
         }
         if(level.getBiome(pos).is(Tags.Biomes.IS_HOT)){
             return CowVariants.WARM;
-        }
-        if(level.getBiome(pos).is(Tags.Biomes.IS_COLD)){
-            return CowVariants.COLD;
         }
         return level.random.nextBoolean() ? CowVariants.BASIC : CowVariants.BASIC_BROWN;
     }

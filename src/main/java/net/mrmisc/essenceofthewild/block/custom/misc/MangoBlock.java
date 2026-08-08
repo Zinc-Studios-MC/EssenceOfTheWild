@@ -12,13 +12,13 @@ import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 
 public class MangoBlock extends Block {
     private static final VoxelShape SHAPE = Shapes.or(
-            // Body
+            // body
             Block.box(
                     4.0D, 3.0D, 4.0D,
                     12.0D, 13.0D, 12.0D
             ),
 
-            // Stem
+            // stem
             Block.box(
                     7.0D, 13.0D, 7.0D,
                     9.0D, 16.0D, 9.0D

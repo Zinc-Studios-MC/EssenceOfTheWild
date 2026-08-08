@@ -5,13 +5,8 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-/**
- * Made with Blockbench 5.1.4
- * Exported for Minecraft version 1.19 or later with Mojang mappings
- *
- * The Blockbench root group is named "body"; it is renamed to "root" here because
- * HierarchicalModel#getAnyDescendantWithName only resolves the root under that name.
- */
+// blockbench export, the root group is called body in blockbench and renamed to root here since
+// getAnyDescendantWithName only finds the root under that name
 public class RabbitAnimations {
 	public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(0.5F).looping()
 		.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,

@@ -1,6 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.pig;// Made with Blockbench 5.1.1
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.pig;
+// blockbench export
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

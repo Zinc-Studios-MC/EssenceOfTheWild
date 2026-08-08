@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class BabyFerretModel extends FerretModel {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "baby_ferret"), "main");
 	private final ModelPart body;
 	private final ModelPart back_left_leg;

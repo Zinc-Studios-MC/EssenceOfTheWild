@@ -90,9 +90,8 @@ public class EOTWNestHelper {
     }
 
     public static void tryPlaceNaturalNest(ServerLevelAccessor level, BlockPos center, RandomSource random) {
-        // During chunk generation the accessor is a WorldGenRegion and reaching into the live
-        // ServerLevel (block reads/writes) from the worldgen worker thread deadlocks the chunk
-        // system. Skip nest placement then; gameplay (NATURAL) spawns still place nests safely.
+        // during worldgen this is a WorldGenRegion and touching the real ServerLevel from that thread
+        // deadlocks the chunk system, so skip nests there, normal spawns still place them fine
         if (level instanceof WorldGenRegion) {
             return;
         }

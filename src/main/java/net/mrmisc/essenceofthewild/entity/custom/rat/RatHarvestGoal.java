@@ -21,11 +21,8 @@ import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-/**
- * When a tamed rat has been assigned to a composter (with a stick), it harvests mature crops
- * nearby, drops the produce into the nearest chest, and carries the leftover seeds back to the
- * composter to compost them.
- */
+// once a tamed rat is assigned to a composter with a stick it harvests grown crops around it,
+// dumps the produce in the nearest chest and brings the leftover seeds back to the composter
 public class RatHarvestGoal extends Goal {
 
     private static final int SEARCH_RADIUS = 8;
@@ -74,7 +71,7 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 1. Empty a ready composter, carrying the bone meal away (needs room to hold it).
+        // 1. empty a finished composter and carry the bone meal off, needs a free slot
         if (isComposterReady() && hasBufferSpace()) {
             if (moveWithinReach(composter)) {
                 collectBonemeal(composter);
@@ -82,7 +79,7 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 2. Carrying produce -> take it to a chest.
+        // 2. holding produce so take it to a chest
         if (hasBufferMatching(false)) {
             BlockPos chest = findContainer();
             if (chest != null) {
@@ -91,10 +88,10 @@ public class RatHarvestGoal extends Goal {
                 }
                 return;
             }
-            // No chest available: leave produce in the buffer and keep working.
+            // no chest around, just hang onto it and carry on
         }
 
-        // 3. Carrying seeds -> compost them.
+        // 3. holding seeds so go compost them
         if (hasBufferMatching(true)) {
             if (moveWithinReach(composter)) {
                 compostSeeds(composter);
@@ -102,7 +99,7 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 4. Harvest a mature crop.
+        // 4. go break a grown crop
         BlockPos crop = findMatureCrop();
         if (crop != null) {
             if (moveWithinReach(crop)) {
@@ -111,15 +108,13 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 5. Nothing to do: stay near the composter.
+        // 5. nothing to do, just idle near the composter
         if (isFarFromComposter()) {
             this.rat.getNavigation().moveTo(composter.getX() + 0.5, composter.getY(), composter.getZ() + 0.5, 1.0D);
         }
     }
 
-    // ------------------------------------------------------------------
-    // Work detection
-    // ------------------------------------------------------------------
+    // figuring out if theres work to do
 
     private boolean hasWork() {
         return isComposterReady() || !bufferIsEmpty() || findMatureCrop() != null;
@@ -135,7 +130,7 @@ public class RatHarvestGoal extends Goal {
                 && s.getValue(ComposterBlock.LEVEL) == 8;
     }
 
-    /** Room to hold at least one more bone meal. */
+    // is there space for at least one more bone meal
     private boolean hasBufferSpace() {
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack s = this.rat.harvestInventory.getItem(i);
@@ -158,7 +153,7 @@ public class RatHarvestGoal extends Goal {
         return this.rat.harvestInventory.isEmpty();
     }
 
-    /** True if the buffer holds an item that is (or is not) a seed, per {@code seeds}. */
+    // true if the buffer has something that is or isnt a seed, depending on the flag
     private boolean hasBufferMatching(boolean seeds) {
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack s = this.rat.harvestInventory.getItem(i);
@@ -173,9 +168,7 @@ public class RatHarvestGoal extends Goal {
         return SEEDS.contains(stack.getItem());
     }
 
-    // ------------------------------------------------------------------
-    // Movement
-    // ------------------------------------------------------------------
+    // movement
 
     private boolean moveWithinReach(BlockPos pos) {
         double distSqr = this.rat.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -193,9 +186,7 @@ public class RatHarvestGoal extends Goal {
         return true;
     }
 
-    // ------------------------------------------------------------------
-    // Harvesting
-    // ------------------------------------------------------------------
+    // harvesting
 
     @Nullable
     private BlockPos findMatureCrop() {
@@ -238,14 +229,12 @@ public class RatHarvestGoal extends Goal {
                 server.addFreshEntity(ie);
             }
         }
-        // Auto-replant.
+        // replant it
         server.setBlock(pos, crop.getStateForAge(0), 3);
         server.levelEvent(2001, pos, Block.getId(state));
     }
 
-    // ------------------------------------------------------------------
-    // Depositing produce into a chest
-    // ------------------------------------------------------------------
+    // dropping produce off in a chest
 
     @Nullable
     private BlockPos findContainer() {
@@ -285,7 +274,7 @@ public class RatHarvestGoal extends Goal {
     }
 
     private ItemStack insertIntoContainer(Container container, ItemStack stack) {
-        // Merge into existing matching stacks first, then empty slots.
+        // top up matching stacks first, then use empty slots
         for (int i = 0; i < container.getContainerSize() && !stack.isEmpty(); i++) {
             ItemStack slot = container.getItem(i);
             if (!slot.isEmpty() && ItemStack.isSameItemSameTags(slot, stack)
@@ -305,9 +294,7 @@ public class RatHarvestGoal extends Goal {
         return stack.isEmpty() ? ItemStack.EMPTY : stack;
     }
 
-    // ------------------------------------------------------------------
-    // Composting seeds
-    // ------------------------------------------------------------------
+    // composting the seeds
 
     private void collectBonemeal(BlockPos composterPos) {
         if (!(this.rat.level() instanceof ServerLevel server)) {
@@ -338,7 +325,7 @@ public class RatHarvestGoal extends Goal {
         }
         int level = state.getValue(ComposterBlock.LEVEL);
         if (level >= 7) {
-            return; // full — wait until it is emptied
+            return; // full, wait til someone empties it
         }
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack stack = this.rat.harvestInventory.getItem(i);

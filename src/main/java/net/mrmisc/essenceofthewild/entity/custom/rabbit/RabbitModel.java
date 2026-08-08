@@ -1,6 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.rabbit;// Made with Blockbench 5.1.4
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.rabbit;
+// blockbench export
 
 
 import net.minecraft.client.model.HierarchicalModel;
@@ -104,11 +103,11 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 		if (!pEntity.isMoving()) {
 			this.animate(pEntity.idleAnimationState, RabbitAnimations.idle, ageInTicks);
 		} else if (pEntity.isRunning()) {
-			// Deliberately well below the clip's natural rate (3.5) for a slower run cycle.
+			// way under the clip's natural 3.5 on purpose, makes the run cycle slower
 			this.animateWalk(RabbitAnimations.run, limbSwing, limbSwingAmount, 1.0F, 2.5F);
 		} else {
-			// 2.2 rather than 1.6 because the walk clip grew from 0.667s to 0.917s; the speed
-			// multiplier scales with clip length to keep the original stride cadence.
+			// 2.2 instead of 1.6 because the walk clip got longer, the multiplier scales with clip
+			// length so the steps stay at the same cadence
 			this.animateWalk(RabbitAnimations.walk, limbSwing, limbSwingAmount, 2.2F, 1.3F);
 		}
 	}

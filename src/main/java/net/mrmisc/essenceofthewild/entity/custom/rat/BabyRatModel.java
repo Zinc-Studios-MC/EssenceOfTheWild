@@ -1,5 +1,5 @@
-package net.mrmisc.essenceofthewild.entity.custom.rat;// Made with Blockbench 5.1.4
-// Reimported from models/rat/baby rat.bbmodel
+package net.mrmisc.essenceofthewild.entity.custom.rat;
+// blockbench export, reimported from models/rat/baby rat.bbmodel
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,11 +12,8 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
-/**
- * Baby rat model. Uses the same part hierarchy/names as {@link RatModel} so it inherits its
- * animation and rendering (constructor, setupAnim, root, renderToBuffer), just with baby geometry
- * and its own UVs (baby_rat.png).
- */
+// same bone names and hierarchy as RatModel so it gets all the anim and render code for free,
+// just with smaller geometry and its own texture
 public class BabyRatModel extends RatModel {
 	public static final ModelLayerLocation LAYER_LOCATION =
 			new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "baby_rat"), "main");

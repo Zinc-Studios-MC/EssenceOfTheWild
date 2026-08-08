@@ -180,7 +180,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
         if(!this.level().isClientSide()){
             if(!this.isBaby()){
                 dayTick();
-                //TODO: move these to their own goals, I'm too lazy to do it right now
+                //TODO: move these into their own goals, im too lazy right now
                 shouldDigTicks();
             }
         }

@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
-//I'm not 100% sure If I will keep it like this, this is just the first way I can think of
+//not sure im keeping it like this, its just the first thing i could think of
 public class FerretFollowOwnerGoal extends Goal{
     public static final int TELEPORT_WHEN_DISTANCE_IS = 12;
     private final TamableAnimal tamable;

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class HareEntity extends Rabbit {
-    // Above this move-speed multiplier the hare runs (smooth glide); below it, it walks (small hops).
+    // over this speed multiplier the hare runs, under it it walks with little hops
     private static final double RUN_SPEED_MODIFIER = 1.5D;
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -33,7 +33,7 @@ public class HareEntity extends Rabbit {
 
     public HareEntity(EntityType<? extends Rabbit> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        // Replace the vanilla rabbit's jump-based move control with smooth ground movement.
+        // swap out the vanilla rabbit hop control for normal ground movement
         this.moveControl = new MoveControl(this);
     }
 
@@ -69,8 +69,7 @@ public class HareEntity extends Rabbit {
         }
     }
 
-    // Smooth ground movement for both walk and run (so the walk/run animations actually play);
-    // only jump to climb obstacles/up-paths or out of water.
+    // walks and runs on the ground so those anims actually play, only jumps for obstacles or to get out of water
     @Override
     public void startJumping() {
         if (shouldJumpObstacle()) {

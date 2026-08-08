@@ -15,9 +15,8 @@ public class DucklingModel extends AbstractDuckModel {
         super(root);
     }
 
-    // Geometry exported from Blockbench (ducking.bbmodel). The Blockbench "root" bone at (0,24,0)
-    // is folded into the top-level bones (body + legs) so AbstractDuckModel can treat the baked
-    // root directly; pivots are otherwise preserved exactly so the animations bind correctly.
+    // exported from ducking.bbmodel, the blockbench root bone at (0,24,0) is folded into the top level
+    // bones so AbstractDuckModel can use the baked root, everything else keeps its exact pivots
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshDefinition = new MeshDefinition();
         PartDefinition partDefinition = meshDefinition.getRoot();

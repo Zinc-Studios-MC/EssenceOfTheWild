@@ -1,15 +1,11 @@
-package net.mrmisc.essenceofthewild.entity.custom.pig;// Save this class in your mod and generate all required imports
+package net.mrmisc.essenceofthewild.entity.custom.pig;
 
 import net.minecraft.client.animation.AnimationChannel;
 import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-/**
- * Made with Blockbench 5.1.4
- * Exported for Minecraft version 1.19 or later with Mojang mappings
- * @author Author
- */
+// blockbench export
 public class BabyPigAnimations {
 	public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(2.0F).looping()
 		.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,

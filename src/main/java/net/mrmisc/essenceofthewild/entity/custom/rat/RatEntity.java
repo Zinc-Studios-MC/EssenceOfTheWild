@@ -70,7 +70,7 @@ import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarrier {
 
     public static final int HARVEST_INVENTORY_SIZE = 6;
-    /** Chance for an angry rat to infect a player it bites with rabies. */
+    // odds an angry rat gives a player rabies when it bites them
     public static final float RABIES_CHANCE = 0.15F;
 
     private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR =
@@ -87,15 +87,15 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Nullable
     private UUID persistentAngerTarget;
 
-    // Taming: a fresh wild rat needs between 6 and 12 cheese wedges.
+    // a wild rat takes somewhere between 6 and 12 cheese wedges to tame
     private int tameThreshold = 6;
     private int tameProgress = 0;
 
-    // Composter this rat has been assigned to farm around (null = unassigned).
+    // composter this rat farms around, null if it hasnt been assigned one
     @Nullable
     private BlockPos composterPos;
 
-    // Buffer for crops the rat is carrying between the field, the chest and the composter.
+    // holds whatever the rat is carrying between the field, the chest and the composter
     public final SimpleContainer harvestInventory = new SimpleContainer(HARVEST_INVENTORY_SIZE);
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -144,9 +144,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.define(RUNNING, false);
     }
 
-    // --------------------------------------------------------------------
-    // Ticking / animation
-    // --------------------------------------------------------------------
+    // ticking and animation
 
     @Override
     public void tick() {
@@ -159,7 +157,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        // Angry look while retaliating or hunting a target; run animation while chasing.
+        // angry texture while it fights back or hunts, run anim while its chasing
         boolean fighting = this.getTarget() != null || this.isAngry();
         this.entityData.set(ANGRY, fighting);
         this.entityData.set(RUNNING, this.getTarget() != null);
@@ -194,9 +192,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return this.entityData.get(RUNNING);
     }
 
-    // --------------------------------------------------------------------
-    // Combat / rabies
-    // --------------------------------------------------------------------
+    // combat and rabies
 
     @Override
     public boolean doHurtTarget(Entity pTarget) {
@@ -210,7 +206,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return flag;
     }
 
-    /** A tamed rat never targets another tamed/owned mob. */
+    // tamed rats never go after another tamed or owned mob
     @Override
     public boolean canAttack(LivingEntity pTarget) {
         if (this.isTame() && isTamedMob(pTarget)) {
@@ -240,9 +236,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return false;
     }
 
-    // --------------------------------------------------------------------
-    // Interaction: taming, healing, sitting, collar dyeing, composter assign
-    // --------------------------------------------------------------------
+    // interaction stuff, taming healing sitting dyeing the collar and composter assign
 
     @Override
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
@@ -256,7 +250,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             return canInteract ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
 
-        // ---- Not tamed: feed cheese wedges to tame ----
+        // not tamed yet, feed it cheese wedges
         if (!this.isTame()) {
             if (itemstack.is(EOTWItems.SHEEP_CHEESE_WEDGE.get())) {
                 this.usePlayerItem(pPlayer, pHand, itemstack);
@@ -278,9 +272,9 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             return super.mobInteract(pPlayer, pHand);
         }
 
-        // ---- Tamed & owned ----
+        // tamed and ours
         if (this.isOwnedBy(pPlayer)) {
-            // Re-colour the collar with any dye.
+            // any dye recolours the collar
             if (itemstack.getItem() instanceof DyeItem dyeItem) {
                 DyeColor color = dyeItem.getDyeColor();
                 if (color != this.getCollarColor()) {
@@ -292,7 +286,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 }
             }
 
-            // Heal with food (onion) or a cheese wedge.
+            // onions or a cheese wedge heal it
             boolean edible = this.isFood(itemstack) || itemstack.is(EOTWItems.SHEEP_CHEESE_WEDGE.get());
             if (edible && this.getHealth() < this.getMaxHealth()) {
                 float nutrition = itemstack.getFoodProperties(this) != null
@@ -302,7 +296,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 return InteractionResult.CONSUME;
             }
 
-            // Stick primes composter assignment (completed by right-clicking a composter).
+            // stick arms the composter assign, you finish it by right clicking a composter
             if (itemstack.is(Items.STICK)) {
                 EOTWEntityUtils.setRatClicked(this, pPlayer);
                 pPlayer.displayClientMessage(
@@ -311,12 +305,12 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 return InteractionResult.CONSUME;
             }
 
-            // Onion at full health -> fall through to vanilla breeding.
+            // onion at full health just falls through to normal breeding
             if (this.isFood(itemstack)) {
                 return super.mobInteract(pPlayer, pHand);
             }
 
-            // Anything else -> toggle sit/follow like a wolf.
+            // anything else toggles sit/follow like a wolf
             this.setOrderedToSit(!this.isOrderedToSit());
             this.jumping = false;
             this.navigation.stop();
@@ -327,15 +321,13 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return super.mobInteract(pPlayer, pHand);
     }
 
-    // --------------------------------------------------------------------
-    // Breeding
-    // --------------------------------------------------------------------
+    // breeding
 
     @Override
     @Nullable
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         RatEntity child = new RatEntity(EOTWEntities.RAT.get(), pLevel);
-        // Baby grows into the variant of this parent (the mother that started breeding).
+        // baby takes this parent's variant, that being the one that started the breeding
         child.setVariant(this.getVariant());
         if (this.isTame()) {
             child.setOwnerUUID(this.getOwnerUUID());
@@ -349,9 +341,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return pStack.is(EOTWItems.RED_ONION.get());
     }
 
-    // --------------------------------------------------------------------
-    // Composter assignment
-    // --------------------------------------------------------------------
+    // composter assignment
 
     public void assignComposter(BlockPos pos) {
         this.composterPos = pos.immutable();
@@ -367,9 +357,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return this.composterPos != null;
     }
 
-    // --------------------------------------------------------------------
-    // Collar colour
-    // --------------------------------------------------------------------
+    // collar colour
 
     public DyeColor getCollarColor() {
         return DyeColor.byId(this.entityData.get(DATA_COLLAR_COLOR));
@@ -379,9 +367,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.set(DATA_COLLAR_COLOR, pCollarColor.getId());
     }
 
-    // --------------------------------------------------------------------
-    // Variant
-    // --------------------------------------------------------------------
+    // variant
 
     public RatVariant getVariant() {
         int index = this.entityData.get(VARIANT);
@@ -410,14 +396,12 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.set(VARIANT, 0);
     }
 
-    // --------------------------------------------------------------------
-    // Spawning
-    // --------------------------------------------------------------------
+    // spawning
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
             MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        this.tameThreshold = 6 + this.random.nextInt(7); // 6..12
+        this.tameThreshold = 6 + this.random.nextInt(7); // 6 to 12
         if (pDataTag != null && pDataTag.contains("Variant")) {
             setVariantById(pDataTag.getString("Variant"));
         } else {
@@ -437,9 +421,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                         level.getFluidState(pos), type);
     }
 
-    // --------------------------------------------------------------------
-    // Neutral anger
-    // --------------------------------------------------------------------
+    // neutral anger
 
     @Override
     public void startPersistentAngerTimer() {
@@ -467,9 +449,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return this.persistentAngerTarget;
     }
 
-    // --------------------------------------------------------------------
-    // Save / load
-    // --------------------------------------------------------------------
+    // save and load
 
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
