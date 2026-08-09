@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import org.jetbrains.annotations.NotNull;
@@ -123,7 +124,8 @@ public class HareEntity extends Rabbit {
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
-        return level.random.nextBoolean() ? HareVariants.BASIC : HareVariants.BROWN;
+        // sandy coat in the desert, brown everywhere else it spawns (savanna and plains)
+        return level.getBiome(pos).is(Biomes.DESERT) ? HareVariants.YELLOW : HareVariants.BROWN;
     }
 
     @Override

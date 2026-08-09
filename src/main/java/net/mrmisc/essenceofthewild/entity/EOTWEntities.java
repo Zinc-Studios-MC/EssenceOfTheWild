@@ -24,21 +24,21 @@ public class EOTWEntities {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, EssenceOfTheWildMod.MOD_ID);
 
     public static RegistryObject<EntityType<SheepEntity>> SHEEP = ENTITIES.register("sheep",
-            ()-> EntityType.Builder.of(SheepEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("sheep"));
+            ()-> EntityType.Builder.of(SheepEntity::new, MobCategory.CREATURE).sized(1f, 1.2f).build("sheep"));
     public static RegistryObject<EntityType<CowEntity>> COW = ENTITIES.register("cow",
-            ()-> EntityType.Builder.of(CowEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("cow"));
+            ()-> EntityType.Builder.of(CowEntity::new, MobCategory.CREATURE).sized(1f, 1.2f).build("cow"));
     public static RegistryObject<EntityType<MooshroomEntity>> MOOSHROOM = ENTITIES.register("mooshroom",
-            ()-> EntityType.Builder.of(MooshroomEntity::new, MobCategory.AMBIENT).sized(1f, 1.2f).build("mooshroom"));
+            ()-> EntityType.Builder.of(MooshroomEntity::new, MobCategory.CREATURE).sized(1f, 1.2f).build("mooshroom"));
     public static RegistryObject<EntityType<ChickenEntity>> CHICKEN = ENTITIES.register("chicken",
-            ()-> EntityType.Builder.of(ChickenEntity::new, MobCategory.AMBIENT).sized(0.7f, 0.5f).build("chicken"));
+            ()-> EntityType.Builder.of(ChickenEntity::new, MobCategory.CREATURE).sized(0.7f, 0.5f).build("chicken"));
     public static RegistryObject<EntityType<DuckEntity>> DUCK = ENTITIES.register("duck",
             ()-> EntityType.Builder.of(DuckEntity::new, MobCategory.CREATURE).sized(0.7f, 0.6f).build("duck"));
     public static RegistryObject<EntityType<PigEntity>> PIG = ENTITIES.register("pig",
-            ()-> EntityType.Builder.of(PigEntity::new, MobCategory.AMBIENT).sized(0.6f, 1.2f).build("pig"));
+            ()-> EntityType.Builder.of(PigEntity::new, MobCategory.CREATURE).sized(0.6f, 1.2f).build("pig"));
     public static RegistryObject<EntityType<RabbitEntity>> RABBIT = ENTITIES.register("rabbit",
-            ()-> EntityType.Builder.of(RabbitEntity::new, MobCategory.AMBIENT).sized(0.6f, 0.6f).build("rabbit"));
+            ()-> EntityType.Builder.of(RabbitEntity::new, MobCategory.CREATURE).sized(0.6f, 0.6f).build("rabbit"));
     public static RegistryObject<EntityType<HareEntity>> HARE = ENTITIES.register("hare",
-            ()-> EntityType.Builder.of(HareEntity::new, MobCategory.AMBIENT).sized(0.6f, 0.6f).build("hare"));
+            ()-> EntityType.Builder.of(HareEntity::new, MobCategory.CREATURE).sized(0.6f, 0.6f).build("hare"));
     public static RegistryObject<EntityType<FerretEntity>> FERRET = ENTITIES.register("ferret",
             ()-> EntityType.Builder.of(FerretEntity::new, MobCategory.CREATURE).sized(0.8f, 0.8f).build("ferret"));
     public static RegistryObject<EntityType<RatEntity>> RAT = ENTITIES.register("rat",

@@ -120,6 +120,9 @@ public class PigEntity extends Pig {
 
     @Override
     public @Nullable Pig getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
-        return new PigEntity(EOTWEntities.PIG.get(), pLevel);
+        PigEntity child = new PigEntity(EOTWEntities.PIG.get(), pLevel);
+        // piglet takes this parent's variant, without this it defaults to index 0 and every baby is pink
+        child.setVariant(this.getVariant());
+        return child;
     }
 }

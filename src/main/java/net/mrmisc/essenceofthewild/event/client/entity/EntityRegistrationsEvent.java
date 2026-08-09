@@ -11,6 +11,7 @@ import net.mrmisc.essenceofthewild.block.entity.EOTWBlockEntities;
 import net.mrmisc.essenceofthewild.block.entity.custom.nest.NestBlockEntityRenderer;
 import net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.client.SleepingBagRenderer;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.custom.chicken.BabyChickenModel;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenEntity;
 import net.mrmisc.essenceofthewild.entity.custom.chicken.ChickenModel;
 import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
@@ -44,6 +45,7 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(BabyPigModel.LAYER_LOCATION, BabyPigModel::createBodyLayer);
         event.registerLayerDefinition(PigSaddleModel.LAYER_LOCATION, PigSaddleModel::createBodyLayer);
         event.registerLayerDefinition(ChickenModel.LAYER_LOCATION, ChickenModel::createBodyLayer);
+        event.registerLayerDefinition(BabyChickenModel.LAYER_LOCATION, BabyChickenModel::createBodyLayer);
         event.registerLayerDefinition(DuckModel.LAYER_LOCATION, DuckModel::createBodyLayer);
         event.registerLayerDefinition(DucklingModel.LAYER_LOCATION, DucklingModel::createBodyLayer);
         event.registerLayerDefinition(RabbitModel.LAYER_LOCATION, RabbitModel::createBodyLayer);
