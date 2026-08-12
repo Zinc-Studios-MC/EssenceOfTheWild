@@ -22,6 +22,8 @@
   "item.essenceofthewild.hare_spawn_egg" : "Hare Spawn Egg",
   "item.essenceofthewild.ferret_spawn_egg" : "Ferret Spawn Egg",
   "item.essenceofthewild.rat_spawn_egg" : "Rat Spawn Egg",
+  "item.essenceofthewild.spider_spawn_egg" : "Spider Spawn Egg",
+  "item.essenceofthewild.cave_spider_spawn_egg" : "Cave Spider Spawn Egg",
 
   "item.essenceofthewild.sheep_cheese" : "Sheep Cheese",
   "item.essenceofthewild.sheep_cheese_wedge" : "Sheep Cheese Wedge",
@@ -41,8 +43,11 @@
   "entity.essenceofthewild.rabbit" : "Rabbit",
   "entity.essenceofthewild.ferret" : "Ferret",
   "entity.essenceofthewild.rat" : "Rat",
+  "entity.essenceofthewild.spider" : "Spider",
+  "entity.essenceofthewild.cave_spider" : "Cave Spider",
 
   "entity.essenceofthewild.underwater_arrow" : "Underwater Arrow",
+  "entity.essenceofthewild.silk_ball" : "Silk Ball",
 
   "message.essenceofthewild.rat.assign_prompt" : "Right-click a composter to assign this rat to it",
   "message.essenceofthewild.rat.assigned" : "Rat assigned to composter",
@@ -143,5 +148,6 @@
   "death.attack.essenceofthewild.rabies_water": "%1$s couldn't handle the existence of water",
   "death.attack.essenceofthewild.rabies_final": "%1$s pet death a bit too much",
 
-  "effect.essenceofthewild.rabies" : "Rabies"
+  "effect.essenceofthewild.rabies" : "Rabies",
+  "effect.essenceofthewild.webbed" : "Webbed"
 }

@@ -23,7 +23,9 @@ public class HideVanillaSpawnEggEvent {
             Items.SHEEP_SPAWN_EGG,
             Items.PIG_SPAWN_EGG,
             Items.CHICKEN_SPAWN_EGG,
-            Items.RABBIT_SPAWN_EGG
+            Items.RABBIT_SPAWN_EGG,
+            Items.SPIDER_SPAWN_EGG,
+            Items.CAVE_SPIDER_SPAWN_EGG
     };
 
     @SubscribeEvent

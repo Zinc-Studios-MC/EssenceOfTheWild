@@ -14,8 +14,11 @@ import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitEntity;
+import net.mrmisc.essenceofthewild.entity.custom.cave_spider.CaveSpiderEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
+import net.mrmisc.essenceofthewild.entity.custom.spider.SpiderEntity;
+import net.mrmisc.essenceofthewild.entity.misc.SilkBall;
 import net.mrmisc.essenceofthewild.entity.misc.ThrownDuckEgg;
 import net.mrmisc.essenceofthewild.entity.misc.arrow.UnderwaterArrow;
 
@@ -43,6 +46,12 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(FerretEntity::new, MobCategory.CREATURE).sized(0.8f, 0.8f).build("ferret"));
     public static RegistryObject<EntityType<RatEntity>> RAT = ENTITIES.register("rat",
             ()-> EntityType.Builder.of(RatEntity::new, MobCategory.CREATURE).sized(0.6f, 0.5f).build("rat"));
+    public static RegistryObject<EntityType<SpiderEntity>> SPIDER = ENTITIES.register("spider",
+            ()-> EntityType.Builder.of(SpiderEntity::new, MobCategory.MONSTER).sized(2.2f, 1.6f).clientTrackingRange(8).build("spider"));
+    public static RegistryObject<EntityType<CaveSpiderEntity>> CAVE_SPIDER = ENTITIES.register("cave_spider",
+            ()-> EntityType.Builder.of(CaveSpiderEntity::new, MobCategory.MONSTER).sized(1.25f, 0.75f).clientTrackingRange(8).build("cave_spider"));
+    public static RegistryObject<EntityType<SilkBall>> SILK_BALL = ENTITIES.register("silk_ball",
+            ()-> EntityType.Builder.<SilkBall>of(SilkBall::new, MobCategory.MISC).sized(0.35f, 0.35f).clientTrackingRange(4).updateInterval(10).build("silk_ball"));
     public static RegistryObject<EntityType<UnderwaterArrow>> UNDERWATER_ARROW = ENTITIES.register("underwater_arrow",
             ()-> EntityType.Builder.<UnderwaterArrow>of(UnderwaterArrow::new, MobCategory.MISC).sized(0.5f, 0.9f).clientTrackingRange(5).build("underwater_arrow"));
     public static RegistryObject<EntityType<ThrownDuckEgg>> THROWN_DUCK_EGG = ENTITIES.register("thrown_duck_egg",

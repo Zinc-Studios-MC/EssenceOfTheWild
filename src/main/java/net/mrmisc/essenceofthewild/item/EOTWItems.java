@@ -56,6 +56,8 @@ public class EOTWItems {
     // template and the colour handler multiplies layer0 by the background, so anything but white just
     // darkens the art
     public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.SPIDER, 0x342D27, 0xA80E0E);
+    public static RegistryObject<Item> CAVE_SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.CAVE_SPIDER, 0x0C424E, 0xA80E0E);
 
     //tree
     public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));

@@ -1,6 +1,9 @@
 package net.mrmisc.essenceofthewild.event.client.entity;
 
 import net.minecraft.client.renderer.blockentity.BedRenderer;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.world.entity.monster.CaveSpider;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -35,6 +38,7 @@ import net.mrmisc.essenceofthewild.entity.custom.rat.RatCollarModel;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatModel;
 import net.mrmisc.essenceofthewild.entity.custom.sheep.SheepEntity;
+import net.mrmisc.essenceofthewild.effect.client.WebbedLayer;
 
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegistrationsEvent {
@@ -57,6 +61,17 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(RatModel.LAYER_LOCATION, RatModel::createBodyLayer);
         event.registerLayerDefinition(BabyRatModel.LAYER_LOCATION, BabyRatModel::createBodyLayer);
         event.registerLayerDefinition(RatCollarModel.LAYER_LOCATION, RatCollarModel::createBodyLayer);
+        event.registerLayerDefinition(WebbedLayer.WIDE_ARMS, () -> WebbedLayer.createLayer(false));
+        event.registerLayerDefinition(WebbedLayer.SLIM_ARMS, () -> WebbedLayer.createLayer(true));
+    }
+
+    @SubscribeEvent
+    public static void addPlayerLayers(EntityRenderersEvent.AddLayers event) {
+        for (String skin : event.getSkins()) {
+            if (event.getSkin(skin) instanceof PlayerRenderer renderer) {
+                renderer.addLayer(new WebbedLayer(renderer, event.getEntityModels(), "slim".equals(skin)));
+            }
+        }
     }
 
     @SubscribeEvent
@@ -71,6 +86,8 @@ public class EntityRegistrationsEvent {
         event.put(EOTWEntities.HARE.get(), HareEntity.createAttributes().build());
         event.put(EOTWEntities.FERRET.get(), FerretEntity.createAttributes().build());
         event.put(EOTWEntities.RAT.get(), RatEntity.createAttributes().build());
+        event.put(EOTWEntities.SPIDER.get(), Spider.createAttributes().build());
+        event.put(EOTWEntities.CAVE_SPIDER.get(), CaveSpider.createCaveSpider().build());
     }
 
     @SubscribeEvent

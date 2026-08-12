@@ -1,7 +1,11 @@
 package net.mrmisc.essenceofthewild.event.server;
 
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Chicken;
@@ -19,6 +23,7 @@ import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomVariants;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -32,13 +37,15 @@ public class ReplaceVanillaMobEvent {
     // vanilla type to whatever replaces it, keyed on the exact type instead of instanceof because
     // MushroomCow extends Cow and all our mobs extend their vanilla version, so instanceof would
     // match our own mobs and loop forever
-    private static final Map<EntityType<?>, Supplier<? extends EntityType<? extends Animal>>> REPLACEMENTS = Map.of(
+    private static final Map<EntityType<?>, Supplier<? extends EntityType<? extends Mob>>> REPLACEMENTS = Map.of(
             EntityType.COW, EOTWEntities.COW,
             EntityType.MOOSHROOM, EOTWEntities.MOOSHROOM,
             EntityType.SHEEP, EOTWEntities.SHEEP,
             EntityType.PIG, EOTWEntities.PIG,
             EntityType.CHICKEN, EOTWEntities.CHICKEN,
-            EntityType.RABBIT, EOTWEntities.RABBIT
+            EntityType.RABBIT, EOTWEntities.RABBIT,
+            EntityType.SPIDER, EOTWEntities.SPIDER,
+            EntityType.CAVE_SPIDER, EOTWEntities.CAVE_SPIDER
     );
 
     @SubscribeEvent
@@ -49,12 +56,12 @@ public class ReplaceVanillaMobEvent {
         }
 
         Entity entity = event.getEntity();
-        Supplier<? extends EntityType<? extends Animal>> replacementType = REPLACEMENTS.get(entity.getType());
-        if (replacementType == null || !(entity instanceof Animal vanilla)) {
+        Supplier<? extends EntityType<? extends Mob>> replacementType = REPLACEMENTS.get(entity.getType());
+        if (replacementType == null || !(entity instanceof Mob vanilla)) {
             return;
         }
 
-        Animal replacement = replacementType.get().create(level);
+        Mob replacement = replacementType.get().create(level);
         if (replacement == null) {
             return;
         }
@@ -62,25 +69,37 @@ public class ReplaceVanillaMobEvent {
         replacement.moveTo(vanilla.getX(), vanilla.getY(), vanilla.getZ(), vanilla.getYRot(), vanilla.getXRot());
         // let it roll its own variant like a natural spawn would instead of copying every mob's biome
         // rules in here, it has to be moved into place first or the biome lookup hits the wrong chunk
-        replacement.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(replacement.blockPosition()),
-                MobSpawnType.CONVERSION, null, null);
+        if (replacement instanceof Animal) {
+            replacement.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(replacement.blockPosition()),
+                    MobSpawnType.CONVERSION, null, null);
+        }
 
         copyCommonState(vanilla, replacement);
         copySpeciesState(vanilla, replacement);
+        boolean hadRiders = copyPassengers(vanilla, replacement);
 
-        level.addFreshEntity(replacement);
+        if (hadRiders) {
+            serverLevel.getLevel().addFreshEntityWithPassengers(replacement);
+        } else {
+            level.addFreshEntity(replacement);
+        }
         event.setCanceled(true);
     }
 
-    private static void copyCommonState(Animal vanilla, Animal replacement) {
+    private static void copyCommonState(Mob vanilla, Mob replacement) {
         replacement.yHeadRot = vanilla.yHeadRot;
         replacement.yBodyRot = vanilla.yBodyRot;
         replacement.setDeltaMovement(vanilla.getDeltaMovement());
         // has to be after finalizeSpawn since that can turn it into a baby, the age we got is the real one
-        replacement.setAge(vanilla.getAge());
+        if (vanilla instanceof AgeableMob vanillaAgeable && replacement instanceof AgeableMob ageable) {
+            ageable.setAge(vanillaAgeable.getAge());
+        }
         replacement.setHealth(vanilla.getHealth());
         replacement.setInvulnerable(vanilla.isInvulnerable());
         replacement.setNoAi(vanilla.isNoAi());
+        for (MobEffectInstance effect : vanilla.getActiveEffects()) {
+            replacement.addEffect(new MobEffectInstance(effect));
+        }
 
         if (vanilla.hasCustomName()) {
             replacement.setCustomName(vanilla.getCustomName());
@@ -92,7 +111,7 @@ public class ReplaceVanillaMobEvent {
     }
 
     // per species stuff that Animal has no field for and would just get dropped otherwise
-    private static void copySpeciesState(Animal vanilla, Animal replacement) {
+    private static void copySpeciesState(Mob vanilla, Mob replacement) {
         // check MushroomCow before Cow, its a subclass so the cow check would grab it first
         if (vanilla instanceof MushroomCow vanillaMooshroom && replacement instanceof MooshroomEntity mooshroom) {
             // set both variants, ours does the texture and mushroom drop, the vanilla one it inherits
@@ -110,5 +129,14 @@ public class ReplaceVanillaMobEvent {
         } else if (vanilla instanceof Rabbit vanillaRabbit && replacement instanceof Rabbit rabbit) {
             rabbit.setVariant(vanillaRabbit.getVariant());
         }
+    }
+
+    private static boolean copyPassengers(Mob vanilla, Mob replacement) {
+        List<Entity> riders = List.copyOf(vanilla.getPassengers());
+        for (Entity rider : riders) {
+            rider.stopRiding();
+            rider.startRiding(replacement, true);
+        }
+        return !riders.isEmpty();
     }
 }
