@@ -69,7 +69,7 @@ public class EOTWItems {
                     new Item.Properties().stacksTo(16)));
 
     public static final RegistryObject<Item> STRAWBERRY = ITEMS.register("strawberry",
-            ()-> new ItemNameBlockItem(EOTWBlocks.STRAWBERRY_BUSH.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2f).alwaysEat().fast().build())));
+            ()-> new ItemNameBlockItem(EOTWBlocks.STRAWBERRY_CROP.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationMod(0.2f).alwaysEat().fast().build())));
 
     public static final RegistryObject<Item> MANGO = ITEMS.register("mango",
             ()-> new BlockItem(EOTWBlocks.MANGO.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(9).saturationMod(0.2f).alwaysEat().fast().build())));

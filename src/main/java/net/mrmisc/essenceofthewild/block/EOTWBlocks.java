@@ -130,6 +130,12 @@ public class EOTWBlocks {
             ()-> new EOTWWoodBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
     public static RegistryObject<Block> STRAWBERRY_BUSH = registerBlock("strawberry_bush",
             ()-> new StrawberryBushBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static RegistryObject<Block> STRAWBERRY_CROP = registerBlock("strawberry_crop",
+            ()-> new CropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()){
+                protected net.minecraft.world.level.ItemLike getBaseSeedId() {
+                        return EOTWItems.STRAWBERRY.get();
+                };
+            });
     public static RegistryObject<Block> RED_ONION_CROP = registerBlock("red_onion_crop",
             ()-> new RedOnionCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
