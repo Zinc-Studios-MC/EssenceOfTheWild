@@ -44,4 +44,8 @@ public class StrawberryCropBlock extends CropBlock{
                 return super.use(pState, pLevel, pPos, pPlayer, pHand, pHit);
         }
     }
+    @Override
+    protected int getBonemealAgeIncrease(Level pLevel) {
+        return 1;
+    }
 }
