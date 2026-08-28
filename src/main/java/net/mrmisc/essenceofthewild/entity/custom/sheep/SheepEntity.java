@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild.entity.custom.sheep;
 
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,9 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraftforge.common.IForgeShearable;
-import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
-import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
 import org.jetbrains.annotations.NotNull;
@@ -67,6 +68,7 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final VariantSlot<Variant> variant = new VariantSlot<>(this.entityData, VARIANT, SheepVariants.SET);
 
     private int panicTicks;
 
@@ -161,10 +163,6 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
         }
     }
 
-    public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, SheepVariants.ALL.indexOf(variant));
-    }
-
     public void setEating(boolean eating){
         this.entityData.set(EATING, eating);
     }
@@ -196,7 +194,7 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
                                                  CompoundTag dataTag) {
         this.setColor(DyeColor.WHITE);
         if (dataTag != null && dataTag.contains("Variant")) {
-            setVariantById(dataTag.getString("Variant"));
+            variant.load(dataTag);
             return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
         }
         setVariant(pickVariant(level.getLevel(), blockPosition()));
@@ -206,14 +204,14 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariant().id());
+        variant.save(tag);
         tag.putByte("Color", (byte) this.getColor().getId());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariantById(tag.getString("Variant"));
+        variant.load(tag);
         this.setColor(DyeColor.byId(tag.getByte("Color")));
     }
 
@@ -235,40 +233,25 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
         this.entityData.set(WOOL_ID, (byte)(b & 240 | color.getId() & 15));
     }
 
-    public SheepVariant getVariant() {
-        int index = this.entityData.get(VARIANT);
-        return index >= 0 && index < SheepVariants.ALL.size()
-                ? SheepVariants.ALL.get(index)
-                : SheepVariants.ALL.get(0);
+    public Variant getVariant() {
+        return variant.get();
     }
 
-    public void setVariant(SheepVariant variant) {
-        this.entityData.set(VARIANT, SheepVariants.ALL.indexOf(variant));
+    public void setVariant(Variant v) {
+        variant.set(v);
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
     public void setVariantById(String id) {
-        for (int i = 0; i < SheepVariants.ALL.size(); i++) {
-            if (SheepVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
-    private SheepVariant pickVariant(Level level, BlockPos pos) {
-        if(level.getBiome(pos).is(Tags.Biomes.IS_COLD)){
-            return SheepVariants.COLD;
-        }
-        if(level.getBiome(pos).is(Tags.Biomes.IS_HOT)){
-            return SheepVariants.WARM;
-        }
-        return level.random.nextBoolean() ? SheepVariants.BASIC : SheepVariants.BASIC_GREY;
+    private Variant pickVariant(Level level, BlockPos pos) {
+        return SheepVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 }

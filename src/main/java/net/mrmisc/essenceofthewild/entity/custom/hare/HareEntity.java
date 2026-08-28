@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild.entity.custom.hare;
 
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -16,7 +19,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -32,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class HareEntity extends Rabbit implements GeoEntity {
+public class HareEntity extends Rabbit implements GeoEntity, VariantCarrier {
     private static final double RUN_SPEED_MODIFIER = 1.5D;
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.hare.idle");
@@ -48,6 +50,8 @@ public class HareEntity extends Rabbit implements GeoEntity {
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(HareEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<MobVariant> variant = new VariantSlot<>(this.entityData, VARIANT, HareVariants.SET);
     private static final EntityDataAccessor<Boolean> RUNNING =
             SynchedEntityData.defineId(HareEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> MOVING =
@@ -110,10 +114,7 @@ public class HareEntity extends Rabbit implements GeoEntity {
     }
 
     public MobVariant getRabbitVariant() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < HareVariants.ALL.size())
-                ? HareVariants.ALL.get(i)
-                : HareVariants.ALL.get(0);
+        return variant.get();
     }
 
     @Override
@@ -127,15 +128,25 @@ public class HareEntity extends Rabbit implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getRabbitVariant().id());
+        variant.save(tag);
     }
 
-    public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, HareVariants.ALL.indexOf(variant));
+    public void setVariant(MobVariant v) {
+        variant.set(v);
+    }
+
+    @Override
+    public String getVariantId() {
+        return variant.id();
+    }
+
+    @Override
+    public void setVariantById(String id) {
+        variant.setById(id);
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
-        return level.getBiome(pos).is(Biomes.DESERT) ? HareVariants.YELLOW : HareVariants.BROWN;
+        return HareVariants.pick(new LevelBiomeQuery(level, pos));
     }
 
     @Override
@@ -146,19 +157,9 @@ public class HareEntity extends Rabbit implements GeoEntity {
         return Objects.requireNonNull(super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag));
     }
 
-    private void setVariantById(String id) {
-        for (int i = 0; i < HareVariants.ALL.size(); i++) {
-            if (HareVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
-    }
-
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariantById(tag.getString("Variant"));
+        variant.load(tag);
     }
 }

@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.entity.custom.cow;
 
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -14,9 +15,10 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
 import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +43,7 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
     private static final double BABY_GAIT_SPEED = 1.5D;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+    private final VariantSlot<Variant> variant = new VariantSlot<>(this.entityData, VARIANT, CowVariants.SET);
 
     private int panicTicks;
 
@@ -111,13 +114,13 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariantId());
+        variant.save(tag);
     }
 
     @Override
     public @NotNull SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        if (pDataTag != null && pDataTag.contains("Variant")) {
-            setVariantById(pDataTag.getString("Variant"));
+        if (pDataTag != null && variant.isStoredIn(pDataTag)) {
+            variant.load(pDataTag);
             return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         }
         setVariant(pickVariant(pLevel.getLevel(), blockPosition()));
@@ -127,7 +130,7 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setVariantById(tag.getString("Variant"));
+        variant.load(tag);
     }
 
     public Cow getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
@@ -136,40 +139,25 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
         return child;
     }
 
-    public CowVariant getVariant() {
-        int index = this.entityData.get(VARIANT);
-        return index >= 0 && index < CowVariants.ALL.size()
-                ? CowVariants.ALL.get(index)
-                : CowVariants.ALL.get(0);
+    public Variant getVariant() {
+        return variant.get();
     }
 
-    public void setVariant(CowVariant variant) {
-        this.entityData.set(VARIANT, CowVariants.ALL.indexOf(variant));
+    public void setVariant(Variant v) {
+        variant.set(v);
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
     public void setVariantById(String id) {
-        for (int i = 0; i < CowVariants.ALL.size(); i++) {
-            if (CowVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
-    private CowVariant pickVariant(Level level, BlockPos pos) {
-        if(level.getBiome(pos).is(Tags.Biomes.IS_COLD)){
-            return CowVariants.COLD;
-        }
-        if(level.getBiome(pos).is(Tags.Biomes.IS_HOT)){
-            return CowVariants.WARM;
-        }
-        return level.random.nextBoolean() ? CowVariants.BASIC : CowVariants.BASIC_BROWN;
+    private Variant pickVariant(Level level, BlockPos pos) {
+        return CowVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 }

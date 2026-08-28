@@ -1,7 +1,7 @@
 package net.mrmisc.essenceofthewild.entity.custom.duck;
 
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -26,7 +26,7 @@ public class DuckRenderer extends MobRenderer<DuckEntity, AbstractDuckModel> {
 
     @Override
     public ResourceLocation getTextureLocation(DuckEntity entity) {
-        DuckVariant variant = entity.getVariant();
+        Variant variant = entity.getVariant();
         return entity.isBaby() ? variant.babyLocation() : variant.adultLocation();
     }
 }

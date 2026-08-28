@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild.entity.custom.pig;
 
+import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -13,13 +16,12 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PigEntity extends Pig {
+public class PigEntity extends Pig implements VariantCarrier {
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
@@ -29,6 +31,8 @@ public class PigEntity extends Pig {
     
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(PigEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<MobVariant> variant = new VariantSlot<>(this.entityData, VARIANT, PigVariants.SET);
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.25D);
@@ -53,10 +57,12 @@ public class PigEntity extends Pig {
     }
 
     public MobVariant getVariant() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < PigVariants.ALL.size())
-                ? PigVariants.ALL.get(i)
-                : PigVariants.ALL.get(0);
+        return variant.get();
+    }
+
+    @Override
+    public String getVariantId() {
+        return variant.id();
     }
 
     @Override
@@ -68,20 +74,15 @@ public class PigEntity extends Pig {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariant().id());
+        variant.save(tag);
     }
 
-    public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, PigVariants.ALL.indexOf(variant));
+    public void setVariant(MobVariant v) {
+        variant.set(v);
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
-        if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
-            return PigVariants.COLD;
-        } else if (level.getBiome(pos).is(Tags.Biomes.IS_HOT)) {
-            return PigVariants.WARM;
-        }
-        return level.random.nextBoolean() ? PigVariants.BASIC : PigVariants.BASIC_GREY;
+        return PigVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 
     @Override
@@ -92,20 +93,15 @@ public class PigEntity extends Pig {
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
-    private void setVariantById(String id) {
-        for (int i = 0; i < PigVariants.ALL.size(); i++) {
-            if (PigVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+    @Override
+    public void setVariantById(String id) {
+        variant.setById(id);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariantById(tag.getString("Variant"));
+        variant.load(tag);
     }
 
     @Override

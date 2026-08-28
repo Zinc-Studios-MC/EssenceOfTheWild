@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.entity.custom.rat;
 
+import net.mrmisc.essenceofthewild.entity.util.VariantSet;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
@@ -29,4 +30,7 @@ public class RatVariants {
                 ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "textures/entity/rat/" + angryTexture)
         );
     }
+
+    public static final VariantSet<RatVariant> SET = VariantSet.of(RatVariant::id, ALL);
+
 }

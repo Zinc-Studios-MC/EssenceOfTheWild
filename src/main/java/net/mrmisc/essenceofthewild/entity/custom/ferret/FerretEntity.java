@@ -1,20 +1,19 @@
 package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
-import java.util.Set;
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.DifficultyInstance;
@@ -45,7 +44,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -56,20 +54,10 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.network.NetworkHooks;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
@@ -111,9 +99,10 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<Variant> variant = new VariantSlot<>(this.entityData, VARIANT, FerretVariants.SET);
     
     public int ticks = 0;
-    public int diggingTicks = 0;
 
     private final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE) {
         @Override
@@ -143,6 +132,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
 
         this.goalSelector.addGoal(1, new FerretPanicGoal(this, 1));
         this.goalSelector.addGoal(1, new FindOrDigBurrowsGoal(this));
+        this.goalSelector.addGoal(1, new DigGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
 
         this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, Ingredient.of(Items.RABBIT), false));
@@ -186,91 +176,10 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
         if(!this.level().isClientSide()){
             if(!this.isBaby()){
                 dayTick();
-                //TODO: move these into their own goals, im too lazy right now
-                shouldDigTicks();
             }
         }
     }
 
-    private void shouldDigTicks(){
-        if(this.shouldDig()){
-            BlockPos pos = this.getBlockToDig();
-            if(pos.getX() == 0 && pos.getY() == 0 && pos.getZ() == 0){
-                return;
-            }
-            BlockState state = this.level().getBlockState(pos);
-            if(!(this.inventory.hasAnyOf(Set.of(Items.GOLDEN_CARROT)))){
-                if(!(state.is(Blocks.SUSPICIOUS_SAND) || state.is(Blocks.SUSPICIOUS_GRAVEL))){
-                    return;
-                }
-            }
-            AABB bound = this.getBoundingBox().inflate(1);
-            if(!bound.contains(pos.getX(), pos.getY(), pos.getZ())){
-                this.getNavigation().moveTo(pos.getX(), pos.getY(), pos.getZ(), 1);
-                return;
-            }
-            if(diggingTicks <= 0){
-                this.setDiggingIn(true);
-                this.diggingTicks = 30;
-            }
-            else if (diggingTicks == 1){
-                if(state.is(Blocks.SUSPICIOUS_SAND) || state.is(Blocks.SUSPICIOUS_GRAVEL)){
-                    BrushableBlockEntity be = (BrushableBlockEntity)this.level().getBlockEntity(pos);
-
-                    ItemStack stack = new ItemStack(Items.AIR);
-
-                    be.saveToItem(stack);
-
-                    String tagString = stack.getTag().get("BlockEntityTag").getAsString();
-
-                    String s = tagString.substring(tagString.indexOf("\"")+1, tagString.indexOf("\","));
-
-                    LootTable loottable = this.level().getServer().getLootData().getLootTable(ResourceLocation.tryParse(s));
-
-                    ObjectArrayList<ItemStack> items = loottable.getRandomItems((new LootParams.Builder((ServerLevel)this.level())).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(this.getOnPos().above())).withLuck(((Player)this.getOwner()).getLuck()).withParameter(LootContextParams.THIS_ENTITY, (Player)this.getOwner()).create(LootContextParamSets.CHEST));
-                    ItemStack itemstack;
-                    switch (items.size()) {
-                        case 0:
-                        itemstack = ItemStack.EMPTY;
-                        break;
-                        case 1:
-                        itemstack = items.get(0);
-                        break;
-                        default:
-                        itemstack = items.get(0);
-                    }
-                    this.level().destroyBlock(pos, false);
-                    if(state.is(Blocks.SUSPICIOUS_SAND)){
-                        this.level().setBlock(pos, Blocks.SAND.defaultBlockState(), 2);
-                    }
-                    else if(state.is(Blocks.SUSPICIOUS_GRAVEL)){
-                        this.level().setBlock(pos, Blocks.GRAVEL.defaultBlockState(), 2);
-                    }
-                    for(int i = 0; i < this.getInventory().getContainerSize(); i++){
-                        ItemStack it = this.getInventory().getItem(i);
-                        if(it.is(Items.AIR)){
-                            this.getInventory().setItem(i, itemstack);
-                            break;
-                        }else if(it.is(itemstack.getItem())){
-                            it.setCount(it.getCount()+itemstack.getCount());
-                            break;
-                        }
-                    }
-                    if(!this.getInventory().hasAnyOf(Set.of(itemstack.getItem()))){
-                        ItemEntity ite = new ItemEntity(this.level(), this.getX(), this.getY()+1, this.getZ(), itemstack);
-                        this.level().addFreshEntity(ite);
-                    }
-                }else{
-                    this.level().destroyBlock(pos, true);
-                }
-                this.setDiggingIn(false);
-                this.setShouldDig(false);
-                --this.diggingTicks;
-            }else{
-                --this.diggingTicks;
-            }
-        }
-    }
 
     private void dayTick(){
         if(this.level().isDay()){
@@ -424,7 +333,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
             MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         if (pDataTag != null && pDataTag.contains("Variant")) {
-            setVariantById(pDataTag.getString("Variant"));
+            variant.load(pDataTag);
             return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
         }
         setVariant(pickVariant(pLevel.getLevel(), blockPosition()));
@@ -491,7 +400,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
         pCompound.put("Inventory", createInventoryTag());
-        pCompound.putString("Variant", getVariantId());
+        variant.save(pCompound);
     }
 
     @Override
@@ -501,7 +410,7 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
         if (pCompound.contains("Inventory", Tag.TAG_LIST)) {
             loadInventoryTag(pCompound.getList("Inventory", Tag.TAG_COMPOUND));
         }
-        setVariantById(pCompound.getString("Variant"));
+        variant.load(pCompound);
     }
     @Override
     public boolean isInWall() {
@@ -550,64 +459,25 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
         this.getOwner().getPersistentData().putBoolean("OwnsFerret", true);
     }
 
-    public FerretVariant getVariant() {
-        int index = this.entityData.get(VARIANT);
-        return index >= 0 && index < FerretVariants.ALL.size()
-                ? FerretVariants.ALL.get(index)
-                : FerretVariants.ALL.get(0);
+    public Variant getVariant() {
+        return variant.get();
     }
 
-    public void setVariant(FerretVariant variant) {
-        this.entityData.set(VARIANT, FerretVariants.ALL.indexOf(variant));
+    public void setVariant(Variant v) {
+        variant.set(v);
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
     public void setVariantById(String id) {
-        for (int i = 0; i < FerretVariants.ALL.size(); i++) {
-            if (FerretVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
-    private FerretVariant pickVariant(Level level, BlockPos pos) {
-        Holder<Biome> biome = level.getBiome(pos);
-        if (biome.is(Biomes.FOREST) || 
-            biome.is(Biomes.BIRCH_FOREST) ||
-            biome.is(Biomes.FLOWER_FOREST)
-            ) {
-            return FerretVariants.BASIC;
-        } else if (
-            level.getBiome(pos).is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
-            level.getBiome(pos).is(Biomes.OLD_GROWTH_PINE_TAIGA) ||
-            biome.is(Biomes.OLD_GROWTH_SPRUCE_TAIGA) || 
-            biome.is(Biomes.OLD_GROWTH_PINE_TAIGA)
-        ) {
-            return FerretVariants.RED;
-        } else if (
-            level.getBiome(pos).is(Biomes.TAIGA) || 
-            level.getBiome(pos).is(Biomes.SNOWY_TAIGA) ||
-            biome.is(Biomes.TAIGA) || 
-            biome.is(Biomes.SNOWY_TAIGA)
-        ) {
-            return FerretVariants.WHITE;
-        }
-        if(biome.is(Tags.Biomes.IS_PLAINS)){
-            return FerretVariants.BASIC;
-        }
-        if(biome.is(Tags.Biomes.IS_HOT)){
-            return FerretVariants.RED;
-        }
-        if(biome.is(Tags.Biomes.IS_COLD)){
-            return FerretVariants.WHITE;
-        }
-        return level.random.nextBoolean() ? FerretVariants.BASIC : FerretVariants.RED;
+    private Variant pickVariant(Level level, BlockPos pos) {
+        return FerretVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 }

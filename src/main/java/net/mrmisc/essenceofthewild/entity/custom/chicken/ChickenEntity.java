@@ -1,5 +1,7 @@
 package net.mrmisc.essenceofthewild.entity.custom.chicken;
 
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,7 +22,6 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.util.EOTWNestHelper;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
@@ -64,7 +65,7 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setVariantById(tag.getString("Variant"));
+        variant.load(tag);
     }
 
     @Override
@@ -133,6 +134,8 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(ChickenEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<MobVariant> variant = new VariantSlot<>(this.entityData, VARIANT, ChickenVariants.SET);
     private static final EntityDataAccessor<Boolean> SITTING_ON_NEST =
             SynchedEntityData.defineId(ChickenEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CENTERING_ON_NEST =
@@ -143,15 +146,12 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     }
 
     public MobVariant getVariant() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < ChickenVariants.ALL.size())
-                ? ChickenVariants.ALL.get(i)
-                : ChickenVariants.ALL.get(0);
+        return variant.get();
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
@@ -165,20 +165,15 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariant().id());
+        variant.save(tag);
     }
 
-    public void setVariant(MobVariant variant) {
-        this.entityData.set(VARIANT, ChickenVariants.ALL.indexOf(variant));
+    public void setVariant(MobVariant v) {
+        variant.set(v);
     }
 
     public MobVariant pickVariant(Level level, BlockPos pos) {
-        if (level.getBiome(pos).is(Tags.Biomes.IS_COLD)) {
-            return level().random.nextBoolean() ? ChickenVariants.COLD : ChickenVariants.COLD_BROWN;
-        } else if (level.getBiome(pos).is(Tags.Biomes.IS_HOT)) {
-            return level().random.nextBoolean() ? ChickenVariants.WARM : ChickenVariants.WARM_BLACK;
-        }
-        return level.random.nextBoolean() ? ChickenVariants.BASIC : ChickenVariants.BASIC_GREY;
+        return ChickenVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 
     @Override
@@ -196,13 +191,7 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     }
 
     public void setVariantById(String id) {
-        for (int i = 0; i < ChickenVariants.ALL.size(); i++) {
-            if (ChickenVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
     public int getEggTimeTicks() {

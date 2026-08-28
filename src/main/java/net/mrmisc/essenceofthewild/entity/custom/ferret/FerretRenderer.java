@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
+import net.mrmisc.essenceofthewild.entity.util.AgedGeoModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -10,7 +11,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class FerretRenderer extends GeoEntityRenderer<FerretEntity> {
 
     public FerretRenderer(Context context) {
-        super(context, new FerretGeoModel());
+        super(context, new AgedGeoModel<>("ferret", "baby_ferret", FerretEntity::getVariant));
         this.shadowRadius = 0.5f;
     }
 

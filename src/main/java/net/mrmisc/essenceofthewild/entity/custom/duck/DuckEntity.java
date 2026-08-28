@@ -1,5 +1,8 @@
 package net.mrmisc.essenceofthewild.entity.custom.duck;
 
+import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -10,10 +13,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -30,7 +31,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
@@ -65,6 +65,8 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<Variant> variant = new VariantSlot<>(this.entityData, VARIANT, DuckVariants.SET);
     private static final EntityDataAccessor<Boolean> SITTING_ON_NEST =
             SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CENTERING_ON_NEST =
@@ -142,7 +144,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariantId());
+        variant.save(tag);
         tag.putBoolean("Imprinted", this.imprinted);
         if (this.imprintUuid != null) {
             tag.putUUID("Imprint", this.imprintUuid);
@@ -152,7 +154,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setVariantById(tag.getString("Variant"));
+        variant.load(tag);
         this.imprinted = tag.getBoolean("Imprinted");
         this.imprintUuid = tag.hasUUID("Imprint") ? tag.getUUID("Imprint") : null;
     }
@@ -268,45 +270,26 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         spawnAtLocation(new ItemStack(EOTWItems.DUCK_FEATHER.get(), count));
     }
 
-    public DuckVariant getVariant() {
-        int index = this.entityData.get(VARIANT);
-        return index >= 0 && index < DuckVariants.ALL.size()
-                ? DuckVariants.ALL.get(index)
-                : DuckVariants.ALL.get(0);
+    public Variant getVariant() {
+        return variant.get();
     }
 
-    public void setVariant(DuckVariant variant) {
-        this.entityData.set(VARIANT, DuckVariants.ALL.indexOf(variant));
+    public void setVariant(Variant v) {
+        variant.set(v);
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
     public void setVariantById(String id) {
-        for (int i = 0; i < DuckVariants.ALL.size(); i++) {
-            if (DuckVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
-    private DuckVariant pickVariant(Level level, BlockPos pos) {
-        var biome = level.getBiome(pos);
-        if (biome.is(Biomes.MANGROVE_SWAMP)) {
-            return level.random.nextBoolean() ? DuckVariants.BLUE : DuckVariants.REDNECK;
-        }
-        if (biome.is(Biomes.JUNGLE) || biome.is(Biomes.BAMBOO_JUNGLE) || biome.is(Biomes.SPARSE_JUNGLE)) {
-            return level.random.nextBoolean() ? DuckVariants.BROWN : DuckVariants.CREST;
-        }
-        if (biome.is(BiomeTags.IS_RIVER) || biome.is(Biomes.SWAMP)) {
-            return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.GRAY;
-        }
-        return level.random.nextBoolean() ? DuckVariants.BASIC : DuckVariants.BROWN;
+    private Variant pickVariant(Level level, BlockPos pos) {
+        return DuckVariants.pick(new LevelBiomeQuery(level, pos), level.random::nextBoolean);
     }
 
     @Override
@@ -317,7 +300,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         SpawnGroupData finalized = super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
 
         if (dataTag != null && dataTag.contains("Variant")) {
-            setVariantById(dataTag.getString("Variant"));
+            variant.load(dataTag);
             return finalized;
         }
 

@@ -1,5 +1,7 @@
 package net.mrmisc.essenceofthewild.entity.custom.mooshroom;
 
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
+import net.mrmisc.essenceofthewild.entity.util.Variant;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -73,6 +75,8 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
     private int effectDuration;
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<Variant> variant = new VariantSlot<>(this.entityData, VARIANT, MooshroomVariants.SET);
     private static final EntityDataAccessor<Boolean> PANICKING =
             SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -201,27 +205,24 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
         this.entityData.define(PANICKING, false);
     }
 
-    public MooshroomVariant getVariantMooshroom() {
-        int i = this.entityData.get(VARIANT);
-        return (i >= 0 && i < MooshroomVariants.ALL.size())
-                ? MooshroomVariants.ALL.get(i)
-                : MooshroomVariants.ALL.get(0);
+    public Variant getVariantMooshroom() {
+        return variant.get();
     }
 
-    public void setVariant(MooshroomVariant variant) {
-        this.entityData.set(VARIANT, MooshroomVariants.ALL.indexOf(variant));
+    public void setVariant(Variant v) {
+        variant.set(v);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Variant", getVariantMooshroom().id());
+        variant.save(tag);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        setVariantById(tag.getString("Variant"));
+        variant.load(tag);
     }
 
     @Override
@@ -278,21 +279,11 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
     }
 
     public BlockState getBlockToDrop(){
-        MooshroomVariant variant = this.getVariantMooshroom();
+        Variant variant = this.getVariantMooshroom();
         if(variant == MooshroomVariants.RED){
             return Blocks.RED_MUSHROOM.defaultBlockState();
         }
         return Blocks.BROWN_MUSHROOM.defaultBlockState();
-    }
-
-    private void setVariantById(String id) {
-        for (int i = 0; i < MooshroomVariants.ALL.size(); i++) {
-            if (MooshroomVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
     }
 
     @Nullable
@@ -302,10 +293,10 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
         return mushroomcow;
     }
 
-    private MooshroomVariant getOffspringType(MooshroomEntity pMate) {
-        MooshroomVariant mushroomcow$mushroomtype = this.getVariantMooshroom();
-        MooshroomVariant mushroomcow$mushroomtype1 = pMate.getVariantMooshroom();
-        MooshroomVariant mushroomcow$mushroomtype2;
+    private Variant getOffspringType(MooshroomEntity pMate) {
+        Variant mushroomcow$mushroomtype = this.getVariantMooshroom();
+        Variant mushroomcow$mushroomtype1 = pMate.getVariantMooshroom();
+        Variant mushroomcow$mushroomtype2;
         if (mushroomcow$mushroomtype == mushroomcow$mushroomtype1 && this.random.nextInt(1024) == 0) {
             mushroomcow$mushroomtype2 = mushroomcow$mushroomtype == MooshroomVariants.BROWN ? MooshroomVariants.RED : MooshroomVariants.BROWN;
         } else {

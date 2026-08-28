@@ -1,5 +1,7 @@
 package net.mrmisc.essenceofthewild.entity.misc.silk_ball;
 
+import net.mrmisc.essenceofthewild.util.EOTWUtils;
+import net.mrmisc.essenceofthewild.entity.util.EotwGeoModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -15,7 +17,7 @@ public class SilkBallRenderer extends GeoEntityRenderer<SilkBall> {
     private static final double MODEL_CENTRE_OFFSET = -11.0D / 16.0D;
 
     public SilkBallRenderer(EntityRendererProvider.Context context) {
-        super(context, new SilkBallGeoModel());
+        super(context, new EotwGeoModel<>("silk_ball", EOTWUtils.getLoc("textures/entity/misc/silk_ball.png")));
         this.shadowRadius = 0.15f;
     }
 

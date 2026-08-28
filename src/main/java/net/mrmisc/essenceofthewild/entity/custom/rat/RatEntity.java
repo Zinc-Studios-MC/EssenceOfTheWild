@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.entity.custom.rat;
 
+import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -76,6 +77,8 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             SynchedEntityData.defineId(RatEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(RatEntity.class, EntityDataSerializers.INT);
+
+    private final VariantSlot<RatVariant> variant = new VariantSlot<>(this.entityData, VARIANT, RatVariants.SET);
     private static final EntityDataAccessor<Boolean> ANGRY =
             SynchedEntityData.defineId(RatEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> RUNNING =
@@ -342,30 +345,21 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     }
 
     public RatVariant getVariant() {
-        int index = this.entityData.get(VARIANT);
-        return index >= 0 && index < RatVariants.ALL.size()
-                ? RatVariants.ALL.get(index)
-                : RatVariants.ALL.get(0);
+        return variant.get();
     }
 
-    public void setVariant(RatVariant variant) {
-        this.entityData.set(VARIANT, RatVariants.ALL.indexOf(variant));
+    public void setVariant(RatVariant v) {
+        variant.set(v);
     }
 
     @Override
     public String getVariantId() {
-        return getVariant().id();
+        return variant.id();
     }
 
     @Override
     public void setVariantById(String id) {
-        for (int i = 0; i < RatVariants.ALL.size(); i++) {
-            if (RatVariants.ALL.get(i).id().equals(id)) {
-                this.entityData.set(VARIANT, i);
-                return;
-            }
-        }
-        this.entityData.set(VARIANT, 0);
+        variant.setById(id);
     }
 
     @Override
@@ -373,7 +367,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         this.tameThreshold = 6 + this.random.nextInt(7);
         if (pDataTag != null && pDataTag.contains("Variant")) {
-            setVariantById(pDataTag.getString("Variant"));
+            variant.load(pDataTag);
         } else {
             setVariant(RatVariants.randomNatural(pLevel.getRandom()));
         }
@@ -420,7 +414,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putString("Variant", getVariantId());
+        variant.save(pCompound);
         pCompound.putByte("CollarColor", (byte) this.getCollarColor().getId());
         pCompound.putInt("TameThreshold", this.tameThreshold);
         pCompound.putInt("TameProgress", this.tameProgress);
@@ -434,7 +428,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        setVariantById(pCompound.getString("Variant"));
+        variant.load(pCompound);
         if (pCompound.contains("CollarColor")) {
             this.setCollarColor(DyeColor.byId(pCompound.getByte("CollarColor")));
         }
