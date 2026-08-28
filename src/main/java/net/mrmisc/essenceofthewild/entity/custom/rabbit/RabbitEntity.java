@@ -16,12 +16,20 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraftforge.common.Tags;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class RabbitEntity extends Rabbit {
+public class RabbitEntity extends Rabbit implements GeoEntity {
     private static final double RUN_SPEED_MODIFIER = 1.5D;
 
     public RabbitEntity(EntityType<? extends Rabbit> pEntityType, Level pLevel) {
@@ -29,8 +37,11 @@ public class RabbitEntity extends Rabbit {
         this.moveControl = new MoveControl(this);
     }
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.rabbit.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.rabbit.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.rabbit.run");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(RabbitEntity.class, EntityDataSerializers.INT);
@@ -41,15 +52,6 @@ public class RabbitEntity extends Rabbit {
 
     public static AttributeSupplier.@NotNull Builder createAttributes() {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 3.0D).add(Attributes.MOVEMENT_SPEED, (double)0.3F);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-
-        if(this.level().isClientSide()) {
-            setupAnimationStates();
-        }
     }
 
     @Override
@@ -87,14 +89,21 @@ public class RabbitEntity extends Rabbit {
         return this.entityData.get(MOVING);
     }
 
-    private void setupAnimationStates() {
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController));
+    }
 
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.startIfStopped(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
+    private PlayState movementController(AnimationState<RabbitEntity> state) {
+        if (!this.isMoving()) {
+            return state.setAndContinue(IDLE);
         }
+        return state.setAndContinue(this.isRunning() ? RUN : WALK);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     public MobVariant getRabbitVariant() {

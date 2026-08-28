@@ -6,7 +6,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -20,16 +19,27 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.mrmisc.essenceofthewild.entity.util.MobVariant;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class HareEntity extends Rabbit {
+public class HareEntity extends Rabbit implements GeoEntity {
     private static final double RUN_SPEED_MODIFIER = 1.5D;
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.hare.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.hare.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.hare.run");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public HareEntity(EntityType<? extends Rabbit> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -44,16 +54,20 @@ public class HareEntity extends Rabbit {
             SynchedEntityData.defineId(HareEntity.class, EntityDataSerializers.BOOLEAN);
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.level().isClientSide()) {
-            if (this.idleAnimationTimeout <= 0) {
-                this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-                this.idleAnimationState.startIfStopped(this.tickCount);
-            } else {
-                --this.idleAnimationTimeout;
-            }
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController));
+    }
+
+    private PlayState movementController(AnimationState<HareEntity> state) {
+        if (!this.isMoving()) {
+            return state.setAndContinue(IDLE);
         }
+        return state.setAndContinue(this.isRunning() ? RUN : WALK);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     @Override
