@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "minecraft:birch_forest",
+    "minecraft:flower_forest",
+    "minecraft:meadow"
+  ],
+  "features": "essenceofthewild:strawberry_bush_patch",
+  "step": "vegetal_decoration"
+}

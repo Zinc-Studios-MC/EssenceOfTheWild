@@ -26,6 +26,7 @@ import net.mrmisc.essenceofthewild.block.custom.crops.RedOnionCropBlock;
 import net.mrmisc.essenceofthewild.block.custom.freezer.WoodenFreezerBlock;
 import net.mrmisc.essenceofthewild.block.custom.misc.MangoBlock;
 import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryBushBlock;
+import net.mrmisc.essenceofthewild.block.custom.crops.StrawberryCropBlock;
 import net.mrmisc.essenceofthewild.block.custom.nest.NestBlock;
 import net.mrmisc.essenceofthewild.block.custom.sleeping_bag.SleepingBagBlock;
 import net.mrmisc.essenceofthewild.block.custom.wood.*;
@@ -129,6 +130,8 @@ public class EOTWBlocks {
             ()-> new EOTWWoodBlock(BlockBehaviour.Properties.copy(Blocks.STRIPPED_OAK_WOOD)));
     public static RegistryObject<Block> STRAWBERRY_BUSH = registerBlock("strawberry_bush",
             ()-> new StrawberryBushBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
+    public static RegistryObject<Block> STRAWBERRY_CROP = registerBlock("strawberry_crop",
+            ()-> new StrawberryCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT).noOcclusion()));
     public static RegistryObject<Block> RED_ONION_CROP = registerBlock("red_onion_crop",
             ()-> new RedOnionCropBlock(BlockBehaviour.Properties.copy(Blocks.WHEAT)));
 
