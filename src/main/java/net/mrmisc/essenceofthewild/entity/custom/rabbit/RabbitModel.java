@@ -1,6 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.rabbit;
-// blockbench export
-
 
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -103,11 +101,8 @@ public class RabbitModel extends HierarchicalModel<RabbitEntity> {
 		if (!pEntity.isMoving()) {
 			this.animate(pEntity.idleAnimationState, RabbitAnimations.idle, ageInTicks);
 		} else if (pEntity.isRunning()) {
-			// way under the clip's natural 3.5 on purpose, makes the run cycle slower
 			this.animateWalk(RabbitAnimations.run, limbSwing, limbSwingAmount, 1.0F, 2.5F);
 		} else {
-			// 2.2 instead of 1.6 because the walk clip got longer, the multiplier scales with clip
-			// length so the steps stay at the same cadence
 			this.animateWalk(RabbitAnimations.walk, limbSwing, limbSwingAmount, 2.2F, 1.3F);
 		}
 	}

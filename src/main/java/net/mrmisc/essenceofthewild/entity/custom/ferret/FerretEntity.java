@@ -25,7 +25,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AgeableMob;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.Pose;
@@ -78,15 +77,25 @@ import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.menu.ferret.FerretMenu;
 import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 
-public class FerretEntity extends TamableAnimal implements MenuProvider, VariantCarrier {
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+public class FerretEntity extends TamableAnimal implements MenuProvider, VariantCarrier, GeoEntity {
     public static final int INVENTORY_SIZE = 9;
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
-    public final AnimationState diggingInAnimationState = new AnimationState();
-    private int diggingInAnimationTimeout = 0;
-    public final AnimationState diggingOutAnimationState = new AnimationState();
-    private int diggingOutAnimationTimeout = 0;
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("animation.ferret.idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.ferret.walk");
+    private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.ferret.run");
+    private static final RawAnimation DIG = RawAnimation.begin().thenPlayAndHold("animation.ferret.dig");
+    private static final RawAnimation DIG_OUT = RawAnimation.begin().thenPlayAndHold("animation.ferret.dig_out");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private static final EntityDataAccessor<Boolean> RUNNING = 
         SynchedEntityData.defineId(FerretEntity.class, EntityDataSerializers.BOOLEAN);
@@ -174,9 +183,6 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
     @Override
     public void tick() {
         super.tick();
-        if(this.level().isClientSide){
-            setupAnimationStates();
-        }
         if(!this.level().isClientSide()){
             if(!this.isBaby()){
                 dayTick();
@@ -282,31 +288,27 @@ public class FerretEntity extends TamableAnimal implements MenuProvider, Variant
         }
     }
 
-    private void setupAnimationStates(){
-        if(this.idleAnimationTimeout <= 0){
-            this.idleAnimationTimeout = this.random.nextInt(40)+80;
-            this.idleAnimationState.start(this.tickCount);
-        }else{
-            --this.idleAnimationTimeout;
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController));
+    }
+
+    private PlayState movementController(AnimationState<FerretEntity> state) {
+        if(this.isDiggingOut()){
+            return state.setAndContinue(DIG_OUT);
         }
-        if(this.isDiggingIn() && diggingInAnimationTimeout <=0){
-            diggingInAnimationTimeout = 30;
-            diggingInAnimationState.start(this.tickCount);
-        }else{
-            --this.diggingInAnimationTimeout;
+        if(this.isDiggingIn()){
+            return state.setAndContinue(DIG);
         }
-        if(this.isDiggingOut() && diggingOutAnimationTimeout <=0){
-            diggingOutAnimationTimeout = 28;
-            diggingOutAnimationState.start(this.tickCount);
-        }else{
-            --this.diggingOutAnimationTimeout;
+        if(!state.isMoving()){
+            return state.setAndContinue(IDLE);
         }
-        if(!this.isDiggingIn()){
-            diggingInAnimationState.stop();
-        }
-        if(!this.isDiggingOut()){
-            diggingOutAnimationState.stop();
-        }
+        return state.setAndContinue(this.isRunning() ? RUN : WALK);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     @Override

@@ -32,9 +32,6 @@ public class EOTWBlockEntities {
     public static RegistryObject<BlockEntityType<BurrowBlockEntity>> BURROW_BLOCK_ENTITY = BLOCK_ENTITY.register("burrow_block_entity",
             ()-> new BlockEntityType<>(BurrowBlockEntity::new, Set.of(EOTWBlocks.DIRT_BURROW_BLOCK.get(), EOTWBlocks.SAND_BURROW_BLOCK.get(), EOTWBlocks.MUD_BURROW_BLOCK.get()), null));
 
-
-    // split the same way vanilla splits SIGN from HANGING_SIGN, they need different renderers so they
-    // cant share one type
     public static final RegistryObject<BlockEntityType<EOTWSignBlockEntity>> MANGO_SIGN =
             BLOCK_ENTITY.register("mango_sign", () ->
                     BlockEntityType.Builder.of(EOTWSignBlockEntity::new,

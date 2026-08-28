@@ -70,7 +70,6 @@ import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarrier {
 
     public static final int HARVEST_INVENTORY_SIZE = 6;
-    // odds an angry rat gives a player rabies when it bites them
     public static final float RABIES_CHANCE = 0.15F;
 
     private static final EntityDataAccessor<Integer> DATA_COLLAR_COLOR =
@@ -87,15 +86,12 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Nullable
     private UUID persistentAngerTarget;
 
-    // a wild rat takes somewhere between 6 and 12 cheese wedges to tame
     private int tameThreshold = 6;
     private int tameProgress = 0;
 
-    // composter this rat farms around, null if it hasnt been assigned one
     @Nullable
     private BlockPos composterPos;
 
-    // holds whatever the rat is carrying between the field, the chest and the composter
     public final SimpleContainer harvestInventory = new SimpleContainer(HARVEST_INVENTORY_SIZE);
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -107,7 +103,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 12) // 6 hearts
+                .add(Attributes.MAX_HEALTH, 12)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.FOLLOW_RANGE, 16)
                 .add(Attributes.ATTACK_DAMAGE, 2)
@@ -144,8 +140,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.define(RUNNING, false);
     }
 
-    // ticking and animation
-
     @Override
     public void tick() {
         super.tick();
@@ -157,7 +151,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
-        // angry texture while it fights back or hunts, run anim while its chasing
         boolean fighting = this.getTarget() != null || this.isAngry();
         this.entityData.set(ANGRY, fighting);
         this.entityData.set(RUNNING, this.getTarget() != null);
@@ -192,8 +185,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return this.entityData.get(RUNNING);
     }
 
-    // combat and rabies
-
     @Override
     public boolean doHurtTarget(Entity pTarget) {
         boolean flag = super.doHurtTarget(pTarget);
@@ -206,7 +197,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return flag;
     }
 
-    // tamed rats never go after another tamed or owned mob
     @Override
     public boolean canAttack(LivingEntity pTarget) {
         if (this.isTame() && isTamedMob(pTarget)) {
@@ -236,8 +226,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return false;
     }
 
-    // interaction stuff, taming healing sitting dyeing the collar and composter assign
-
     @Override
     public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
@@ -250,7 +238,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             return canInteract ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
 
-        // not tamed yet, feed it cheese wedges
         if (!this.isTame()) {
             if (itemstack.is(EOTWItems.SHEEP_CHEESE_WEDGE.get())) {
                 this.usePlayerItem(pPlayer, pHand, itemstack);
@@ -272,9 +259,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
             return super.mobInteract(pPlayer, pHand);
         }
 
-        // tamed and ours
         if (this.isOwnedBy(pPlayer)) {
-            // any dye recolours the collar
             if (itemstack.getItem() instanceof DyeItem dyeItem) {
                 DyeColor color = dyeItem.getDyeColor();
                 if (color != this.getCollarColor()) {
@@ -286,7 +271,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 }
             }
 
-            // onions or a cheese wedge heal it
             boolean edible = this.isFood(itemstack) || itemstack.is(EOTWItems.SHEEP_CHEESE_WEDGE.get());
             if (edible && this.getHealth() < this.getMaxHealth()) {
                 float nutrition = itemstack.getFoodProperties(this) != null
@@ -296,7 +280,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 return InteractionResult.CONSUME;
             }
 
-            // stick arms the composter assign, you finish it by right clicking a composter
             if (itemstack.is(Items.STICK)) {
                 EOTWEntityUtils.setRatClicked(this, pPlayer);
                 pPlayer.displayClientMessage(
@@ -305,12 +288,10 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 return InteractionResult.CONSUME;
             }
 
-            // onion at full health just falls through to normal breeding
             if (this.isFood(itemstack)) {
                 return super.mobInteract(pPlayer, pHand);
             }
 
-            // anything else toggles sit/follow like a wolf
             this.setOrderedToSit(!this.isOrderedToSit());
             this.jumping = false;
             this.navigation.stop();
@@ -321,13 +302,10 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return super.mobInteract(pPlayer, pHand);
     }
 
-    // breeding
-
     @Override
     @Nullable
     public AgeableMob getBreedOffspring(ServerLevel pLevel, AgeableMob pOtherParent) {
         RatEntity child = new RatEntity(EOTWEntities.RAT.get(), pLevel);
-        // baby takes this parent's variant, that being the one that started the breeding
         child.setVariant(this.getVariant());
         if (this.isTame()) {
             child.setOwnerUUID(this.getOwnerUUID());
@@ -340,8 +318,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     public boolean isFood(ItemStack pStack) {
         return pStack.is(EOTWItems.RED_ONION.get());
     }
-
-    // composter assignment
 
     public void assignComposter(BlockPos pos) {
         this.composterPos = pos.immutable();
@@ -357,8 +333,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         return this.composterPos != null;
     }
 
-    // collar colour
-
     public DyeColor getCollarColor() {
         return DyeColor.byId(this.entityData.get(DATA_COLLAR_COLOR));
     }
@@ -366,8 +340,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     public void setCollarColor(DyeColor pCollarColor) {
         this.entityData.set(DATA_COLLAR_COLOR, pCollarColor.getId());
     }
-
-    // variant
 
     public RatVariant getVariant() {
         int index = this.entityData.get(VARIANT);
@@ -396,12 +368,10 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.set(VARIANT, 0);
     }
 
-    // spawning
-
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
             MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
-        this.tameThreshold = 6 + this.random.nextInt(7); // 6 to 12
+        this.tameThreshold = 6 + this.random.nextInt(7);
         if (pDataTag != null && pDataTag.contains("Variant")) {
             setVariantById(pDataTag.getString("Variant"));
         } else {
@@ -420,8 +390,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 && NaturalSpawner.isValidEmptySpawnBlock(level, pos, level.getBlockState(pos),
                         level.getFluidState(pos), type);
     }
-
-    // neutral anger
 
     @Override
     public void startPersistentAngerTimer() {
@@ -448,8 +416,6 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     public UUID getPersistentAngerTarget() {
         return this.persistentAngerTarget;
     }
-
-    // save and load
 
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {

@@ -50,23 +50,18 @@ import net.mrmisc.essenceofthewild.screen.freezer.WoodenFreezerScreen;
 import net.mrmisc.essenceofthewild.util.EOTWEntityUtils;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
-// this has to match an entry in META-INF/mods.toml
 @Mod(EssenceOfTheWildMod.MOD_ID)
 public class EssenceOfTheWildMod
 {
-    // mod id lives here so everything else can just point at it
     public static final String MOD_ID = "essenceofthewild";
-
 
     public EssenceOfTheWildMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
         context.registerConfig(ModConfig.Type.COMMON, EOTWConfig.COMMON_SPEC);
         EOTWUtils.modInit(modEventBus);
-        // hook up commonSetup for modloading
         modEventBus.addListener(this::commonSetup);
 
-        // sign us up for the server and game events we care about
         MinecraftForge.EVENT_BUS.register(this);
 
         MinecraftForge.EVENT_BUS.register(new ServerInteractionListener());
@@ -76,13 +71,11 @@ public class EssenceOfTheWildMod
     {
     }
 
-    // SubscribeEvent lets the event bus find methods to call on its own
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
     }
 
-    // EventBusSubscriber auto registers every static method in here marked with SubscribeEvent
     @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
@@ -123,7 +116,6 @@ public class EssenceOfTheWildMod
                 return;
             }
 
-            // assigning a rat to a composter
             String ratUuid = EOTWEntityUtils.getRatClicked(p);
             if(!ratUuid.isEmpty()
                     && event.getLevel().getBlockState(event.getPos()).is(net.minecraft.world.level.block.Blocks.COMPOSTER)){
@@ -138,7 +130,6 @@ public class EssenceOfTheWildMod
                 }
             }
 
-            // assigning a ferret its dig block
             if(!p.getPersistentData().contains("OwnsFerret")){
                 return;
             }

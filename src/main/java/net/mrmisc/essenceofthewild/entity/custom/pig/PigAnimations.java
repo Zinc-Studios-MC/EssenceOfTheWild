@@ -5,7 +5,6 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-// blockbench export
 public class PigAnimations {
 	public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(2.0F).looping()
 		.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,

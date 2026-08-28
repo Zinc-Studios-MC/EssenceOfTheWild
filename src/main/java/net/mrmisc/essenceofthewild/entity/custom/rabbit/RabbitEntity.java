@@ -22,12 +22,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 public class RabbitEntity extends Rabbit {
-    // over this speed multiplier the rabbit runs, under it it walks with little hops
     private static final double RUN_SPEED_MODIFIER = 1.5D;
 
     public RabbitEntity(EntityType<? extends Rabbit> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        // swap out the vanilla rabbit hop control for normal ground movement
         this.moveControl = new MoveControl(this);
     }
 
@@ -66,7 +64,6 @@ public class RabbitEntity extends Rabbit {
         }
     }
 
-    // walks and runs on the ground so those anims actually play, only jumps for obstacles or to get out of water
     @Override
     public void startJumping() {
         if (shouldJumpObstacle()) {

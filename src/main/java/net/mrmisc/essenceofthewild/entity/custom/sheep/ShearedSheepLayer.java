@@ -6,7 +6,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 
-// the shorn body, drawn once the fleece is gone, tinted the same way so dyed sheep stay dyed
 @OnlyIn(Dist.CLIENT)
 public class ShearedSheepLayer extends SheepOverlayLayer {
 

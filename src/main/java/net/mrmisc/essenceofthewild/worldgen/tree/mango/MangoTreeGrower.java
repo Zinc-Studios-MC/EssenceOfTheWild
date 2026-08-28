@@ -14,7 +14,6 @@ public class MangoTreeGrower extends AbstractMegaTreeGrower {
         return null;
     }
 
-
     @Override
     protected @Nullable ResourceKey<ConfiguredFeature<?, ?>> getConfiguredMegaFeature(RandomSource pRandom) {
         return EOTWConfiguredFeatures.MANGO_KEY;

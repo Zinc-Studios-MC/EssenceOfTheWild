@@ -36,10 +36,8 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.cow.walk");
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.cow.run");
 
-    // ticks a cow keeps running after one hit
     private static final int PANIC_DURATION = 60;
 
-    // calves reuse the adult clips but move faster for their size, so speed the playback up or their legs slide
     private static final double BABY_GAIT_SPEED = 1.5D;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -52,7 +50,6 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
                 .setAnimationSpeedHandler(CowEntity::gaitSpeed));
     }
@@ -61,7 +58,6 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
         if (!state.isMoving()) {
             return state.setAndContinue(IDLE);
         }
-        // go by hurt, not speed, a cow walking to grass moves about as fast as one running from a wolf
         return state.setAndContinue(this.isPanicking() ? RUN : WALK);
     }
 
@@ -98,7 +94,6 @@ public class CowEntity extends Cow implements VariantCarrier, GeoEntity {
 
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.INT);
-    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
     private static final EntityDataAccessor<Boolean> PANICKING =
             SynchedEntityData.defineId(CowEntity.class, EntityDataSerializers.BOOLEAN);
 

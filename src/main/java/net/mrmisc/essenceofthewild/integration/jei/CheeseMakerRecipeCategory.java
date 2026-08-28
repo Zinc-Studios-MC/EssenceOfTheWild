@@ -151,7 +151,6 @@ public class CheeseMakerRecipeCategory implements IRecipeCategory<CheeseMakerRec
         drawPipeBase(guiGraphics, 34, 45, 67, 50);
         drawPipeBase(guiGraphics, 105, 45, 142, 50);
 
-        // plain milk bar, no dotted or moving white pixels
         guiGraphics.fill(36, 46, 65, 49, MILK_SHADOW);
         guiGraphics.fill(36, 46, 65, 48, MILK);
         guiGraphics.fill(36, 48, 65, 49, 0xFFE9DDC8);

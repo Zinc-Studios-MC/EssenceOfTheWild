@@ -72,7 +72,6 @@ public class EOTWBlocks {
     public static RegistryObject<Block> MANGO_SAPLING = registerBlock("mango_sapling",
             ()-> new SaplingBlock(new MangoTreeGrower(), BlockBehaviour.Properties.copy(Blocks.OAK_SAPLING)));
 
-
     public static final RegistryObject<Block> MANGO_LEAVES = registerBlock("mango_leaves",
             () -> createLeaves(60, 30));
 

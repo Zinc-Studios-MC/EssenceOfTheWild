@@ -34,7 +34,6 @@ public class WoodenFreezerMenu extends AbstractContainerMenu {
     private static final int PLAYER_HOTBAR_FIRST_SLOT_INDEX = PLAYER_INVENTORY_FIRST_SLOT_INDEX + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int PLAYER_HOTBAR_SLOT_COUNT = 9;
 
-    // top left slot is ice and top right is milk, thats what the texture expects
     private static final int ICE_SLOT_X = 17;
     private static final int ICE_SLOT_Y = 20;
 

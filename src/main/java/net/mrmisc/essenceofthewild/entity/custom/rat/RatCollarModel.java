@@ -1,6 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.rat;
-// blockbench export
-
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HierarchicalModel;
@@ -13,7 +11,6 @@ import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 
 public class RatCollarModel extends HierarchicalModel<RatEntity> {
-	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "rat_collar"), "main");
 	private final ModelPart body;
 	private final ModelPart bone;

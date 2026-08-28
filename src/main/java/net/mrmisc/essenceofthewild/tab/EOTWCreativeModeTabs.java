@@ -81,8 +81,6 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWBlocks.MANGO_FENCE_GATE.get());
                 pOutput.accept(EOTWBlocks.MANGO_BUTTON.get());
                 pOutput.accept(EOTWBlocks.MANGO_PRESURE_PLATE.get());
-                // the item not the block, wall variants share an item with the standing one so going
-                // off blocks would list it twice
                 pOutput.accept(EOTWItems.MANGO_SIGN.get());
                 pOutput.accept(EOTWItems.MANGO_HANGING_SIGN.get());
                 pOutput.accept(EOTWBlocks.WOODEN_FREEZER.get());

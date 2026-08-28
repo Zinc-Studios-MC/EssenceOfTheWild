@@ -134,5 +134,4 @@ public class CheeseMakerBlock extends BaseEntityBlock {
         pBuilder.add(CONTENT);
     }
 
-
 }

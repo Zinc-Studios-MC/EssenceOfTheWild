@@ -27,7 +27,6 @@ public class EOTWBlockTagsProvider extends BlockTagsProvider {
         this.tag(BlockTags.FENCES).add(EOTWBlocks.MANGO_FENCE.get());
         this.tag(BlockTags.FENCE_GATES).add(EOTWBlocks.MANGO_FENCE_GATE.get());
 
-        // the big tags like SIGNS and ALL_SIGNS are just unions of these four so filling these is enough
         this.tag(BlockTags.STANDING_SIGNS).add(EOTWBlocks.MANGO_SIGN.get());
         this.tag(BlockTags.WALL_SIGNS).add(EOTWBlocks.MANGO_WALL_SIGN.get());
         this.tag(BlockTags.CEILING_HANGING_SIGNS).add(EOTWBlocks.MANGO_HANGING_SIGN.get());

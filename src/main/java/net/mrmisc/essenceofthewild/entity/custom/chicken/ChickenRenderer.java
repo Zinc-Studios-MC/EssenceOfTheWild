@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
-// typed on HierarchicalModel because the chick is its own rig and doesnt extend ChickenModel
 public class ChickenRenderer extends MobRenderer<ChickenEntity, HierarchicalModel<ChickenEntity>> {
 
     private final HierarchicalModel<ChickenEntity> adult;
@@ -38,7 +37,6 @@ public class ChickenRenderer extends MobRenderer<ChickenEntity, HierarchicalMode
 
     @Override
     public void render(ChickenEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight) {
-        // no scale() override any more, the chick model is already chick sized instead of a shrunk adult
         this.model = pEntity.isBaby() ? baby : adult;
         super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
     }

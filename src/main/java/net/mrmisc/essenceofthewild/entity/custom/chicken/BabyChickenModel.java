@@ -1,5 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.chicken;
-// blockbench export
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,13 +10,10 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
-// the chick is its own rig, not a shrunk adult, so it doesnt share ChickenModel's bone layout
-// here the wings and tail hang off head and the legs sit under Root, so it gets its own setupAnim
 public class BabyChickenModel extends HierarchicalModel<ChickenEntity> {
 	private static final float DEG_TO_RAD = ((float) Math.PI / 180F);
 	private static final double RUN_SPEED_THRESHOLD = 0.22D;
 
-	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "baby_chicken"), "main");
 	private final ModelPart Root;
 	private final ModelPart head;
@@ -72,7 +68,6 @@ public class BabyChickenModel extends HierarchicalModel<ChickenEntity> {
 		this.head.yRot = pNetHeadYaw * DEG_TO_RAD;
 		this.head.xRot += pHeadPitch * DEG_TO_RAD;
 
-		// no nest branches here, chicks never get nest delivery, ChickenEntity bails on isBaby
 		if (isFlapping(pEntity)) {
 			this.animate(pEntity.flapAnimationState, BabyChickenAnimations.chicken_flap, pAgeInTicks);
 			return;

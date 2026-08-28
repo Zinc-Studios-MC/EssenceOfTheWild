@@ -116,8 +116,6 @@ public class SleepingBagBlock extends BedBlock {
         }
     }
 
-
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new SleepingBagBlockEntity(color, pPos, pState);

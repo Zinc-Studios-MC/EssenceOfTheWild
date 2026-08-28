@@ -1,5 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.chicken;
-// blockbench export
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +16,6 @@ public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEnt
 	private static final float DEG_TO_RAD = ((float) Math.PI / 180F);
 	private static final double RUN_SPEED_THRESHOLD = 0.22D;
 
-	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "chicken"), "main");
 	private final ModelPart body;
 	private final ModelPart head;

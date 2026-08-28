@@ -50,11 +50,8 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.sheep.run");
     private static final RawAnimation EAT = RawAnimation.begin().thenLoop("animation.sheep.eat");
 
-    // ticks a sheep keeps running after one hit
     private static final int PANIC_DURATION = 60;
 
-    // lambs reuse the adult clips but move faster for their size, so speed the playback up or their
-    // legs slide, eating is left alone since the goal paces that not the movement speed
     private static final double BABY_GAIT_SPEED = 1.5D;
 
     private static final EntityDataAccessor<Byte> WOOL_ID =
@@ -66,7 +63,6 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
     private static final EntityDataAccessor<Boolean> EATING =
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BOOLEAN);
 
-    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
     private static final EntityDataAccessor<Boolean> PANICKING =
             SynchedEntityData.defineId(SheepEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -114,10 +110,8 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
                 .setAnimationSpeedHandler(SheepEntity::gaitSpeed));
-        // eating gets its own controller so it can play on top of whatever the legs are doing
         controllers.add(new AnimationController<>(this, "eat", 3, this::eatController));
     }
 
@@ -125,7 +119,6 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
         if (!state.isMoving()) {
             return state.setAndContinue(IDLE);
         }
-        // go by hurt, not speed, a sheep walking to grass moves about as fast as one running from a wolf
         return state.setAndContinue(this.isPanicking() ? RUN : WALK);
     }
 
@@ -224,14 +217,12 @@ public class SheepEntity extends Sheep implements IForgeShearable, VariantCarrie
         this.setColor(DyeColor.byId(tag.getByte("Color")));
     }
 
-
     @Override
     public Sheep getBreedOffspring(ServerLevel level, AgeableMob otherParent) {
         SheepEntity child = new SheepEntity(EOTWEntities.SHEEP.get(), level);
         child.setVariant(this.getVariant());
         return child;
     }
-
 
     @Override
     public DyeColor getColor() {

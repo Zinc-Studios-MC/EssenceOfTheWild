@@ -14,11 +14,9 @@ import java.util.List;
 
 public class RabiesEffect extends MobEffect {
 
-
     //TODO: change the * 1 back to * 6
     public static final int TOTAL_DURATION = 20 * 60 * 6;
     private static int NAUSEA_INTERVAL = 20 * 45;
-
 
     public RabiesEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);

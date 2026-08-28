@@ -21,8 +21,6 @@ import net.minecraft.world.level.block.ComposterBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-// once a tamed rat is assigned to a composter with a stick it harvests grown crops around it,
-// dumps the produce in the nearest chest and brings the leftover seeds back to the composter
 public class RatHarvestGoal extends Goal {
 
     private static final int SEARCH_RADIUS = 8;
@@ -71,7 +69,6 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 1. empty a finished composter and carry the bone meal off, needs a free slot
         if (isComposterReady() && hasBufferSpace()) {
             if (moveWithinReach(composter)) {
                 collectBonemeal(composter);
@@ -79,7 +76,6 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 2. holding produce so take it to a chest
         if (hasBufferMatching(false)) {
             BlockPos chest = findContainer();
             if (chest != null) {
@@ -88,10 +84,8 @@ public class RatHarvestGoal extends Goal {
                 }
                 return;
             }
-            // no chest around, just hang onto it and carry on
         }
 
-        // 3. holding seeds so go compost them
         if (hasBufferMatching(true)) {
             if (moveWithinReach(composter)) {
                 compostSeeds(composter);
@@ -99,7 +93,6 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 4. go break a grown crop
         BlockPos crop = findMatureCrop();
         if (crop != null) {
             if (moveWithinReach(crop)) {
@@ -108,13 +101,10 @@ public class RatHarvestGoal extends Goal {
             return;
         }
 
-        // 5. nothing to do, just idle near the composter
         if (isFarFromComposter()) {
             this.rat.getNavigation().moveTo(composter.getX() + 0.5, composter.getY(), composter.getZ() + 0.5, 1.0D);
         }
     }
-
-    // figuring out if theres work to do
 
     private boolean hasWork() {
         return isComposterReady() || !bufferIsEmpty() || findMatureCrop() != null;
@@ -130,7 +120,6 @@ public class RatHarvestGoal extends Goal {
                 && s.getValue(ComposterBlock.LEVEL) == 8;
     }
 
-    // is there space for at least one more bone meal
     private boolean hasBufferSpace() {
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack s = this.rat.harvestInventory.getItem(i);
@@ -153,7 +142,6 @@ public class RatHarvestGoal extends Goal {
         return this.rat.harvestInventory.isEmpty();
     }
 
-    // true if the buffer has something that is or isnt a seed, depending on the flag
     private boolean hasBufferMatching(boolean seeds) {
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack s = this.rat.harvestInventory.getItem(i);
@@ -167,8 +155,6 @@ public class RatHarvestGoal extends Goal {
     private boolean isSeed(ItemStack stack) {
         return SEEDS.contains(stack.getItem());
     }
-
-    // movement
 
     private boolean moveWithinReach(BlockPos pos) {
         double distSqr = this.rat.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -185,8 +171,6 @@ public class RatHarvestGoal extends Goal {
         this.actionCooldown = 10;
         return true;
     }
-
-    // harvesting
 
     @Nullable
     private BlockPos findMatureCrop() {
@@ -229,12 +213,9 @@ public class RatHarvestGoal extends Goal {
                 server.addFreshEntity(ie);
             }
         }
-        // replant it
         server.setBlock(pos, crop.getStateForAge(0), 3);
         server.levelEvent(2001, pos, Block.getId(state));
     }
-
-    // dropping produce off in a chest
 
     @Nullable
     private BlockPos findContainer() {
@@ -274,7 +255,6 @@ public class RatHarvestGoal extends Goal {
     }
 
     private ItemStack insertIntoContainer(Container container, ItemStack stack) {
-        // top up matching stacks first, then use empty slots
         for (int i = 0; i < container.getContainerSize() && !stack.isEmpty(); i++) {
             ItemStack slot = container.getItem(i);
             if (!slot.isEmpty() && ItemStack.isSameItemSameTags(slot, stack)
@@ -293,8 +273,6 @@ public class RatHarvestGoal extends Goal {
         container.setChanged();
         return stack.isEmpty() ? ItemStack.EMPTY : stack;
     }
-
-    // composting the seeds
 
     private void collectBonemeal(BlockPos composterPos) {
         if (!(this.rat.level() instanceof ServerLevel server)) {
@@ -325,7 +303,7 @@ public class RatHarvestGoal extends Goal {
         }
         int level = state.getValue(ComposterBlock.LEVEL);
         if (level >= 7) {
-            return; // full, wait til someone empties it
+            return;
         }
         for (int i = 0; i < this.rat.harvestInventory.getContainerSize(); i++) {
             ItemStack stack = this.rat.harvestInventory.getItem(i);
@@ -343,7 +321,7 @@ public class RatHarvestGoal extends Goal {
             }
             server.levelEvent(1500, composterPos, success ? 1 : 0);
             stack.shrink(1);
-            return; // one item per action tick
+            return;
         }
     }
 

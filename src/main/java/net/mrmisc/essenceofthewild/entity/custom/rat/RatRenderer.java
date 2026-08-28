@@ -11,7 +11,6 @@ import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class RatRenderer extends MobRenderer<RatEntity, RatModel> {
 
-    // every baby rat uses the same texture no matter the variant
     private static final ResourceLocation BABY_TEXTURE = ResourceLocation.fromNamespaceAndPath(
             EssenceOfTheWildMod.MOD_ID, "textures/entity/rat/baby_rat.png");
 
@@ -30,7 +29,6 @@ public class RatRenderer extends MobRenderer<RatEntity, RatModel> {
         if (entity.isBaby()) {
             return BABY_TEXTURE;
         }
-        // easter egg, name a rat fishguy and it gets the fishguy texture whatever its variant is
         if (entity.hasCustomName()) {
             String name = ChatFormatting.stripFormatting(entity.getName().getString());
             if (name != null && name.equalsIgnoreCase("fishguy")) {

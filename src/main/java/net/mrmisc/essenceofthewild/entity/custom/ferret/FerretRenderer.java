@@ -1,42 +1,27 @@
 package net.mrmisc.essenceofthewild.entity.custom.ferret;
 
-import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
-
 import com.mojang.blaze3d.vertex.PoseStack;
-
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
-public class FerretRenderer extends MobRenderer<FerretEntity, FerretModel> {
+public class FerretRenderer extends GeoEntityRenderer<FerretEntity> {
 
-    public FerretModel adult;
-    public BabyFerretModel baby;
-
-    public FerretRenderer(Context pContext) {
-        super(pContext, new FerretModel(pContext.bakeLayer(FerretModel.LAYER_LOCATION)), 0.5f);
-
-        this.adult = new FerretModel(pContext.bakeLayer(FerretModel.LAYER_LOCATION));
-        this.baby = new BabyFerretModel(pContext.bakeLayer(BabyFerretModel.LAYER_LOCATION));
+    public FerretRenderer(Context context) {
+        super(context, new FerretGeoModel());
+        this.shadowRadius = 0.5f;
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FerretEntity pEntity) {
-        FerretVariant variant = pEntity.getVariant();
-        return pEntity.isBaby() ? variant.babyLocation() : variant.adultLocation();
-    }
-
-    @Override
-    public void render(FerretEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pPoseStack,
-            MultiBufferSource pBuffer, int pPackedLight) {
-        if (pEntity.isBaby()) {
-            this.model = baby;
-            pPoseStack.scale(0.9F, 0.9F, 0.9F);
-        } else {
-            this.model = adult;
+    public void preRender(PoseStack poseStack, FerretEntity animatable, BakedGeoModel model,
+                          MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender,
+                          float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        if (animatable.isBaby()) {
+            poseStack.scale(0.9F, 0.9F, 0.9F);
         }
-
-        super.render(pEntity, pEntityYaw, pPartialTicks, pPoseStack, pBuffer, pPackedLight);
+        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick,
+                packedLight, packedOverlay, red, green, blue, alpha);
     }
-    
 }

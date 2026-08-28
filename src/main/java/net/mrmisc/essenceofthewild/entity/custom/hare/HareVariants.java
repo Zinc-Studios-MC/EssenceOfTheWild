@@ -7,13 +7,11 @@ import net.mrmisc.essenceofthewild.entity.util.MobVariant;
 import java.util.List;
 
 public class HareVariants {
-    // sandy coat, this is the desert one
     public static final MobVariant YELLOW =
             new MobVariant("yellow",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/hare/hare.png"),
                     false, true);
-    // savanna and plains
     public static final MobVariant BROWN =
             new MobVariant("brown",
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,

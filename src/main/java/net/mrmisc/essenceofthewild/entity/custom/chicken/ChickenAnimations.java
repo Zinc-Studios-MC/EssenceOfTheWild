@@ -5,7 +5,6 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-// blockbench export
 public class ChickenAnimations {
 	public static final AnimationDefinition chicken_idle = AnimationDefinition.Builder.withLength(1.5F).looping()
 		.addAnimation("body", new AnimationChannel(AnimationChannel.Targets.ROTATION,

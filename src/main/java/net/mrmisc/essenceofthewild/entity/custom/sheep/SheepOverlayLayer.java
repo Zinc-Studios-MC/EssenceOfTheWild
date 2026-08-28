@@ -15,10 +15,6 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
-// draws a second dyed shell over the sheep, either the wool or the shorn body under it
-// each shell has its own uvs so it cant just be extra bones on the body model, and geckolib only
-// animates the renderer's own model, so we copy the body's bone transforms over by name before
-// drawing, same idea as copyPropertiesTo on the old vanilla models but without animating twice
 @OnlyIn(Dist.CLIENT)
 public abstract class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
 
@@ -29,15 +25,12 @@ public abstract class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
         this.overlayModel = overlayModel;
     }
 
-    // does this shell apply to the sheep right now
     protected abstract boolean appliesTo(SheepEntity sheep);
 
     @Override
     public void render(PoseStack poseStack, SheepEntity animatable, BakedGeoModel bakedModel, RenderType renderType,
                        MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
-        // skip lambs, both shells are adult sized and there is no lamb version, plus the lamb model
-        // already has its fleece cubes baked in so it looks fine without them (and you cant shear lambs anyway)
         if (animatable.isBaby() || !appliesTo(animatable)) {
             return;
         }
@@ -54,7 +47,6 @@ public abstract class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
                 rgb[0], rgb[1], rgb[2], 1.0F);
     }
 
-    // give the shell the body's animated pose, bones get matched up by name
     private static void copyPose(BakedGeoModel from, BakedGeoModel to) {
         for (GeoBone bone : from.topLevelBones()) {
             copyBone(bone, to);
@@ -79,7 +71,6 @@ public abstract class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
         }
     }
 
-    // wool colour including the jeb_ rainbow, tweaked the same way the old layers did it
     private static float[] tint(SheepEntity sheep, float partialTick) {
         if (sheep.hasCustomName() && "jeb_".equals(sheep.getName().getString())) {
             int offset = sheep.tickCount / 25 + sheep.getId();

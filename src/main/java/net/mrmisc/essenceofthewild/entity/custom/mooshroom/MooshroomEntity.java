@@ -60,10 +60,8 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
     private static final RawAnimation WALK = RawAnimation.begin().thenLoop("animation.mooshroom.walk");
     private static final RawAnimation RUN = RawAnimation.begin().thenLoop("animation.mooshroom.run");
 
-    // ticks a mooshroom keeps running after one hit
     private static final int PANIC_DURATION = 60;
 
-    // calves reuse the adult clips but move faster for their size, so speed the playback up or their legs slide
     private static final double BABY_GAIT_SPEED = 1.5D;
 
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
@@ -75,7 +73,6 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
     private int effectDuration;
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.INT);
-    // anims run clientside but only the server knows about damage, so sync the flag and keep the countdown server only
     private static final EntityDataAccessor<Boolean> PANICKING =
             SynchedEntityData.defineId(MooshroomEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -85,8 +82,6 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
         super(type, level);
     }
 
-    // copy of vanilla MushroomCow#checkMushroomSpawnRules, the normal animal rule wants grass and
-    // mushroom fields has none, so it would reject every spot there
     public static boolean checkMooshroomSpawnRules(EntityType<? extends MooshroomEntity> type, LevelAccessor level,
                                                   MobSpawnType spawnType, BlockPos pos, RandomSource random) {
         return level.getBlockState(pos.below()).is(BlockTags.MOOSHROOMS_SPAWNABLE_ON) && isBrightEnoughToSpawn(level, pos);
@@ -94,7 +89,6 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        // the 5 tick transition is what blends idle/walk/run instead of snapping between them
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
                 .setAnimationSpeedHandler(MooshroomEntity::gaitSpeed));
     }
@@ -103,7 +97,6 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
         if (!state.isMoving()) {
             return state.setAndContinue(IDLE);
         }
-        // go by hurt, not speed, one walking to grass moves about as fast as one running from a wolf
         return state.setAndContinue(this.isPanicking() ? RUN : WALK);
     }
 
@@ -204,7 +197,7 @@ public class MooshroomEntity extends MushroomCow implements GeoEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(VARIANT, 0); // 0 is red, 1 is brown
+        this.entityData.define(VARIANT, 0);
         this.entityData.define(PANICKING, false);
     }
 

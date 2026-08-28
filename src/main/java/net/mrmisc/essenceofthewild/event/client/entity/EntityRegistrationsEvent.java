@@ -21,9 +21,7 @@ import net.mrmisc.essenceofthewild.entity.custom.cow.CowEntity;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckEntity;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DuckModel;
 import net.mrmisc.essenceofthewild.entity.custom.duck.DucklingModel;
-import net.mrmisc.essenceofthewild.entity.custom.ferret.BabyFerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
-import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretModel;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareEntity;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareModel;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomEntity;
@@ -42,7 +40,6 @@ import net.mrmisc.essenceofthewild.effect.client.WebbedLayer;
 
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class EntityRegistrationsEvent {
-
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(PigModel.LAYER_LOCATION, PigModel::createBodyLayer);
@@ -56,8 +53,6 @@ public class EntityRegistrationsEvent {
         event.registerLayerDefinition(HareModel.LAYER_LOCATION, HareModel::createBodyLayer);
         event.registerLayerDefinition(SleepingBagRenderer.HEAD, SleepingBagRenderer::createHeadLayer);
         event.registerLayerDefinition(SleepingBagRenderer.FOOT, SleepingBagRenderer::createFootLayer);
-        event.registerLayerDefinition(FerretModel.LAYER_LOCATION, FerretModel::createBodyLayer);
-        event.registerLayerDefinition(BabyFerretModel.LAYER_LOCATION, BabyFerretModel::createBodyLayer);
         event.registerLayerDefinition(RatModel.LAYER_LOCATION, RatModel::createBodyLayer);
         event.registerLayerDefinition(BabyRatModel.LAYER_LOCATION, BabyRatModel::createBodyLayer);
         event.registerLayerDefinition(RatCollarModel.LAYER_LOCATION, RatCollarModel::createBodyLayer);

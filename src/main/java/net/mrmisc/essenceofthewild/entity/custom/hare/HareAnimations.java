@@ -5,8 +5,6 @@ import net.minecraft.client.animation.AnimationDefinition;
 import net.minecraft.client.animation.Keyframe;
 import net.minecraft.client.animation.KeyframeAnimations;
 
-// blockbench export, the root group is called body in blockbench and renamed to root here since
-// getAnyDescendantWithName only finds the root under that name
 public class HareAnimations {
 	public static final AnimationDefinition idle = AnimationDefinition.Builder.withLength(0.5F).looping()
 		.addAnimation("head", new AnimationChannel(AnimationChannel.Targets.ROTATION,

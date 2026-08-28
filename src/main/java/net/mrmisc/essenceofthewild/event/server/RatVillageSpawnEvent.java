@@ -24,20 +24,12 @@ import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.entity.custom.rat.RatEntity;
 
-// rats hanging around villages, same idea as vanilla cats
-// swamps and caves are handled by the add_rat_spawn biome modifier, this only does the village part.
-// it runs off a level tick because ServerLevel builds its CustomSpawner list in the constructor and
-// forge gives us no way to add to it, so the cat logic is mirrored here instead
 @Mod.EventBusSubscriber(modid = EssenceOfTheWildMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RatVillageSpawnEvent {
 
-    // same cadence vanilla uses for cats, one attempt per minute
     private static final int SPAWN_INTERVAL = 1200;
-    // how far out from the picked spot we count beds and existing rats
     private static final int VILLAGE_RADIUS = 48;
-    // a village only draws rats once it has more than this many claimed beds
     private static final int MIN_OCCUPIED_BEDS = 4;
-    // stop once this many rats are already hanging around
     private static final int MAX_RATS_NEARBY = 5;
 
     private static final Map<ResourceKey<Level>, Integer> COOLDOWNS = new HashMap<>();
@@ -68,7 +60,6 @@ public class RatVillageSpawnEvent {
             return;
         }
 
-        // pick a spot 8 to 32 blocks away from someone, same offsets the cat spawner uses
         RandomSource random = level.random;
         int dx = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
         int dz = (8 + random.nextInt(24)) * (random.nextBoolean() ? -1 : 1);
@@ -84,7 +75,6 @@ public class RatVillageSpawnEvent {
             return;
         }
 
-        // count claimed beds so a couple of stray villagers dont pull rats in
         long beds = level.getPoiManager().getCountInRange(
                 holder -> holder.is(PoiTypes.HOME), pos, VILLAGE_RADIUS, PoiManager.Occupancy.IS_OCCUPIED);
         if (beds <= MIN_OCCUPIED_BEDS) {

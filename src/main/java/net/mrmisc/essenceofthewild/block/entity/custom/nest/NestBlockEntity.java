@@ -100,8 +100,6 @@ public class NestBlockEntity extends BlockEntity {
         return eggCount;
     }
 
-    // takes the whole clutch out and hands it back as a stack, duck eggs for duck nests and normal
-    // ones otherwise, gives back EMPTY if theres nothing in there
     public ItemStack collectEggs() {
         if (!hasEggs()) {
             return ItemStack.EMPTY;

@@ -6,7 +6,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoRenderer;
 
-// the fleece, drawn over a sheep that hasnt been sheared and tinted by its dye colour
 @OnlyIn(Dist.CLIENT)
 public class SheepWoolLayer extends SheepOverlayLayer {
 

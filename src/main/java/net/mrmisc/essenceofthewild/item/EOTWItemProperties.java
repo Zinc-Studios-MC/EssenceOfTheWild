@@ -5,12 +5,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.mrmisc.essenceofthewild.util.EOTWUtils;
 
-// client only, keep this behind Dist.CLIENT callers
 public class EOTWItemProperties {
 
-    // feeds the extra overrides in assets/minecraft/models/item/bow.json so a bow pulled with an
-    // underwater arrow shows that instead of a normal one, only works for your own player since you
-    // dont get other people's inventories, so their bows keep the vanilla pulling textures
     public static void register() {
         ItemProperties.register(Items.BOW, EOTWUtils.getLoc("underwater_arrow"),
                 (stack, level, entity, seed) -> {

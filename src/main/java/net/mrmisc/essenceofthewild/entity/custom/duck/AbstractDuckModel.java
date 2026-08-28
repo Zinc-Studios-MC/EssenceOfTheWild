@@ -6,7 +6,6 @@ import net.minecraft.util.Mth;
 
 public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
     protected static final float DEG_TO_RAD = ((float) Math.PI / 180F);
-    // matches the DUCK_SWIM leg arc, 20 tick loop with the legs going from 10 to -35 degrees
     private static final float PADDLE_PHASE_PER_TICK = (float) (Math.PI * 2.0 / 20.0);
     private static final float PADDLE_CENTER = -12.5F * DEG_TO_RAD;
     private static final float PADDLE_SWEEP = 22.5F * DEG_TO_RAD;
@@ -51,27 +50,20 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
 
         if (entity.isDivingAnimationActive()) {
             this.animate(entity.diveAnimationState, DuckAnimations.DUCK_DIVING, ageInTicks);
-            // DUCK_DIVING has no leg keyframes, so kick hard while chasing fish down there
             applyPaddle(ageInTicks, 1.0F);
             return;
         }
 
         if (entity.isInWaterOrBubble()) {
-            // swimming is slow so limbSwingAmount barely gets past 0.1, and animateWalk scales both
-            // the amplitude and the speed by it which basically froze the swim loop, so run the clip
-            // off the animation state clock and only use the walk signal to pick swim vs drift
             if (limbSwingAmount > 0.02F) {
                 this.animate(entity.swimAnimationState, DuckAnimations.DUCK_SWIM, ageInTicks);
             } else {
                 this.animate(entity.waterIdleAnimationState, DuckAnimations.DUCK_WATER_IDLE, ageInTicks);
-                // DUCK_WATER_IDLE has no leg keyframes either, paddle slowly so the feet dont freeze
                 applyPaddle(ageInTicks, 0.4F);
             }
             return;
         }
 
-        // flap any time its in the air, using the synced onGround flag since client deltaMovement
-        // drops to about 0 mid fall for entities that arent yours
         if (!entity.onGround()) {
             this.animate(entity.flapAnimationState, DuckAnimations.DUCK_FLY, ageInTicks);
             return;
@@ -89,8 +81,6 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
         }
     }
 
-    // alternating leg stroke at a fixed rate, matches the DUCK_SWIM arc at strength 1 so swapping
-    // between the water branches doesnt pop
     private void applyPaddle(float ageInTicks, float strength) {
         float phase = ageInTicks * PADDLE_PHASE_PER_TICK;
         float sweep = PADDLE_SWEEP * strength;

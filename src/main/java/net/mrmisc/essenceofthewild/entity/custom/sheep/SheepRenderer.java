@@ -18,7 +18,6 @@ public class SheepRenderer extends GeoEntityRenderer<SheepEntity> {
     public void preRender(PoseStack poseStack, SheepEntity animatable, software.bernie.geckolib.cache.object.BakedGeoModel model,
                           MultiBufferSource bufferSource, com.mojang.blaze3d.vertex.VertexConsumer buffer, boolean isReRender,
                           float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        // lambs have their own geo but the old renderer also scaled it down, keeping that so they dont change size
         if (animatable.isBaby()) {
             poseStack.scale(0.7F, 0.7F, 0.7F);
         }

@@ -1,6 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.rat;
-// blockbench export
-
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -14,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class RatModel extends HierarchicalModel<RatEntity> {
-	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "rat"), "main");
 	private final ModelPart body;
 	private final ModelPart back_left_leg;
@@ -78,7 +75,6 @@ public class RatModel extends HierarchicalModel<RatEntity> {
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
-
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {

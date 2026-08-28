@@ -59,7 +59,6 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
 
         EOTWBlocks.getRolledWool().forEach(this::makeRolledWool);
 
-
     }
 
     public void hangingSignBlock(Block signBlock, Block wallSignBlock, ResourceLocation texture) {
@@ -90,7 +89,6 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
         simpleBlock(signBlock, sign);
         simpleBlock(wallSignBlock, sign);
     }
-
 
     private String name(Block block) {
         return key(block).getPath();

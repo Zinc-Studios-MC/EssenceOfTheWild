@@ -1,6 +1,4 @@
 package net.mrmisc.essenceofthewild.block.entity.custom.sleeping_bag.client;
-// blockbench export
-
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -86,7 +84,6 @@ public class SleepingBagRenderer implements BlockEntityRenderer<SleepingBagBlock
 			this.renderPiece(pPoseStack, pBuffer, this.footRoot, Direction.SOUTH, pPackedLight, pPackedOverlay, pBlockEntity);
 		}
 	}
-
 
 	private void renderPiece(PoseStack poseStack, MultiBufferSource bufferSource, ModelPart modelPart,
 							 Direction direction, int packedLight, int packedOverlay, SleepingBagBlockEntity entity) {

@@ -4,8 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import software.bernie.geckolib.model.GeoModel;
 
-// adult and calf share this model, only the geo and animation files differ
-// both use the same animation.cow.* names so the same RawAnimations drive either
 public class CowGeoModel extends GeoModel<CowEntity> {
     private static final ResourceLocation ADULT_MODEL = path("geo/entity/cow.geo.json");
     private static final ResourceLocation BABY_MODEL = path("geo/entity/baby_cow.geo.json");

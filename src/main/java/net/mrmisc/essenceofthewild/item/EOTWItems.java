@@ -52,9 +52,6 @@ public class EOTWItems {
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);
-    // white like all the other eggs here, they use a custom sprite instead of the vanilla two layer
-    // template and the colour handler multiplies layer0 by the background, so anything but white just
-    // darkens the art
     public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.SPIDER, 0x342D27, 0xA80E0E);
     public static RegistryObject<Item> CAVE_SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.CAVE_SPIDER, 0x0C424E, 0xA80E0E);

@@ -1,6 +1,4 @@
 package net.mrmisc.essenceofthewild.entity.custom.pig;
-// blockbench export
-
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -13,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 
 public class BabyPigModel extends PigModel {
-	// bake this in the renderer and hand it to the constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID, "baby_pig"), "main");
 	private final ModelPart root;
 	private final ModelPart body;
@@ -73,7 +70,6 @@ public class BabyPigModel extends PigModel {
 
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
-
 
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
