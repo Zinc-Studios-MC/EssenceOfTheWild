@@ -13,6 +13,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -43,10 +44,12 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     private static final double NEST_VERTICAL_SETTLE_SPEED = 0.35D;
     private static final int GUARD_REPATH_MIN_TICKS = 45;
     private static final int GUARD_REPATH_RANDOM_TICKS = 55;
+    private static final int FLAP_AIR_TICKS = 2;
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState flapAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
+    private int airTicks;
 
     @Nullable
     private BlockPos nestTarget;
@@ -99,6 +102,15 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
         if (level().isClientSide()) {
             setupAnimationStates();
         }
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return false;
+    }
+
+    public boolean isAirborne() {
+        return airTicks > FLAP_AIR_TICKS;
     }
 
     @Override
@@ -410,7 +422,9 @@ public class ChickenEntity extends Chicken implements VariantCarrier {
     }
 
     private void setupAnimationStates() {
-        if (!onGround() && Math.abs(getDeltaMovement().y) > 0.02D) {
+        airTicks = onGround() || isInWater() || isPassenger() ? 0 : airTicks + 1;
+
+        if (isAirborne()) {
             flapAnimationState.startIfStopped(tickCount);
         } else {
             flapAnimationState.stop();

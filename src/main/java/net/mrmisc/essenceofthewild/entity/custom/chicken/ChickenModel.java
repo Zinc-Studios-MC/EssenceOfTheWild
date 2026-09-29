@@ -95,7 +95,7 @@ public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEnt
 			return;
 		}
 
-		if (isFlapping(pEntity)) {
+		if (pEntity.isAirborne()) {
 			this.animate(pEntity.flapAnimationState, ChickenAnimations.chicken_flap, pAgeInTicks);
 			return;
 		}
@@ -116,10 +116,6 @@ public class ChickenModel<T extends Entity> extends HierarchicalModel<ChickenEnt
 				this.animateWalk(ChickenAnimations.chicken_walk, pLimbSwing, pLimbSwingAmount, 1.8F, 1.4F);
 			}
 		}
-	}
-
-	private boolean isFlapping(ChickenEntity entity) {
-		return !entity.onGround() && Math.abs(entity.getDeltaMovement().y) > 0.02D;
 	}
 
 	private void applyNestSittingPose() {

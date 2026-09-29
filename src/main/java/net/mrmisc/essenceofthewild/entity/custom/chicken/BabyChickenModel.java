@@ -68,7 +68,7 @@ public class BabyChickenModel extends HierarchicalModel<ChickenEntity> {
 		this.head.yRot = pNetHeadYaw * DEG_TO_RAD;
 		this.head.xRot += pHeadPitch * DEG_TO_RAD;
 
-		if (isFlapping(pEntity)) {
+		if (pEntity.isAirborne()) {
 			this.animate(pEntity.flapAnimationState, BabyChickenAnimations.chicken_flap, pAgeInTicks);
 			return;
 		}
@@ -84,9 +84,5 @@ public class BabyChickenModel extends HierarchicalModel<ChickenEntity> {
 				this.animateWalk(BabyChickenAnimations.chicken_walk, pLimbSwing, pLimbSwingAmount, 1.8F, 1.4F);
 			}
 		}
-	}
-
-	private boolean isFlapping(ChickenEntity entity) {
-		return !entity.onGround() && Math.abs(entity.getDeltaMovement().y) > 0.02D;
 	}
 }

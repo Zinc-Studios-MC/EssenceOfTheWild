@@ -55,8 +55,9 @@ public class EssenceOfTheWildMod
 {
     public static final String MOD_ID = "essenceofthewild";
 
-    public EssenceOfTheWildMod(FMLJavaModLoadingContext context)
+    public EssenceOfTheWildMod()
     {
+        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
         IEventBus modEventBus = context.getModEventBus();
         context.registerConfig(ModConfig.Type.COMMON, EOTWConfig.COMMON_SPEC);
         EOTWUtils.modInit(modEventBus);

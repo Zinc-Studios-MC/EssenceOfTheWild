@@ -2,11 +2,12 @@
   "format_version": "1.21.11",
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
-  "render_type": "cutout",
+  "render_type": "translucent",
   "texture_size": [64, 64],
 
   "textures": {
-		"1": "essenceofthewild:block/wooden_freezer_no_cone_empty"
+		"1": "essenceofthewild:block/wooden_freezer_no_cone_empty",
+		"particle": "essenceofthewild:block/wooden_freezer_no_cone_empty"
 	},
 
 	"elements": [

@@ -71,6 +71,11 @@ public class RabbitEntity extends Rabbit implements GeoEntity, VariantCarrier {
     }
 
     @Override
+    protected float getJumpPower() {
+        return 0.5F + this.getJumpBoostPower();
+    }
+
+    @Override
     public void startJumping() {
         if (shouldJumpObstacle()) {
             super.startJumping();
@@ -95,7 +100,8 @@ public class RabbitEntity extends Rabbit implements GeoEntity, VariantCarrier {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController));
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementController)
+                .setAnimationSpeed(0.85));
     }
 
     private PlayState movementController(AnimationState<RabbitEntity> state) {

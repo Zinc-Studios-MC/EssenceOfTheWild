@@ -1,6 +1,7 @@
 {
     "parent" : "essenceofthewild:block/wooden_freezer",
     "textures" : {
-        "1" : "essenceofthewild:block/wooden_freezer_two_icecream_two"
+        "1" : "essenceofthewild:block/wooden_freezer_two_icecream_two",
+        "particle" : "essenceofthewild:block/wooden_freezer_two_icecream_two"
     }
 }
