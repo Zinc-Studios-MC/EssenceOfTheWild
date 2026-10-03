@@ -36,7 +36,10 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
@@ -51,6 +54,7 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
@@ -118,6 +122,25 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(0, new AvoidEntityGoal<>(this, Cat.class, 12.0F, 1.5D, 1.8D) {
+            private final TargetingConditions cats = TargetingConditions.forNonCombat().range(12.0D);
+
+            @Override
+            public boolean canUse() {
+                this.toAvoid = this.mob.level().getNearestEntity(
+                        this.mob.level().getEntitiesOfClass(Cat.class, this.mob.getBoundingBox().inflate(12.0D, 3.0D, 12.0D)),
+                        cats, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
+                if (this.toAvoid == null) {
+                    return false;
+                }
+                var pos = DefaultRandomPos.getPosAway(this.mob, 16, 7, this.toAvoid.position());
+                if (pos == null || this.toAvoid.distanceToSqr(pos) < this.toAvoid.distanceToSqr(this.mob)) {
+                    return false;
+                }
+                this.path = this.pathNav.createPath(pos.x, pos.y, pos.z, 0);
+                return this.path != null;
+            }
+        });
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
@@ -201,7 +224,8 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         super.customServerAiStep();
         boolean fighting = this.getTarget() != null || this.isAngry();
         this.entityData.set(ANGRY, fighting);
-        this.entityData.set(RUNNING, this.getTarget() != null);
+        this.entityData.set(RUNNING, this.getTarget() != null
+                || (!this.navigation.isDone() && this.getMoveControl().getSpeedModifier() >= 1.5D));
         this.updatePersistentAnger((ServerLevel) this.level(), true);
     }
 
@@ -254,7 +278,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     @Override
     public boolean canAttack(LivingEntity pTarget) {
-        if (this.isTame() && isTamedMob(pTarget)) {
+        if (pTarget instanceof Cat || (this.isTame() && isTamedMob(pTarget))) {
             return false;
         }
         return super.canAttack(pTarget);
@@ -262,10 +286,15 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     @Override
     public boolean wantsToAttack(LivingEntity pTarget, LivingEntity pOwner) {
-        if (isTamedMob(pTarget)) {
+        if (pTarget instanceof Cat || isTamedMob(pTarget)) {
             return false;
         }
         return super.wantsToAttack(pTarget, pOwner);
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target instanceof Cat ? null : target);
     }
 
     private static boolean isTamedMob(LivingEntity target) {
