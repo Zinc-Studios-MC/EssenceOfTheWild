@@ -24,7 +24,7 @@ public class RabiesEffect extends MobEffect {
 
     @Override
     public List<ItemStack> getCurativeItems() {
-        return List.of(new ItemStack(EOTWItems.VANILLA_ICECREAM.get()));
+        return List.of(new ItemStack(EOTWItems.ICE_CUBES.get()));
     }
 
     @Override

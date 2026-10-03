@@ -13,7 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
+import net.mrmisc.essenceofthewild.sound.EOTWSounds;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.TimeUtil;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -94,9 +94,11 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     @Nullable
     private BlockPos composterPos;
+    private String composterDimension;
 
     public final SimpleContainer harvestInventory = new SimpleContainer(HARVEST_INVENTORY_SIZE);
 
+    public final AnimationState sitAnimationState = new AnimationState();
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
@@ -120,10 +122,44 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.goalSelector.addGoal(2, new LeapAtTargetGoal(this, 0.4F));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true));
         this.goalSelector.addGoal(3, new RatHarvestGoal(this));
-        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+        this.goalSelector.addGoal(4, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false) {
+            @Override
+            public boolean canUse() {
+                return !hasComposter() && super.canUse();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return !hasComposter() && super.canContinueToUse();
+            }
+
+            @Override
+            public void tick() {
+                if (!hasComposter()) {
+                    super.tick();
+                }
+            }
+        });
         this.goalSelector.addGoal(5, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(6, new TemptGoal(this, 1.1D,
-                Ingredient.of(EOTWItems.RED_ONION.get(), EOTWItems.SHEEP_CHEESE_WEDGE.get()), false));
+                Ingredient.of(EOTWItems.RED_ONION.get(), EOTWItems.SHEEP_CHEESE_WEDGE.get()), false) {
+            @Override
+            public boolean canUse() {
+                return !hasComposter() && super.canUse();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return !hasComposter() && super.canContinueToUse();
+            }
+
+            @Override
+            public void tick() {
+                if (!hasComposter()) {
+                    super.tick();
+                }
+            }
+        });
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 6.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -145,6 +181,15 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     @Override
     public void tick() {
+        if (!this.level().isClientSide && this.composterPos != null
+                && (!this.level().dimension().location().toString().equals(this.composterDimension)
+                || (this.level().hasChunkAt(this.composterPos)
+                && !this.level().getBlockState(this.composterPos).is(net.minecraft.world.level.block.Blocks.COMPOSTER)))) {
+            this.composterPos = null;
+            this.composterDimension = null;
+            this.clearRestriction();
+            this.navigation.stop();
+        }
         super.tick();
         if (this.level().isClientSide()) {
             setupAnimationStates();
@@ -161,6 +206,13 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     }
 
     private void setupAnimationStates() {
+        if (isTame() && isInSittingPose()) {
+            sitAnimationState.startIfStopped(tickCount);
+            idleAnimationState.stop();
+            idleAnimationTimeout = 0;
+            return;
+        }
+        sitAnimationState.stop();
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = this.random.nextInt(40) + 80;
             this.idleAnimationState.start(this.tickCount);
@@ -324,6 +376,10 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
     public void assignComposter(BlockPos pos) {
         this.composterPos = pos.immutable();
+        this.composterDimension = this.level().dimension().location().toString();
+        this.restrictTo(this.composterPos, 8);
+        this.setOrderedToSit(false);
+        this.navigation.stop();
         this.setPersistenceRequired();
     }
 
@@ -420,6 +476,7 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         pCompound.putInt("TameProgress", this.tameProgress);
         if (this.composterPos != null) {
             pCompound.putLong("ComposterPos", this.composterPos.asLong());
+            pCompound.putString("ComposterDimension", this.composterDimension);
         }
         pCompound.put("HarvestItems", this.harvestInventory.createTag());
         this.addPersistentAngerSaveData(pCompound);
@@ -438,6 +495,13 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.tameProgress = pCompound.getInt("TameProgress");
         this.composterPos = pCompound.contains("ComposterPos")
                 ? BlockPos.of(pCompound.getLong("ComposterPos")) : null;
+        this.composterDimension = pCompound.contains("ComposterDimension", Tag.TAG_STRING)
+                ? pCompound.getString("ComposterDimension") : this.level().dimension().location().toString();
+        if (this.composterPos != null) {
+            this.restrictTo(this.composterPos, 8);
+        } else {
+            this.clearRestriction();
+        }
         if (pCompound.contains("HarvestItems", Tag.TAG_LIST)) {
             this.harvestInventory.fromTag(pCompound.getList("HarvestItems", Tag.TAG_COMPOUND));
         }
@@ -464,12 +528,17 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
     }
 
     @Override
+    protected net.minecraft.sounds.SoundEvent getAmbientSound() {
+        return EOTWSounds.RAT_AMBIENT.get();
+    }
+
+    @Override
     public net.minecraft.sounds.SoundEvent getHurtSound(net.minecraft.world.damagesource.DamageSource pDamageSource) {
-        return SoundEvents.RABBIT_HURT;
+        return EOTWSounds.RAT_HURT.get();
     }
 
     @Override
     public net.minecraft.sounds.SoundEvent getDeathSound() {
-        return SoundEvents.RABBIT_DEATH;
+        return EOTWSounds.RAT_DEATH.get();
     }
 }

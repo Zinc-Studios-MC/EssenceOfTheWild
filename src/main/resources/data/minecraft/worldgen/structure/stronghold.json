@@ -2,7 +2,7 @@
   "type": "minecraft:stronghold",
   "biomes": "#minecraft:has_structure/stronghold",
   "spawn_overrides": {
-    "monster": {
+    "creature": {
       "bounding_box": "piece",
       "spawns": [
         {

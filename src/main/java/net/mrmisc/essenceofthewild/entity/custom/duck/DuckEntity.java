@@ -12,6 +12,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundEvent;
+import net.mrmisc.essenceofthewild.sound.EOTWSounds;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
@@ -71,6 +73,10 @@ public class DuckEntity extends Chicken implements VariantCarrier {
             SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CENTERING_ON_NEST =
             SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> FLYING =
+            SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PANICKING =
+            SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DIVING =
             SynchedEntityData.defineId(DuckEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -112,7 +118,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.4D));
+        this.goalSelector.addGoal(1, new DuckPanicGoal(this));
         this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new TemptGoal(this, 1.1D, Ingredient.of(Items.COD), false));
         this.goalSelector.addGoal(4, new DuckImprintFollowGoal(this, 1.1D));
@@ -128,6 +134,21 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     }
 
     @Override
+    protected SoundEvent getAmbientSound() {
+        return EOTWSounds.DUCK_AMBIENT.get();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return EOTWSounds.DUCK_HURT.get();
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return EOTWSounds.DUCK_DEATH.get();
+    }
+
+    @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
         return false;
     }
@@ -139,6 +160,8 @@ public class DuckEntity extends Chicken implements VariantCarrier {
         this.entityData.define(SITTING_ON_NEST, false);
         this.entityData.define(CENTERING_ON_NEST, false);
         this.entityData.define(DIVING, false);
+        this.entityData.define(FLYING, false);
+        this.entityData.define(PANICKING, false);
     }
 
     @Override
@@ -200,15 +223,17 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     @Override
     public void aiStep() {
         if (!level().isClientSide) {
-            tickNestDelivery();
-            tickNestGuarding();
-            tickFishHunting();
+            if (!isPanicking()) {
+                tickNestDelivery();
+                tickNestGuarding();
+            }
             tickImprinting();
         }
 
         super.aiStep();
 
         if (!level().isClientSide
+                && !isPanicking()
                 && nestTarget != null
                 && horizontalDistanceToNestSqr(nestTarget) <= NEST_CAPTURE_DISTANCE_SQR) {
             getNavigation().stop();
@@ -222,6 +247,55 @@ public class DuckEntity extends Chicken implements VariantCarrier {
 
     private static final double FLOAT_SUBMERGE = 0.5D;
     private static final double EYE_FLOAT_CLEARANCE = 0.05D;
+
+    public boolean isFlying() {
+        return entityData.get(FLYING);
+    }
+
+    public void setFlying(boolean flying) {
+        entityData.set(FLYING, flying);
+    }
+
+    @Override
+    protected float tickHeadTurn(float yaw, float step) {
+        if (!isFlying()) {
+            return super.tickHeadTurn(yaw, step);
+        }
+        double dx = getX() - xo;
+        double dz = getZ() - zo;
+        float heading = dx * dx + dz * dz > 1.0E-7D
+                ? (float) (Mth.atan2(dz, dx) * Mth.RAD_TO_DEG) - 90.0F : getYRot();
+        setYRot(heading);
+        yBodyRot = heading;
+        yHeadRot = heading;
+        yRotO = heading;
+        yBodyRotO = heading;
+        yHeadRotO = heading;
+        return step;
+    }
+
+    public boolean isPanicking() {
+        return entityData.get(PANICKING);
+    }
+
+    public void setPanicking(boolean panicking) {
+        entityData.set(PANICKING, panicking);
+        if (panicking) {
+            setSittingOnNestDelivery(false);
+            setCenteringOnNestDelivery(false);
+        }
+    }
+
+    @Override
+    public void travel(Vec3 input) {
+        if (isFlying()) {
+            move(MoverType.SELF, getDeltaMovement());
+            calculateEntityAnimation(false);
+            fallDistance = 0.0F;
+            return;
+        }
+        super.travel(input);
+    }
 
     private void tickSteadyFloat() {
         if (!isInWater() || isDivingAnimationActive() || nestTarget != null || fishTargetId >= 0) {
@@ -695,7 +769,7 @@ public class DuckEntity extends Chicken implements VariantCarrier {
     }
 
     private void setupAnimationStates() {
-        if (!onGround() && !isInWaterOrBubble()) {
+        if ((isFlying() || !onGround()) && !isInWaterOrBubble()) {
             flapAnimationState.startIfStopped(tickCount);
         } else {
             flapAnimationState.stop();

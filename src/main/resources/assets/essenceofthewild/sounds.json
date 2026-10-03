@@ -1,0 +1,50 @@
+{
+  "entity.rat.ambient": {
+    "subtitle": "subtitles.essenceofthewild.rat.ambient",
+    "sounds": [
+      "essenceofthewild:entity/rat/idle",
+      "essenceofthewild:entity/rat/idle2",
+      "essenceofthewild:entity/rat/idle3",
+      "essenceofthewild:entity/rat/idle4"
+    ]
+  },
+  "entity.rat.hurt": {
+    "subtitle": "subtitles.essenceofthewild.rat.hurt",
+    "sounds": [
+      "essenceofthewild:entity/rat/angry"
+    ]
+  },
+  "entity.rat.death": {
+    "subtitle": "subtitles.essenceofthewild.rat.death",
+    "sounds": [
+      "essenceofthewild:entity/rat/idle2"
+    ]
+  },
+  "entity.duck.ambient": {
+    "subtitle": "subtitles.essenceofthewild.duck.ambient",
+    "sounds": [
+      "essenceofthewild:entity/duck/idle",
+      "essenceofthewild:entity/duck/idle2",
+      "essenceofthewild:entity/duck/peaceful",
+      "essenceofthewild:entity/duck/quack2",
+      "essenceofthewild:entity/duck/quack3",
+      "essenceofthewild:entity/duck/quack4"
+    ]
+  },
+  "entity.duck.hurt": {
+    "subtitle": "subtitles.essenceofthewild.duck.hurt",
+    "sounds": [
+      "essenceofthewild:entity/duck/angry",
+      "essenceofthewild:entity/duck/angry2"
+    ]
+  },
+  "entity.duck.death": {
+    "subtitle": "subtitles.essenceofthewild.duck.death",
+    "sounds": [
+      {
+        "name": "essenceofthewild:entity/duck/quack2",
+        "pitch": 0.85
+      }
+    ]
+  }
+}

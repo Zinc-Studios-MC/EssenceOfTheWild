@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.block.entity;
 
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,7 +30,7 @@ public class EOTWBlockEntities {
             () -> new BlockEntityType<>(SleepingBagBlockEntity::new,
                     EOTWBlocks.getSleepingBags().stream().map(RegistryObject::get).collect(Collectors.toSet()),null));
 
-    public static RegistryObject<BlockEntityType<BurrowBlockEntity>> BURROW_BLOCK_ENTITY = BLOCK_ENTITY.register("burrow_block_entity",
+    public static RegistryObject<BlockEntityType<BurrowBlockEntity>> BURROW_BLOCK_ENTITY = FerretContent.BLOCK_ENTITIES.register("burrow_block_entity",
             ()-> new BlockEntityType<>(BurrowBlockEntity::new, Set.of(EOTWBlocks.DIRT_BURROW_BLOCK.get(), EOTWBlocks.SAND_BURROW_BLOCK.get(), EOTWBlocks.MUD_BURROW_BLOCK.get()), null));
 
     public static final RegistryObject<BlockEntityType<EOTWSignBlockEntity>> MANGO_SIGN =

@@ -35,7 +35,6 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
         blockItem(EOTWBlocks.MANGO_SLAB);
         blockItem(EOTWBlocks.MANGO_FENCE_GATE);
         blockItem(EOTWBlocks.MANGO_PRESURE_PLATE);
-        blockItem(EOTWBlocks.MANGO_BUTTON);
 
         blockWithItem(EOTWBlocks.MANGO_PLANKS);
 
@@ -47,6 +46,8 @@ public class EOTWBlockModelProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType((TrapDoorBlock) EOTWBlocks.MANGO_TRAPDOOR.get(), EOTWUtils.getLoc("block/mango_trapdoor"), true, "cutout");
         slabBlock((SlabBlock) EOTWBlocks.MANGO_SLAB.get(), blockTexture(EOTWBlocks.MANGO_PLANKS.get()), blockTexture(EOTWBlocks.MANGO_PLANKS.get()));
         buttonBlock((ButtonBlock) EOTWBlocks.MANGO_BUTTON.get(), blockTexture(EOTWBlocks.MANGO_PLANKS.get()));
+        simpleBlockItem(EOTWBlocks.MANGO_BUTTON.get(),
+                models().buttonInventory("mango_button_inventory", blockTexture(EOTWBlocks.MANGO_PLANKS.get())));
         fenceBlockWithRenderType((FenceBlock) EOTWBlocks.MANGO_FENCE.get(), blockTexture(EOTWBlocks.MANGO_PLANKS.get()), "cutout");
         fenceGateBlockWithRenderType((FenceGateBlock) EOTWBlocks.MANGO_FENCE_GATE.get(), blockTexture(EOTWBlocks.MANGO_PLANKS.get()), "cutout");
         pressurePlateBlock((PressurePlateBlock) EOTWBlocks.MANGO_PRESURE_PLATE.get(), blockTexture(EOTWBlocks.MANGO_PLANKS.get()));

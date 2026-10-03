@@ -91,6 +91,11 @@ public class RatModel extends HierarchicalModel<RatEntity> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 		this.applyHeadRotation(netHeadYaw, headPitch);
 
+        if (entity.isTame() && entity.isInSittingPose()) {
+            this.animate(entity.sitAnimationState, entity.isBaby() ? RatAnimations.babySit : RatAnimations.sit, ageInTicks);
+            return;
+        }
+
 		this.animateWalk(entity.isRunning() ? RatAnimations.run : RatAnimations.walk, limbSwing, limbSwingAmount, 2f, 2.5f);
 		this.animate(entity.idleAnimationState, RatAnimations.idle, ageInTicks, 1f);
 	}

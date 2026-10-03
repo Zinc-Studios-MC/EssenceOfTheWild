@@ -42,11 +42,13 @@ public class RatHarvestGoal extends Goal {
     @Override
     public boolean canUse() {
         if (!this.rat.isTame() || this.rat.isBaby() || this.rat.isOrderedToSit()
+                || this.rat.isLeashed() || this.rat.isPassenger()
                 || this.rat.getTarget() != null || !this.rat.hasComposter()) {
             return false;
         }
         BlockPos composter = this.rat.getComposterPos();
-        if (composter == null || !this.rat.level().getBlockState(composter).is(net.minecraft.world.level.block.Blocks.COMPOSTER)) {
+        if (composter == null || !this.rat.level().hasChunkAt(composter)
+                || !this.rat.level().getBlockState(composter).is(net.minecraft.world.level.block.Blocks.COMPOSTER)) {
             return false;
         }
         return hasWork() || isFarFromComposter();
@@ -184,6 +186,9 @@ public class RatHarvestGoal extends Goal {
         for (BlockPos pos : BlockPos.betweenClosed(
                 c.offset(-SEARCH_RADIUS, -SEARCH_HEIGHT, -SEARCH_RADIUS),
                 c.offset(SEARCH_RADIUS, SEARCH_HEIGHT, SEARCH_RADIUS))) {
+            if (!level.hasChunkAt(pos)) {
+                continue;
+            }
             BlockState state = level.getBlockState(pos);
             if (state.getBlock() instanceof CropBlock crop && crop.isMaxAge(state)) {
                 double d = this.rat.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
@@ -229,6 +234,9 @@ public class RatHarvestGoal extends Goal {
         for (BlockPos pos : BlockPos.betweenClosed(
                 c.offset(-SEARCH_RADIUS, -SEARCH_HEIGHT, -SEARCH_RADIUS),
                 c.offset(SEARCH_RADIUS, SEARCH_HEIGHT, SEARCH_RADIUS))) {
+            if (!level.hasChunkAt(pos)) {
+                continue;
+            }
             if (level.getBlockEntity(pos) instanceof Container) {
                 double d = this.rat.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 if (d < bestDist) {

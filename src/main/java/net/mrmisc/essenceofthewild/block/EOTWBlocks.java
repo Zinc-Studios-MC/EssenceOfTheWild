@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.block;
 
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -182,11 +183,11 @@ public class EOTWBlocks {
     public static RegistryObject<Block> YELLOW_ROLLED_WOOL = registerBlock("yellow_rolled_wool",
             ()-> new Block(BlockBehaviour.Properties.copy(Blocks.YELLOW_WOOL  )));
     
-    public static RegistryObject<Block> DIRT_BURROW_BLOCK = registerBlock("dirt_burrow_block",
+    public static RegistryObject<Block> DIRT_BURROW_BLOCK = FerretContent.registerBlock("dirt_burrow_block",
             ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.DIRT).noOcclusion()));
-    public static RegistryObject<Block> SAND_BURROW_BLOCK = registerBlock("sand_burrow_block",
+    public static RegistryObject<Block> SAND_BURROW_BLOCK = FerretContent.registerBlock("sand_burrow_block",
             ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.SAND).noOcclusion()));
-    public static RegistryObject<Block> MUD_BURROW_BLOCK = registerBlock("mud_burrow_block",
+    public static RegistryObject<Block> MUD_BURROW_BLOCK = FerretContent.registerBlock("mud_burrow_block",
             ()-> new BurrowBlock(BlockBehaviour.Properties.copy(Blocks.MUD).noOcclusion()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {

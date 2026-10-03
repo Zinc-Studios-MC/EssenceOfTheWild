@@ -43,11 +43,15 @@ public class SleepingBagBlock extends BedBlock {
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        if(!level.isClientSide()){
-            ServerPlayer serverPlayer = (ServerPlayer) player;
+        if(!level.isClientSide() && player instanceof ServerPlayer serverPlayer){
             serverPlayer.getCapability(SleepingBagSpawnProvider.SLEEPING_BAG_SPAWN).ifPresent(sleepingBagSpawn -> {
-                if(sleepingBagSpawn.getSbPos().equals(pos) || sleepingBagSpawn.getSbPos().equals(pos.relative(getConnectedDirection(state)))){
-                    serverPlayer.setRespawnPosition(level.dimension(), sleepingBagSpawn.getOriginalPos(), 0f, false, false);
+                BlockPos savedPos = sleepingBagSpawn.getSbPos();
+                if(pos.equals(savedPos) || pos.relative(getConnectedDirection(state)).equals(savedPos)){
+                    if (savedPos.equals(serverPlayer.getRespawnPosition())
+                            && level.dimension().equals(serverPlayer.getRespawnDimension())) {
+                        serverPlayer.setRespawnPosition(level.dimension(), sleepingBagSpawn.getOriginalPos(), 0f, false, false);
+                    }
+                    sleepingBagSpawn.setSbPos(null);
                 }
             });
         }

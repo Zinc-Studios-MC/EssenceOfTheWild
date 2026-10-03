@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "essenceofthewild:sheep_cheese"
+    }
+  ],
+  "result": {
+    "count": 5,
+    "item": "essenceofthewild:sheep_cheese_wedge"
+  }
+}

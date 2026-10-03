@@ -4,6 +4,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.BeetrootBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.mrmisc.essenceofthewild.item.EOTWItems;
 
 public class RedOnionCropBlock extends BeetrootBlock {
     public RedOnionCropBlock(Properties pProperties) {
@@ -17,6 +18,6 @@ public class RedOnionCropBlock extends BeetrootBlock {
 
     @Override
     protected ItemLike getBaseSeedId() {
-        return super.getBaseSeedId();
+        return EOTWItems.RED_ONION.get();
     }
 }

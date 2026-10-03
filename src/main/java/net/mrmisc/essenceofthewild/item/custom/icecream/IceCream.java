@@ -6,7 +6,7 @@ import net.minecraft.world.item.Item;
 public class IceCream extends Item {
     public IceCream() {
         super(new Properties().stacksTo(8).food(new FoodProperties.Builder()
-                .nutrition(1)
+                .nutrition(4)
                 .saturationMod(0.2f)
                 .fast()
                 .build()));

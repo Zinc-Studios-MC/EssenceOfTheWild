@@ -39,8 +39,10 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
     public void setupAnim(DuckEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
 
-        this.head.yRot = netHeadYaw * DEG_TO_RAD;
-        this.head.xRot += headPitch * DEG_TO_RAD;
+        if (!entity.isFlying()) {
+            this.head.yRot = netHeadYaw * DEG_TO_RAD;
+            this.head.xRot += headPitch * DEG_TO_RAD;
+        }
 
         if (entity.isSittingOnNestDelivery()) {
             this.animate(entity.idleAnimationState, DuckAnimations.DUCK_IDLE, ageInTicks);
@@ -64,7 +66,7 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
             return;
         }
 
-        if (!entity.onGround()) {
+        if (entity.isFlying() || !entity.onGround()) {
             this.animate(entity.flapAnimationState, DuckAnimations.DUCK_FLY, ageInTicks);
             return;
         }
@@ -77,7 +79,8 @@ public abstract class AbstractDuckModel extends HierarchicalModel<DuckEntity> {
         if (limbSwingAmount < 0.01F) {
             this.animate(entity.idleAnimationState, DuckAnimations.DUCK_IDLE, ageInTicks);
         } else {
-            this.animateWalk(DuckAnimations.DUCK_WALK, limbSwing, limbSwingAmount, 1.8F, 1.25F);
+            this.animateWalk(DuckAnimations.DUCK_WALK, limbSwing, limbSwingAmount,
+                    entity.isPanicking() ? 2.8F : 1.8F, 1.25F);
         }
     }
 

@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.entity;
 
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;
@@ -42,7 +43,7 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(RabbitEntity::new, MobCategory.CREATURE).sized(0.6f, 0.6f).build("rabbit"));
     public static RegistryObject<EntityType<HareEntity>> HARE = ENTITIES.register("hare",
             ()-> EntityType.Builder.of(HareEntity::new, MobCategory.CREATURE).sized(0.6f, 0.6f).build("hare"));
-    public static RegistryObject<EntityType<FerretEntity>> FERRET = ENTITIES.register("ferret",
+    public static RegistryObject<EntityType<FerretEntity>> FERRET = FerretContent.ENTITIES.register("ferret",
             ()-> EntityType.Builder.of(FerretEntity::new, MobCategory.CREATURE).sized(0.8f, 0.8f).build("ferret"));
     public static RegistryObject<EntityType<RatEntity>> RAT = ENTITIES.register("rat",
             ()-> EntityType.Builder.of(RatEntity::new, MobCategory.CREATURE).sized(0.6f, 0.5f).build("rat"));

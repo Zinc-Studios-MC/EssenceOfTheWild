@@ -29,7 +29,9 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.DUCK_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.RABBIT_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.HARE_SPAWN_EGG.get());
-                pOutput.accept(EOTWItems.FERRET_SPAWN_EGG.get());
+                if (EOTWItems.FERRET_SPAWN_EGG.isPresent()) {
+                    pOutput.accept(EOTWItems.FERRET_SPAWN_EGG.get());
+                }
                 pOutput.accept(EOTWItems.RAT_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.SPIDER_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.CAVE_SPIDER_SPAWN_EGG.get());
@@ -63,9 +65,15 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.DUCK_FEATHER.get());
                 pOutput.accept(EOTWItems.VANILLA_FLOWER.get());
                 pOutput.accept(EOTWItems.VANILLA_STICK.get());
-                pOutput.accept(EOTWBlocks.DIRT_BURROW_BLOCK.get());
-                pOutput.accept(EOTWBlocks.SAND_BURROW_BLOCK.get());
-                pOutput.accept(EOTWBlocks.MUD_BURROW_BLOCK.get());
+                if (EOTWBlocks.DIRT_BURROW_BLOCK.isPresent()) {
+                    pOutput.accept(EOTWBlocks.DIRT_BURROW_BLOCK.get());
+                }
+                if (EOTWBlocks.SAND_BURROW_BLOCK.isPresent()) {
+                    pOutput.accept(EOTWBlocks.SAND_BURROW_BLOCK.get());
+                }
+                if (EOTWBlocks.MUD_BURROW_BLOCK.isPresent()) {
+                    pOutput.accept(EOTWBlocks.MUD_BURROW_BLOCK.get());
+                }
             });
             
     public static RegistryObject<CreativeModeTab> MANMADE_TAB =

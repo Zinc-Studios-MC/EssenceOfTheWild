@@ -1,7 +1,7 @@
 {
   "type": "essenceofthewild:wooden_freezer",
   "ingredient": {
-    "item": "minecraft:sweet_berries"
+    "item": "essenceofthewild:strawberry"
   },
   "result": {
     "item": "essenceofthewild:strawberry_icecream"

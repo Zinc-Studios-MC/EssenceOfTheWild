@@ -32,8 +32,9 @@ public class EffectIceCream extends IceCream {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        pLivingEntity.addEffect(new MobEffectInstance(mobEffect, 400, 1, true, true, true));
-        pStack.shrink(1);
-        return pStack;
+        if (!pLevel.isClientSide) {
+            pLivingEntity.addEffect(new MobEffectInstance(mobEffect, 400, 1, true, true, true));
+        }
+        return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 }

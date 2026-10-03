@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "I I",
+    "L L",
+    "III"
+  ],
+  "key": {
+    "L": {
+      "tag": "forge:stripped_logs"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "essenceofthewild:cheese_maker",
+    "count": 1
+  }
+}

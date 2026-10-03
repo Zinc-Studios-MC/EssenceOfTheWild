@@ -64,6 +64,7 @@
   "block.essenceofthewild.mango_log" : "Mango Log",
   "block.essenceofthewild.mango_wood" : "Mango Wood",
   "block.essenceofthewild.stripped_mango_wood" : "Stripped Mango Wood",
+  "block.essenceofthewild.stripped_mango_log" : "Stripped Mango Log",
   "block.essenceofthewild.mango_planks" : "Mango Planks",
   "block.essenceofthewild.mango_slab" : "Mango Slabs",
   "block.essenceofthewild.mango_stairs" : "Mango Stairs",
@@ -150,5 +151,11 @@
   "death.attack.essenceofthewild.rabies_final": "%1$s pet death a bit too much",
 
   "effect.essenceofthewild.rabies" : "Rabies",
-  "effect.essenceofthewild.webbed" : "Webbed"
+  "effect.essenceofthewild.webbed" : "Webbed",
+  "subtitles.essenceofthewild.duck.ambient": "Duck quacks",
+  "subtitles.essenceofthewild.duck.hurt": "Duck hurts",
+  "subtitles.essenceofthewild.duck.death": "Duck dies",
+  "subtitles.essenceofthewild.rat.ambient": "Rat squeaks",
+  "subtitles.essenceofthewild.rat.hurt": "Rat hurts",
+  "subtitles.essenceofthewild.rat.death": "Rat dies"
 }

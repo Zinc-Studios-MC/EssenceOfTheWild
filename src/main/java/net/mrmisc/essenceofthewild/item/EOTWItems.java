@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.item;
 
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -14,6 +15,7 @@ import net.mrmisc.essenceofthewild.EssenceOfTheWildMod;
 import net.mrmisc.essenceofthewild.block.EOTWBlocks;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.item.custom.DuckEggItem;
+import net.mrmisc.essenceofthewild.item.custom.IceCubesItem;
 import net.mrmisc.essenceofthewild.item.custom.icecream.EffectIceCream;
 import net.mrmisc.essenceofthewild.item.custom.icecream.IceCream;
 import net.mrmisc.essenceofthewild.item.custom.tools.IceAxe;
@@ -35,7 +37,7 @@ public class EOTWItems {
     public static RegistryObject<Item> CONE = ITEMS.register("cone", ()-> new Item(new Item.Properties().stacksTo(8)));
     public static RegistryObject<Item> SHEEP_CHEESE = ITEMS.register("sheep_cheese", ()-> new Item(new Item.Properties()));
     public static RegistryObject<Item> SHEEP_CHEESE_WEDGE = ITEMS.register("sheep_cheese_wedge", ()-> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationMod(0.2f).build())));
-    public static RegistryObject<Item> ICE_CUBES = ITEMS.register("ice_cubes", ()-> new Item(new Item.Properties()));
+    public static RegistryObject<Item> ICE_CUBES = ITEMS.register("ice_cubes", ()-> new IceCubesItem(new Item.Properties()));
     public static RegistryObject<Item> ICE_AXE = ITEMS.register("ice_axe", ()-> new IceAxe(new Item.Properties().durability(65)));
     public static RegistryObject<Item> SHEEP_MILK_BUCKET = ITEMS.register("sheep_milk_bucket", ()-> new MilkBucketItem(new Item.Properties().stacksTo(1)));
     public static RegistryObject<Item> UNDERWATER_ARROW = ITEMS.register("underwater_arrow", ()-> new UnderwaterArrowItem(new Item.Properties()));
@@ -51,7 +53,8 @@ public class EOTWItems {
     public static RegistryObject<Item> DUCK_SPAWN_EGG = createSpawnEgg(EOTWEntities.DUCK, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> RABBIT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RABBIT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> HARE_SPAWN_EGG = createSpawnEgg(EOTWEntities.HARE, 0xFFFFFF, 0xFFFFFF);
-    public static RegistryObject<Item> FERRET_SPAWN_EGG = createSpawnEgg(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> FERRET_SPAWN_EGG = FerretContent.ITEMS.register("ferret_spawn_egg",
+            () -> new ForgeSpawnEggItem(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
     public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.SPIDER, 0x342D27, 0xA80E0E);
     public static RegistryObject<Item> CAVE_SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.CAVE_SPIDER, 0x0C424E, 0xA80E0E);

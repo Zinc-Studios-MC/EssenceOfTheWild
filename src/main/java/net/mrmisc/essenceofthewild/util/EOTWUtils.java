@@ -15,6 +15,7 @@ import net.mrmisc.essenceofthewild.item.EOTWItems;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
 import net.mrmisc.essenceofthewild.recipe.EOTWRecipes;
 import net.mrmisc.essenceofthewild.tab.EOTWCreativeModeTabs;
+import net.mrmisc.essenceofthewild.sound.EOTWSounds;
 import net.mrmisc.essenceofthewild.worldgen.registry.EOTWTreeDecorators;
 import net.mrmisc.essenceofthewild.worldgen.registry.EOTWTrunkPlacers;
 
@@ -33,6 +34,7 @@ public class EOTWUtils {
         EOTWRecipes.RECIPE_TYPES.register(eventBus);
         EOTWRecipes.RECIPE_SERIALIZERS.register(eventBus);
         EOTWEffects.EFFECTS.register(eventBus);
+        EOTWSounds.SOUNDS.register(eventBus);
         EOTWCreativeModeTabs.TABS.register(eventBus);
         EOTWTreeDecorators.TREE_DECORATORS.register(eventBus);
         EOTWTrunkPlacers.TRUNK_PLACERS.register(eventBus);

@@ -1,7 +1,7 @@
 {
   "type": "essenceofthewild:wooden_freezer",
   "ingredient": {
-    "item": "minecraft:sugar"
+    "item": "minecraft:golden_carrot"
   },
   "result": {
     "item": "essenceofthewild:speed_icecream"

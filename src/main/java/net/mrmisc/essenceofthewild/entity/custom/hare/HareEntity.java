@@ -4,6 +4,11 @@ import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
 import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.ai.goal.BreedGoal;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -149,6 +154,27 @@ public class HareEntity extends Rabbit implements GeoEntity, VariantCarrier {
     @Override
     public void setVariantById(String id) {
         variant.setById(id);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.removeAllGoals(goal -> goal instanceof BreedGoal);
+    }
+
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean canMate(Animal partner) {
+        return false;
+    }
+
+    @Override
+    public Rabbit getBreedOffspring(ServerLevel level, AgeableMob partner) {
+        return null;
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:stick"
+    },
+    {
+      "item": "essenceofthewild:vanilla_flower"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "essenceofthewild:vanilla_stick"
+  }
+}

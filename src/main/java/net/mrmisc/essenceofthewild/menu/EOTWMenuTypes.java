@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.menu;
 
+import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -17,5 +18,5 @@ public class EOTWMenuTypes {
             MENU_TYPES.register("wooden_freezer", () -> IForgeMenuType.create(WoodenFreezerMenu::new));
 
     public static final RegistryObject<MenuType<FerretMenu>> FERRET =
-            MENU_TYPES.register("ferret", () -> IForgeMenuType.create(FerretMenu::new));
+            FerretContent.MENUS.register("ferret", () -> IForgeMenuType.create(FerretMenu::new));
 }

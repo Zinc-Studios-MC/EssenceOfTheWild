@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "W": {
+      "item": "essenceofthewild:white_rolled_wool"
+    }
+  },
+  "result": {
+    "item": "essenceofthewild:white_sleeping_bag",
+    "count": 1
+  }
+}

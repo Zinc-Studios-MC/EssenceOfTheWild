@@ -93,7 +93,9 @@ public class EssenceOfTheWildMod
             EntityRenderers.register(EOTWEntities.RABBIT.get(), RabbitRenderer::new);
             EntityRenderers.register(EOTWEntities.HARE.get(), HareRenderer::new);
             EntityRenderers.register(EOTWEntities.UNDERWATER_ARROW.get(), UnderwaterArrowRenderer::new);
-            EntityRenderers.register(EOTWEntities.FERRET.get(), FerretRenderer::new);
+            if (EOTWEntities.FERRET.isPresent()) {
+                EntityRenderers.register(EOTWEntities.FERRET.get(), FerretRenderer::new);
+            }
             EntityRenderers.register(EOTWEntities.RAT.get(), RatRenderer::new);
             EntityRenderers.register(EOTWEntities.THROWN_DUCK_EGG.get(), ThrownItemRenderer::new);
             EntityRenderers.register(EOTWEntities.SPIDER.get(), SpiderRenderer::new);
@@ -102,7 +104,9 @@ public class EssenceOfTheWildMod
             BlockEntityRenderers.register(EOTWBlockEntities.MANGO_SIGN.get(), SignRenderer::new);
             BlockEntityRenderers.register(EOTWBlockEntities.MANGO_HANGING_SIGN.get(), HangingSignRenderer::new);
             MenuScreens.register(EOTWMenuTypes.WOODEN_FREEZER.get(), WoodenFreezerScreen::new);
-            MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
+            if (EOTWMenuTypes.FERRET.isPresent()) {
+                MenuScreens.register(EOTWMenuTypes.FERRET.get(), FerretScreen::new);
+            }
             ItemBlockRenderTypes.setRenderLayer(EOTWBlocks.NEST.get(), RenderType.cutout());
             event.enqueueWork(EOTWItemProperties::register);
         }
@@ -121,7 +125,7 @@ public class EssenceOfTheWildMod
             if(!ratUuid.isEmpty()
                     && event.getLevel().getBlockState(event.getPos()).is(net.minecraft.world.level.block.Blocks.COMPOSTER)){
                 List<RatEntity> lre = event.getLevel().getEntitiesOfClass(RatEntity.class, p.getBoundingBox().inflate(200),
-                        (e) -> e.getStringUUID().equals(ratUuid));
+                        (e) -> e.getStringUUID().equals(ratUuid) && e.isOwnedBy(p));
                 if(!lre.isEmpty()){
                     lre.get(0).assignComposter(event.getPos());
                     EOTWEntityUtils.removeRatClicked(p);
@@ -131,7 +135,7 @@ public class EssenceOfTheWildMod
                 }
             }
 
-            if(!p.getPersistentData().contains("OwnsFerret")){
+            if(!EOTWEntities.FERRET.isPresent() || !p.getPersistentData().contains("OwnsFerret")){
                 return;
             }
             String uuid = EOTWEntityUtils.getPlayerClicked(p);

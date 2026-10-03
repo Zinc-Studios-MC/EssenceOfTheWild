@@ -4,6 +4,8 @@ import net.mrmisc.essenceofthewild.entity.util.VariantCarrier;
 import net.mrmisc.essenceofthewild.entity.util.LevelBiomeQuery;
 import net.mrmisc.essenceofthewild.entity.util.VariantSlot;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -146,6 +148,16 @@ public class RabbitEntity extends Rabbit implements GeoEntity, VariantCarrier {
     @Override
     public void setVariantById(String id) {
         variant.setById(id);
+    }
+
+    @Override
+    public RabbitEntity getBreedOffspring(ServerLevel level, AgeableMob partner) {
+        RabbitEntity child = EOTWEntities.RABBIT.get().create(level);
+        if (child != null) {
+            child.setVariant(partner instanceof RabbitEntity rabbit && random.nextBoolean()
+                    ? rabbit.getRabbitVariant() : getRabbitVariant());
+        }
+        return child;
     }
 
     private MobVariant pickVariant(Level level, BlockPos pos) {
