@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.event.mod;
 
+import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogEntity;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -23,6 +24,7 @@ public class EntityAttributesEvent {
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(EOTWEntities.SHEEP.get(), SheepEntity.createAttributes().build());
+        event.put(EOTWEntities.WARTHOG.get(), WarthogEntity.createAttributes().build());
         event.put(EOTWEntities.PIG.get(), PigEntity.createAttributes().build());
         event.put(EOTWEntities.COW.get(), CowEntity.createAttributes().build());
         event.put(EOTWEntities.MOOSHROOM.get(), MooshroomEntity.createAttributes().build());

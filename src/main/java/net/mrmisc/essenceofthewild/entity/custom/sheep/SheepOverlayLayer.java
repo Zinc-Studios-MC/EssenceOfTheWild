@@ -10,65 +10,33 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.GeoModel;
+import net.mrmisc.essenceofthewild.util.EOTWUtils;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 @OnlyIn(Dist.CLIENT)
-public abstract class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
+public class SheepOverlayLayer extends GeoRenderLayer<SheepEntity> {
 
-    private final GeoModel<SheepEntity> overlayModel;
-
-    protected SheepOverlayLayer(GeoRenderer<SheepEntity> renderer, GeoModel<SheepEntity> overlayModel) {
+    public SheepOverlayLayer(GeoRenderer<SheepEntity> renderer) {
         super(renderer);
-        this.overlayModel = overlayModel;
     }
-
-    protected abstract boolean appliesTo(SheepEntity sheep);
 
     @Override
     public void render(PoseStack poseStack, SheepEntity animatable, BakedGeoModel bakedModel, RenderType renderType,
                        MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
-        if (animatable.isBaby() || !appliesTo(animatable)) {
+        if (animatable.isBaby()) {
             return;
         }
 
-        BakedGeoModel shell = this.overlayModel.getBakedModel(this.overlayModel.getModelResource(animatable));
-        copyPose(bakedModel, shell);
-
-        ResourceLocation texture = this.overlayModel.getTextureResource(animatable);
+        ResourceLocation texture = EOTWUtils.getLoc("textures/entity/sheep/"
+                + (animatable.isSheared() ? "sheared_sheep.png" : "sheep_wool.png"));
         RenderType shellType = RenderType.entityCutoutNoCull(texture);
         float[] rgb = tint(animatable, partialTick);
 
-        getRenderer().reRender(shell, poseStack, bufferSource, animatable, shellType,
+        getRenderer().reRender(bakedModel, poseStack, bufferSource, animatable, shellType,
                 bufferSource.getBuffer(shellType), partialTick, packedLight, packedOverlay,
                 rgb[0], rgb[1], rgb[2], 1.0F);
-    }
-
-    private static void copyPose(BakedGeoModel from, BakedGeoModel to) {
-        for (GeoBone bone : from.topLevelBones()) {
-            copyBone(bone, to);
-        }
-    }
-
-    private static void copyBone(GeoBone source, BakedGeoModel target) {
-        target.getBone(source.getName()).ifPresent(dest -> {
-            dest.setRotX(source.getRotX());
-            dest.setRotY(source.getRotY());
-            dest.setRotZ(source.getRotZ());
-            dest.setPosX(source.getPosX());
-            dest.setPosY(source.getPosY());
-            dest.setPosZ(source.getPosZ());
-            dest.setScaleX(source.getScaleX());
-            dest.setScaleY(source.getScaleY());
-            dest.setScaleZ(source.getScaleZ());
-        });
-
-        for (GeoBone child : source.getChildBones()) {
-            copyBone(child, target);
-        }
     }
 
     private static float[] tint(SheepEntity sheep, float partialTick) {

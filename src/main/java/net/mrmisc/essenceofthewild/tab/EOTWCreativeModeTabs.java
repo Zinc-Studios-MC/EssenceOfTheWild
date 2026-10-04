@@ -23,6 +23,7 @@ public class EOTWCreativeModeTabs {
             createNewTabWithItemIcon("spawn_egg_tab", "Essence Of The Wild Spawn Eggs", ()-> EOTWItems.SHEEP_SPAWN_EGG.get(), (pParameters, pOutput) -> {
                 pOutput.accept(EOTWItems.SHEEP_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.PIG_SPAWN_EGG.get());
+                pOutput.accept(EOTWItems.WARTHOG_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.COW_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.MOOSHROOM_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.CHICKEN_SPAWN_EGG.get());
@@ -96,6 +97,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.ICE_CUBES.get());
                 pOutput.accept(EOTWItems.ICE_AXE.get());
                 pOutput.accept(EOTWItems.UNDERWATER_ARROW.get());
+                pOutput.accept(EOTWItems.WEB_CANNON.get());
                 EOTWBlocks.getRolledWool().forEach(wool -> pOutput.accept(wool.get()));
                 EOTWBlocks.getSleepingBags().forEach(sb -> pOutput.accept(sb.get()));
         });

@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#essenceofthewild:warthog_spawns",
+  "spawners": {
+    "type": "essenceofthewild:warthog",
+    "weight": 8,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}

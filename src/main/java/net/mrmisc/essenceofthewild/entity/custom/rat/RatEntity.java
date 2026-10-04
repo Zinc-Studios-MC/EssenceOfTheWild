@@ -26,6 +26,7 @@ import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.NeutralMob;
@@ -127,6 +128,9 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
 
             @Override
             public boolean canUse() {
+                if (isTame()) {
+                    return false;
+                }
                 this.toAvoid = this.mob.level().getNearestEntity(
                         this.mob.level().getEntitiesOfClass(Cat.class, this.mob.getBoundingBox().inflate(12.0D, 3.0D, 12.0D)),
                         cats, this.mob, this.mob.getX(), this.mob.getY(), this.mob.getZ());
@@ -139,6 +143,17 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
                 }
                 this.path = this.pathNav.createPath(pos.x, pos.y, pos.z, 0);
                 return this.path != null;
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return !isTame() && super.canContinueToUse();
+            }
+
+            @Override
+            public void stop() {
+                super.stop();
+                this.pathNav.stop();
             }
         });
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
@@ -200,6 +215,20 @@ public class RatEntity extends TamableAnimal implements NeutralMob, VariantCarri
         this.entityData.define(VARIANT, 0);
         this.entityData.define(ANGRY, false);
         this.entityData.define(RUNNING, false);
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        EntityDimensions size = super.getDimensions(pose);
+        return isTame() && isInSittingPose() ? size.scale(1F, 2F) : size;
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (DATA_FLAGS_ID.equals(key)) {
+            refreshDimensions();
+        }
     }
 
     @Override

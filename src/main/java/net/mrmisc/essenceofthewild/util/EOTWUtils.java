@@ -12,6 +12,7 @@ import net.mrmisc.essenceofthewild.config.EOTWConfig;
 import net.mrmisc.essenceofthewild.effect.EOTWEffects;
 import net.mrmisc.essenceofthewild.entity.EOTWEntities;
 import net.mrmisc.essenceofthewild.item.EOTWItems;
+import net.mrmisc.essenceofthewild.item.custom.WebCannonLoot;
 import net.mrmisc.essenceofthewild.menu.EOTWMenuTypes;
 import net.mrmisc.essenceofthewild.recipe.EOTWRecipes;
 import net.mrmisc.essenceofthewild.tab.EOTWCreativeModeTabs;
@@ -28,6 +29,7 @@ public class EOTWUtils {
     public static void modInit(IEventBus eventBus) {
         EOTWEntities.ENTITIES.register(eventBus);
         EOTWItems.ITEMS.register(eventBus);
+        WebCannonLoot.LOOT.register(eventBus);
         EOTWBlocks.BLOCKS.register(eventBus);
         EOTWBlockEntities.BLOCK_ENTITY.register(eventBus);
         EOTWMenuTypes.MENU_TYPES.register(eventBus);

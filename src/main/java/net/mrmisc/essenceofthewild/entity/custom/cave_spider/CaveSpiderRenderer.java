@@ -8,6 +8,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class CaveSpiderRenderer extends GeoEntityRenderer<CaveSpiderEntity> {
     public CaveSpiderRenderer(EntityRendererProvider.Context context) {
         super(context, new EotwGeoModel<>("cave_spider", EOTWUtils.getLoc("textures/entity/cave_spider/cave_spider.png")));
+        addRenderLayer(new software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer<>(this));
         this.shadowRadius = 0.4f;
     }
 

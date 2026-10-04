@@ -8,6 +8,7 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class SpiderRenderer extends GeoEntityRenderer<SpiderEntity> {
     public SpiderRenderer(EntityRendererProvider.Context context) {
         super(context, new EotwGeoModel<>("spider", EOTWUtils.getLoc("textures/entity/spider/spider.png")));
+        addRenderLayer(new software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer<>(this));
         this.shadowRadius = 0.7f;
     }
 

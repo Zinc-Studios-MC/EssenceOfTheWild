@@ -41,6 +41,7 @@
   "entity.essenceofthewild.duck" : "Duck",
   "entity.essenceofthewild.mooshroom" : "Mooshroom",
   "entity.essenceofthewild.rabbit" : "Rabbit",
+  "entity.essenceofthewild.hare" : "Hare",
   "entity.essenceofthewild.ferret" : "Ferret",
   "entity.essenceofthewild.rat" : "Rat",
   "entity.essenceofthewild.spider" : "Spider",
@@ -48,6 +49,7 @@
 
   "entity.essenceofthewild.underwater_arrow" : "Underwater Arrow",
   "entity.essenceofthewild.silk_ball" : "Silk Ball",
+  "entity.essenceofthewild.thrown_duck_egg" : "Thrown Duck Egg",
 
   "message.essenceofthewild.rat.assign_prompt" : "Right-click a composter to assign this rat to it",
   "message.essenceofthewild.rat.assigned" : "Rat assigned to composter",
@@ -157,5 +159,11 @@
   "subtitles.essenceofthewild.duck.death": "Duck dies",
   "subtitles.essenceofthewild.rat.ambient": "Rat squeaks",
   "subtitles.essenceofthewild.rat.hurt": "Rat hurts",
-  "subtitles.essenceofthewild.rat.death": "Rat dies"
+  "subtitles.essenceofthewild.rat.death": "Rat dies",
+  "entity.essenceofthewild.warthog": "Warthog",
+  "item.essenceofthewild.warthog_spawn_egg": "Warthog Spawn Egg",
+  "key.essenceofthewild.warthog_charge": "Warthog Charge",
+  "key.categories.essenceofthewild": "Essence of the Wild",
+  "item.essenceofthewild.web_cannon": "Web Cannon",
+  "item.essenceofthewild.web_cannon.broken": "Broken. Repair with iron in an anvil."
 }

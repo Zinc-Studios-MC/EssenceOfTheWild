@@ -13,7 +13,12 @@ public class CatHuntEvent {
     @SubscribeEvent
     public static void onEntityJoinLevel(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide && event.getEntity() instanceof Cat cat) {
-            cat.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(cat, RatEntity.class, true));
+            cat.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(cat, RatEntity.class, true, rat -> !((RatEntity) rat).isTame()) {
+                @Override
+                public boolean canContinueToUse() {
+                    return !(cat.getTarget() instanceof RatEntity rat && rat.isTame()) && super.canContinueToUse();
+                }
+            });
         }
     }
 }

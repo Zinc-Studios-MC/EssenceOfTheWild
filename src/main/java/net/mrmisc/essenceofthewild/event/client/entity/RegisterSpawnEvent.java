@@ -1,5 +1,6 @@
 package net.mrmisc.essenceofthewild.event.client.entity;
 
+import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -16,6 +17,10 @@ public class RegisterSpawnEvent {
 
     @SubscribeEvent
     public static void onSpawn(SpawnPlacementRegisterEvent event){
+        event.register(EOTWEntities.WARTHOG.get(), SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                WarthogEntity::checkSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(
                 EOTWEntities.SHEEP.get(),
                 SpawnPlacements.Type.ON_GROUND,

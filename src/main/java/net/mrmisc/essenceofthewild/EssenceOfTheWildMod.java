@@ -1,5 +1,7 @@
 package net.mrmisc.essenceofthewild;
 
+import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogChargePacket;
 import java.util.List;
 
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -70,6 +72,7 @@ public class EssenceOfTheWildMod
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
+        WarthogChargePacket.register();
     }
 
     @SubscribeEvent
@@ -85,6 +88,7 @@ public class EssenceOfTheWildMod
         {
             EOTWUtils.clientInit();
             EntityRenderers.register(EOTWEntities.SHEEP.get(), SheepRenderer::new);
+            EntityRenderers.register(EOTWEntities.WARTHOG.get(), WarthogRenderer::new);
             EntityRenderers.register(EOTWEntities.PIG.get(), PigRenderer::new);
             EntityRenderers.register(EOTWEntities.COW.get(), CowRenderer::new);
             EntityRenderers.register(EOTWEntities.MOOSHROOM.get(), MooshroomRenderer::new);

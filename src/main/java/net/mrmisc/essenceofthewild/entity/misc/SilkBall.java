@@ -1,6 +1,7 @@
 package net.mrmisc.essenceofthewild.entity.misc;
 
 import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -31,6 +32,8 @@ public class SilkBall extends ThrowableProjectile implements GeoEntity {
     private static final int WEBBED_TICKS = 20 * 8;
     private static final float GRAVITY = 0.015F;
 
+    private float impactDamage = IMPACT_DAMAGE;
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public SilkBall(EntityType<? extends SilkBall> type, Level level) {
@@ -39,6 +42,25 @@ public class SilkBall extends ThrowableProjectile implements GeoEntity {
 
     public SilkBall(Level level, LivingEntity shooter) {
         super(EOTWEntities.SILK_BALL.get(), shooter, level);
+    }
+
+    public SilkBall(Level level, LivingEntity shooter, float damage) {
+        this(level, shooter);
+        this.impactDamage = damage;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putFloat("ImpactDamage", impactDamage);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        if (tag.contains("ImpactDamage")) {
+            impactDamage = tag.getFloat("ImpactDamage");
+        }
     }
 
     @Override
@@ -65,7 +87,7 @@ public class SilkBall extends ThrowableProjectile implements GeoEntity {
         Entity hit = result.getEntity();
         Entity owner = this.getOwner();
         hit.hurt(this.damageSources().mobProjectile(this, owner instanceof LivingEntity living ? living : null),
-                IMPACT_DAMAGE);
+                impactDamage);
         if (hit instanceof LivingEntity living) {
             living.addEffect(new MobEffectInstance(EOTWEffects.WEBBED.get(), WEBBED_TICKS, 0),
                     owner == null ? this : owner);

@@ -11,8 +11,7 @@ public class SheepRenderer extends GeoEntityRenderer<SheepEntity> {
     public SheepRenderer(EntityRendererProvider.Context context) {
         super(context, new AgedGeoModel<>("sheep", "baby_sheep", "sheep", "sheep", SheepEntity::getVariant));
         this.shadowRadius = 0.7F;
-        addRenderLayer(new SheepWoolLayer(this));
-        addRenderLayer(new ShearedSheepLayer(this));
+        addRenderLayer(new SheepOverlayLayer(this));
     }
 
     @Override
