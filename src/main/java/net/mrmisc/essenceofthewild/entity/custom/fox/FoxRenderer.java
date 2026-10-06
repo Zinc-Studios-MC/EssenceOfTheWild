@@ -35,7 +35,11 @@ public class FoxRenderer extends GeoEntityRenderer<FoxEntity> {
             public void setCustomAnimations(FoxEntity fox, long id, AnimationState<FoxEntity> state) {
                 var root = getAnimationProcessor().getBone("bone");
                 var head = getAnimationProcessor().getBone("head");
-                if (fox.isPouncing() || fox.isFaceplanted()) {
+                if (fox.isSleeping()) {
+                    float z = fox.isBaby() ? 2.5F : 3.5F;
+                    root.setPosX(Mth.sin(root.getRotY()) * z);
+                    root.setPosZ(-Mth.cos(root.getRotY()) * z);
+                } else if (fox.isPouncing() || fox.isFaceplanted()) {
                     root.setRotX(-Mth.lerp(state.getPartialTick(), fox.xRotO, fox.getXRot()) * Mth.DEG_TO_RAD);
                 } else if (fox.isCrouching()) {
                     root.setPosY(-fox.getCrouchAmount(state.getPartialTick()));
@@ -69,6 +73,12 @@ public class FoxRenderer extends GeoEntityRenderer<FoxEntity> {
                 super.renderStackForBone(pose, bone, stack, fox, buffers, partialTick, light, overlay);
             }
         });
+    }
+
+    @Override
+    public void render(FoxEntity fox, float yaw, float partialTick, PoseStack pose, MultiBufferSource buffers, int light) {
+        shadowRadius = fox.isSleeping() ? (fox.isBaby() ? 0.8F : 0.5F) : 0.4F;
+        super.render(fox, yaw, partialTick, pose, buffers, light);
     }
 
     private static ResourceLocation texture(FoxEntity fox) {
