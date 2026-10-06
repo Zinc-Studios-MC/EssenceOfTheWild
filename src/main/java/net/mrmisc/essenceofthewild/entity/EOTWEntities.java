@@ -1,6 +1,7 @@
 package net.mrmisc.essenceofthewild.entity;
 
 import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogEntity;
+import net.mrmisc.essenceofthewild.entity.custom.fox.FoxEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretContent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -38,6 +39,8 @@ public class EOTWEntities {
             ()-> EntityType.Builder.of(ChickenEntity::new, MobCategory.CREATURE).sized(0.7f, 0.5f).build("chicken"));
     public static RegistryObject<EntityType<DuckEntity>> DUCK = ENTITIES.register("duck",
             ()-> EntityType.Builder.of(DuckEntity::new, MobCategory.CREATURE).sized(0.7f, 0.6f).build("duck"));
+    public static RegistryObject<EntityType<FoxEntity>> FOX = ENTITIES.register("fox",
+            () -> EntityType.Builder.of(FoxEntity::new, MobCategory.CREATURE).sized(0.6F, 0.7F).clientTrackingRange(8).build("fox"));
     public static RegistryObject<EntityType<WarthogEntity>> WARTHOG = ENTITIES.register("warthog",
             () -> EntityType.Builder.of(WarthogEntity::new, MobCategory.CREATURE).sized(1F, 1F).build("warthog"));
     public static RegistryObject<EntityType<PigEntity>> PIG = ENTITIES.register("pig",

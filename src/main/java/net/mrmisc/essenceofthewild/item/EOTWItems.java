@@ -48,6 +48,7 @@ public class EOTWItems {
 
     //spawn eggs
     public static RegistryObject<Item> SHEEP_SPAWN_EGG = createSpawnEgg(EOTWEntities.SHEEP, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> FOX_SPAWN_EGG = createSpawnEgg(EOTWEntities.FOX, 0xD5B69C, 0xCC6920);
     public static RegistryObject<Item> WARTHOG_SPAWN_EGG = createSpawnEgg(EOTWEntities.WARTHOG, 0x76533D, 0xCBB791);
     public static RegistryObject<Item> PIG_SPAWN_EGG = createSpawnEgg(EOTWEntities.PIG, 0xFFFFFF, 0xFFFFFF);
     public static RegistryObject<Item> COW_SPAWN_EGG = createSpawnEgg(EOTWEntities.COW, 0xFFFFFF, 0xFFFFFF);

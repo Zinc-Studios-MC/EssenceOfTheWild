@@ -206,6 +206,14 @@ public class WarthogEntity extends AbstractHorse implements GeoEntity, VariantCa
     }
 
     @Override
+    protected void positionRider(Entity rider, MoveFunction move) {
+        super.positionRider(rider, (passenger, x, y, z) -> {
+            double yaw = Math.toRadians(yBodyRot);
+            move.accept(passenger, x + Math.sin(yaw) * 0.2, y, z - Math.cos(yaw) * 0.2);
+        });
+    }
+
+    @Override
     protected Vec2 getRiddenRotation(LivingEntity rider) {
         return entityData.get(CHARGE) == 1 ? new Vec2(0, entityData.get(HEADING)) : super.getRiddenRotation(rider);
     }

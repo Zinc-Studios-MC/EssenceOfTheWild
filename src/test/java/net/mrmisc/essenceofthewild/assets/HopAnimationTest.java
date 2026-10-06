@@ -40,21 +40,22 @@ class HopAnimationTest {
 
     @ParameterizedTest
     @CsvSource({
-            "rabbit.animation.json, animation.rabbit.walk",
-            "rabbit.animation.json, animation.rabbit.run",
-            "hare.animation.json,   animation.hare.walk",
-            "hare.animation.json,   animation.hare.run",
+            "rabbit.animation.json, animation.rabbit.walk, 0.875, 0.6667",
+            "rabbit.animation.json, animation.rabbit.run, 0.3333, 0.3333",
+            "hare.animation.json,   animation.hare.walk, 0.6667, 0.6667",
+            "hare.animation.json,   animation.hare.run, 0.3333, 0.3333",
     })
-    void hopSpansExactlyOneLoop(String file, String name) throws IOException {
+    void hopUsesAuthoredTiming(String file, String name, double duration, double end) throws IOException {
         JsonObject clip = clip(file, name);
         double length = clip.get("animation_length").getAsDouble();
+        assertEquals(duration, length, 1e-4, name + " clip duration differs from the source");
         JsonObject body = clip.getAsJsonObject("bones").getAsJsonObject("body");
         assertTrue(body != null && body.has("position"), name + " has no body position channel");
 
         JsonObject position = body.getAsJsonObject("position");
         List<Double> times = times(position);
         assertEquals(0.0, times.get(0), 1e-6, name + " hop does not start at 0");
-        assertEquals(length, times.get(times.size() - 1), 1e-4, name + " hop does not end at animation_length");
+        assertEquals(end, times.get(times.size() - 1), 1e-4, name + " hop endpoint differs from the source");
     }
 
     @ParameterizedTest

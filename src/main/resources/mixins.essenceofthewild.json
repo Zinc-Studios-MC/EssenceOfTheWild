@@ -6,7 +6,8 @@
   "minVersion" : "0.7",
   "mixins": [
     "BedBlockSaveSpawnpointMixin",
-    "BaseSpawnerReplaceMobMixin"
+    "BaseSpawnerReplaceMobMixin",
+    "FoxEatingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

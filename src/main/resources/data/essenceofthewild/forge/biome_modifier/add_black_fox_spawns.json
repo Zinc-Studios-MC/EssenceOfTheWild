@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "#essenceofthewild:black_fox_spawns",
+  "spawners": {
+    "type": "essenceofthewild:fox",
+    "weight": 8,
+    "minCount": 2,
+    "maxCount": 4
+  }
+}
