@@ -36,6 +36,7 @@ import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretEntity;
 import net.mrmisc.essenceofthewild.entity.custom.ferret.FerretRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.hare.HareRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.fox.FoxRenderer;
+import net.mrmisc.essenceofthewild.entity.custom.wolf.WolfRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.mooshroom.MooshroomRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.pig.PigRenderer;
 import net.mrmisc.essenceofthewild.entity.custom.rabbit.RabbitRenderer;
@@ -90,6 +91,7 @@ public class EssenceOfTheWildMod
             EOTWUtils.clientInit();
             EntityRenderers.register(EOTWEntities.SHEEP.get(), SheepRenderer::new);
             EntityRenderers.register(EOTWEntities.FOX.get(), FoxRenderer::new);
+            EntityRenderers.register(EOTWEntities.WOLF.get(), WolfRenderer::new);
             EntityRenderers.register(EOTWEntities.WARTHOG.get(), WarthogRenderer::new);
             EntityRenderers.register(EOTWEntities.PIG.get(), PigRenderer::new);
             EntityRenderers.register(EOTWEntities.COW.get(), CowRenderer::new);

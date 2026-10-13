@@ -13,6 +13,8 @@
   "item.essenceofthewild.red_onion" : "Red Onion",
 
   "item.essenceofthewild.sheep_spawn_egg" : "Sheep Spawn Egg",
+  "item.essenceofthewild.wolf_spawn_egg" : "Wolf Spawn Egg",
+  "entity.essenceofthewild.wolf" : "Wolf",
   "item.essenceofthewild.pig_spawn_egg" : "Pig Spawn Egg",
   "item.essenceofthewild.cow_spawn_egg" : "Cow Spawn Egg",
   "item.essenceofthewild.chicken_spawn_egg" : "Chicken Spawn Egg",
@@ -68,7 +70,7 @@
   "block.essenceofthewild.stripped_mango_wood" : "Stripped Mango Wood",
   "block.essenceofthewild.stripped_mango_log" : "Stripped Mango Log",
   "block.essenceofthewild.mango_planks" : "Mango Planks",
-  "block.essenceofthewild.mango_slab" : "Mango Slabs",
+  "block.essenceofthewild.mango_slabs" : "Mango Slab",
   "block.essenceofthewild.mango_stairs" : "Mango Stairs",
   "block.essenceofthewild.mango_fence" : "Mango Fence",
   "block.essenceofthewild.mango_fence_gate" : "Mango Fence Gate",

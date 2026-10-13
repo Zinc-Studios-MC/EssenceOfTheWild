@@ -13,6 +13,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +25,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.BreedGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.FollowParentGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -74,6 +77,18 @@ public class FoxEntity extends Fox implements GeoEntity, OwnableEntity {
 
     public FoxEntity(EntityType<? extends Fox> type, Level level) {
         super(type, level);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        goalSelector.removeAllGoals(goal -> goal instanceof FollowParentGoal);
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        EntityDimensions size = super.getDimensions(pose);
+        return isBaby() ? size.scale(1.5F) : size;
     }
 
     @Override
@@ -222,7 +237,7 @@ public class FoxEntity extends Fox implements GeoEntity, OwnableEntity {
     @Override
     public boolean canAttack(LivingEntity target) {
         if (isTame()) {
-            if (!readyToHunt() || getOwnerUUID().equals(target.getUUID()) || isAlliedTo(target)) {
+            if (!canPounce() || getOwnerUUID().equals(target.getUUID()) || isAlliedTo(target)) {
                 return false;
             }
             if (target instanceof OwnableEntity pet && getOwnerUUID().equals(pet.getOwnerUUID())) {
@@ -285,7 +300,7 @@ public class FoxEntity extends Fox implements GeoEntity, OwnableEntity {
 
     @Override
     public boolean doHurtTarget(Entity target) {
-        if (isTame() && (!readyToHunt() || !(target instanceof LivingEntity living) || !canAttack(living))) {
+        if (isTame() && (!canPounce() || !isPouncing() || !(target instanceof LivingEntity living) || !canAttack(living))) {
             return false;
         }
         boolean pounce = isTame() && isPouncing();
@@ -302,7 +317,8 @@ public class FoxEntity extends Fox implements GeoEntity, OwnableEntity {
             }
         }
         if (hit && pounce) {
-            pounceCooldown = 400;
+            pounceCooldown = 300;
+            setTarget(null);
         }
         if (hit && isTame() && isPouncing() && target instanceof Player player && getMainHandItem().isEmpty()) {
             var inventory = player.getInventory();
@@ -380,7 +396,7 @@ public class FoxEntity extends Fox implements GeoEntity, OwnableEntity {
         entityData.set(OWNER, tag.hasUUID("Owner") ? Optional.of(tag.getUUID("Owner")) : Optional.empty());
         entityData.set(ORDERED_SIT, tag.getBoolean("OrderedSit"));
         setCollarColor(tag.contains("CollarColor") ? DyeColor.byId(tag.getByte("CollarColor")) : DyeColor.RED);
-        pounceCooldown = Math.max(0, Math.min(400, tag.getInt("PounceCooldown")));
+        pounceCooldown = Math.max(0, Math.min(300, tag.getInt("PounceCooldown")));
         petGoals = false;
         installPetGoals();
     }

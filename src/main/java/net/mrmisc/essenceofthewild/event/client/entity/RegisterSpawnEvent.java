@@ -1,6 +1,7 @@
 package net.mrmisc.essenceofthewild.event.client.entity;
 
 import net.mrmisc.essenceofthewild.entity.custom.warthog.WarthogEntity;
+import net.mrmisc.essenceofthewild.entity.custom.wolf.WolfEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Fox;
@@ -19,6 +20,9 @@ public class RegisterSpawnEvent {
 
     @SubscribeEvent
     public static void onSpawn(SpawnPlacementRegisterEvent event){
+        event.register(EOTWEntities.WOLF.get(), SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, WolfEntity::checkSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(EOTWEntities.FOX.get(), SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, level, reason, pos, random) -> Fox.checkFoxSpawnRules(EntityType.FOX, level, reason, pos, random),

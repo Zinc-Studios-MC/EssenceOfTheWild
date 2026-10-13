@@ -20,6 +20,7 @@ public class HideVanillaSpawnEggEvent {
             Items.CHICKEN_SPAWN_EGG,
             Items.RABBIT_SPAWN_EGG,
             Items.FOX_SPAWN_EGG,
+            Items.WOLF_SPAWN_EGG,
             Items.SPIDER_SPAWN_EGG,
             Items.CAVE_SPIDER_SPAWN_EGG
     };

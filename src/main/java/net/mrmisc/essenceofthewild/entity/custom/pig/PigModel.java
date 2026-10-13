@@ -70,7 +70,7 @@ public class PigModel extends HierarchicalModel<PigEntity> {
 			this.animate(pig.idleAnimationState, PigAnimations.idle, ageInTicks);
 		} else {
 			double speed = pig.getDeltaMovement().horizontalDistance();
-			if (speed > 0.2D) {
+			if (pig.isFleeing() || speed > 0.2D) {
 				this.animateWalk(PigAnimations.run, limbSwing, limbSwingAmount, 4.0f, 2.5F);
 			} else {
 				this.animateWalk(PigAnimations.walk, limbSwing, limbSwingAmount, 2.8f, 1.3F);

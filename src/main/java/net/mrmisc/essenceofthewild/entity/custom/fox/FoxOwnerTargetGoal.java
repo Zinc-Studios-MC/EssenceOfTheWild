@@ -22,7 +22,7 @@ class FoxOwnerTargetGoal extends TargetGoal {
     @Override
     public boolean canUse() {
         LivingEntity owner = fox.getOwner();
-        if (!fox.readyToHunt() || owner == null) {
+        if (!fox.canPounce() || owner == null) {
             return false;
         }
         target = defend ? owner.getLastHurtByMob() : owner.getLastHurtMob();

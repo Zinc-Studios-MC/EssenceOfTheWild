@@ -10,7 +10,6 @@ import java.util.EnumSet;
 class FoxHuntGoal extends Goal {
     private final FoxEntity fox;
     private int airborne;
-    private int attackDelay;
     private boolean hit;
 
     FoxHuntGoal(FoxEntity fox) {
@@ -21,7 +20,7 @@ class FoxHuntGoal extends Goal {
     @Override
     public boolean canUse() {
         LivingEntity target = fox.getTarget();
-        return fox.readyToHunt() && target != null && target.isAlive() && fox.canAttack(target);
+        return fox.canPounce() && target != null && target.isAlive() && fox.canAttack(target);
     }
 
     @Override
@@ -38,7 +37,6 @@ class FoxHuntGoal extends Goal {
     public void start() {
         fox.clearStates();
         fox.setIsPouncing(false);
-        attackDelay = 0;
     }
 
     @Override
@@ -58,9 +56,6 @@ class FoxHuntGoal extends Goal {
             return;
         }
         fox.getLookControl().setLookAt(target, 60, 30);
-        if (attackDelay > 0) {
-            attackDelay--;
-        }
         if (fox.isPouncing()) {
             airborne++;
             Vec3 motion = fox.getDeltaMovement();
@@ -78,7 +73,6 @@ class FoxHuntGoal extends Goal {
             if (!hit && fox.getBoundingBox().inflate(0.6).intersects(target.getBoundingBox())
                     && fox.getSensing().hasLineOfSight(target)) {
                 hit = fox.doHurtTarget(target);
-                attackDelay = 20;
             }
             if (airborne > 2 && fox.onGround()) {
                 fox.setIsPouncing(false);
@@ -107,10 +101,5 @@ class FoxHuntGoal extends Goal {
         fox.setIsCrouching(false);
         fox.setIsInterested(false);
         fox.getNavigation().moveTo(target, 1.2);
-        double reach = fox.getBbWidth() * 2 + target.getBbWidth();
-        if (attackDelay == 0 && fox.distanceToSqr(target) <= reach * reach && fox.getSensing().hasLineOfSight(target)) {
-            fox.doHurtTarget(target);
-            attackDelay = 20;
-        }
     }
 }

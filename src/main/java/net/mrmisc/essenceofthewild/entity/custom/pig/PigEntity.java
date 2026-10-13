@@ -13,6 +13,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -31,6 +32,8 @@ public class PigEntity extends Pig implements VariantCarrier {
     
     private static final EntityDataAccessor<Integer> VARIANT =
             SynchedEntityData.defineId(PigEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> FLEEING =
+            SynchedEntityData.defineId(PigEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final VariantSlot<MobVariant> variant = new VariantSlot<>(this.entityData, VARIANT, PigVariants.SET);
 
@@ -41,6 +44,11 @@ public class PigEntity extends Pig implements VariantCarrier {
     @Override
     public void tick() {
         super.tick();
+
+        if (!level().isClientSide) {
+            entityData.set(FLEEING, goalSelector.getAvailableGoals().stream()
+                    .anyMatch(goal -> goal.isRunning() && goal.getGoal() instanceof PanicGoal));
+        }
 
         if(this.level().isClientSide()) {
             setupAnimationStates();
@@ -60,6 +68,10 @@ public class PigEntity extends Pig implements VariantCarrier {
         return variant.get();
     }
 
+    public boolean isFleeing() {
+        return entityData.get(FLEEING);
+    }
+
     @Override
     public String getVariantId() {
         return variant.id();
@@ -69,6 +81,7 @@ public class PigEntity extends Pig implements VariantCarrier {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(VARIANT, 0);
+        this.entityData.define(FLEEING, false);
     }
 
     @Override

@@ -25,6 +25,7 @@ public class EOTWCreativeModeTabs {
                 pOutput.accept(EOTWItems.PIG_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.WARTHOG_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.FOX_SPAWN_EGG.get());
+                pOutput.accept(EOTWItems.WOLF_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.COW_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.MOOSHROOM_SPAWN_EGG.get());
                 pOutput.accept(EOTWItems.CHICKEN_SPAWN_EGG.get());

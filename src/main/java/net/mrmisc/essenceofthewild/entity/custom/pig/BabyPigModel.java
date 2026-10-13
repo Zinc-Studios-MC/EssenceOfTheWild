@@ -89,7 +89,7 @@ public class BabyPigModel extends PigModel {
 			this.animate(pig.idleAnimationState, BabyPigAnimations.idle, ageInTicks);
 		} else {
 			double speed = pig.getDeltaMovement().horizontalDistance();
-			if (speed > 0.2D) {
+			if (pig.isFleeing() || speed > 0.2D) {
 				this.animateWalk(BabyPigAnimations.run, limbSwing, limbSwingAmount, 4.0f, 2.5F);
 			} else {
 				this.animateWalk(BabyPigAnimations.walk, limbSwing, limbSwingAmount, 2.8f, 1.3F);

@@ -3,6 +3,7 @@ package net.mrmisc.essenceofthewild.event.server;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
@@ -40,6 +41,7 @@ public class ReplaceVanillaMobEvent {
             EntityType.CHICKEN, EOTWEntities.CHICKEN,
             EntityType.RABBIT, EOTWEntities.RABBIT,
             EntityType.FOX, EOTWEntities.FOX,
+            EntityType.WOLF, EOTWEntities.WOLF,
             EntityType.SPIDER, EOTWEntities.SPIDER,
             EntityType.CAVE_SPIDER, EOTWEntities.CAVE_SPIDER
     );
@@ -121,6 +123,11 @@ public class ReplaceVanillaMobEvent {
             CompoundTag tag = new CompoundTag();
             vanillaFox.addAdditionalSaveData(tag);
             fox.readAdditionalSaveData(tag);
+        } else if (vanilla instanceof Wolf vanillaWolf && replacement instanceof Wolf wolf) {
+            CompoundTag tag = new CompoundTag();
+            vanillaWolf.addAdditionalSaveData(tag);
+            wolf.readAdditionalSaveData(tag);
+            wolf.setHealth(vanillaWolf.getHealth());
         }
     }
 
