@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.animal.Fox;
 import net.minecraft.world.entity.animal.Wolf;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
@@ -68,8 +69,9 @@ public class ReplaceVanillaMobEvent {
 
         replacement.moveTo(vanilla.getX(), vanilla.getY(), vanilla.getZ(), vanilla.getYRot(), vanilla.getXRot());
         if (replacement instanceof Animal) {
-            replacement.finalizeSpawn(serverLevel, level.getCurrentDifficultyAt(replacement.blockPosition()),
-                    MobSpawnType.CONVERSION, null, null);
+            DifficultyInstance difficulty = new DifficultyInstance(level.getDifficulty(), level.getDayTime(), 0,
+                    level.getMoonBrightness());
+            replacement.finalizeSpawn(serverLevel, difficulty, MobSpawnType.CONVERSION, null, null);
         }
 
         copyCommonState(vanilla, replacement);
