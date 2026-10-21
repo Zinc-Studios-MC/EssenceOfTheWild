@@ -15,8 +15,10 @@ public class SheepVariants {
     public static final Variant BASIC_GREY = variant("basic_grey", "sheep_grey.png", "baby_sheep_grey.png");
     public static final Variant COLD = variant("cold", "cold_sheep.png", "baby_cold_sheep.png");
     public static final Variant WARM = variant("warm", "warm_sheep.png", "baby_warm_sheep.png");
+    public static final Variant COLD2 = variant("cold2", "cold_sheep2.png", "baby_cold_sheep2.png");
+    public static final Variant WARM2 = variant("warm2", "warm_sheep2.png", "baby_warm_sheep2.png");
 
-    public static final List<Variant> ALL = List.of(BASIC, BASIC_GREY, COLD, WARM);
+    public static final List<Variant> ALL = List.of(BASIC, BASIC_GREY, COLD, WARM, COLD2, WARM2);
 
     private static Variant variant(String id, String adult, String baby) {
         return new Variant(
@@ -30,10 +32,10 @@ public class SheepVariants {
 
     public static Variant pick(BiomeQuery at, BooleanSupplier coin) {
         if (at.is(Habitat.COLD)) {
-            return COLD;
+            return coin.getAsBoolean() ? COLD : COLD2;
         }
         if (at.is(Habitat.HOT)) {
-            return WARM;
+            return coin.getAsBoolean() ? WARM : WARM2;
         }
         return coin.getAsBoolean() ? BASIC : BASIC_GREY;
     }

@@ -31,17 +31,27 @@ public class PigVariants {
                     ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
                             "textures/entity/pig/warm_pig.png"),
                     false, true);
+    public static final MobVariant COLD2 =
+            new MobVariant("cold2",
+                    ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
+                            "textures/entity/pig/cold_pig2.png"),
+                    true, false);
+    public static final MobVariant WARM2 =
+            new MobVariant("warm2",
+                    ResourceLocation.fromNamespaceAndPath(EssenceOfTheWildMod.MOD_ID,
+                            "textures/entity/pig/warm_pig2.png"),
+                    false, true);
 
-    public static final List<MobVariant> ALL = List.of(BASIC, BASIC_GREY, WARM, COLD);
+    public static final List<MobVariant> ALL = List.of(BASIC, BASIC_GREY, WARM, COLD, COLD2, WARM2);
 
     public static final VariantSet<MobVariant> SET = VariantSet.of(MobVariant::id, ALL);
 
     public static MobVariant pick(BiomeQuery at, BooleanSupplier coin) {
         if (at.is(Habitat.COLD)) {
-            return COLD;
+            return coin.getAsBoolean() ? COLD : COLD2;
         }
         if (at.is(Habitat.HOT)) {
-            return WARM;
+            return coin.getAsBoolean() ? WARM : WARM2;
         }
         return coin.getAsBoolean() ? BASIC : BASIC_GREY;
     }

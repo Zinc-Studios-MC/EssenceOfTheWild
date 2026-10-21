@@ -30,12 +30,23 @@ class VariantPickTest {
     }
 
     @Test
-    void coldAndHotBeatTheCoinFlip() {
+    void coldAndHotPickBetweenTheirTwoCoats() {
         assertEquals(CowVariants.COLD, CowVariants.pick(at(Habitat.COLD), HEADS));
-        assertEquals(CowVariants.COLD, CowVariants.pick(at(Habitat.COLD), TAILS));
+        assertEquals(CowVariants.COLD2, CowVariants.pick(at(Habitat.COLD), TAILS));
         assertEquals(CowVariants.WARM, CowVariants.pick(at(Habitat.HOT), HEADS));
-        assertEquals(SheepVariants.COLD, SheepVariants.pick(at(Habitat.COLD), TAILS));
-        assertEquals(PigVariants.WARM, PigVariants.pick(at(Habitat.HOT), TAILS));
+        assertEquals(CowVariants.WARM2, CowVariants.pick(at(Habitat.HOT), TAILS));
+        assertEquals(SheepVariants.COLD, SheepVariants.pick(at(Habitat.COLD), HEADS));
+        assertEquals(SheepVariants.COLD2, SheepVariants.pick(at(Habitat.COLD), TAILS));
+        assertEquals(SheepVariants.WARM2, SheepVariants.pick(at(Habitat.HOT), TAILS));
+        assertEquals(PigVariants.COLD2, PigVariants.pick(at(Habitat.COLD), TAILS));
+        assertEquals(PigVariants.WARM, PigVariants.pick(at(Habitat.HOT), HEADS));
+        assertEquals(PigVariants.WARM2, PigVariants.pick(at(Habitat.HOT), TAILS));
+    }
+
+    @Test
+    void secondCoatsKeepTheirClimateSaddle() {
+        assertEquals(true, PigVariants.COLD2.cold());
+        assertEquals(true, PigVariants.WARM2.warm());
     }
 
     @Test
@@ -48,7 +59,9 @@ class VariantPickTest {
     @Test
     void plainBiomesFallBackToTheCoinFlip() {
         assertEquals(CowVariants.BASIC, CowVariants.pick(at(), HEADS));
-        assertEquals(CowVariants.BASIC_BROWN, CowVariants.pick(at(), TAILS));
+        assertEquals(CowVariants.WHITE, CowVariants.pick(at(), TAILS));
+        java.util.Iterator<Boolean> flips = java.util.List.of(false, true).iterator();
+        assertEquals(CowVariants.BASIC_BROWN, CowVariants.pick(at(), flips::next));
         assertEquals(SheepVariants.BASIC, SheepVariants.pick(at(), HEADS));
         assertEquals(SheepVariants.BASIC_GREY, SheepVariants.pick(at(), TAILS));
         assertEquals(RabbitVariants.BASIC, RabbitVariants.pick(at(), HEADS));
