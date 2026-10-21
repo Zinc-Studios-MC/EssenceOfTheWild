@@ -1,5 +1,7 @@
 package net.mrmisc.essenceofthewild.event.server;
 
+import net.minecraft.tags.BiomeTags;
+import net.mrmisc.essenceofthewild.entity.custom.cave_spider.CaveSpiderEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.animal.Fox;
@@ -106,7 +108,9 @@ public class ReplaceVanillaMobEvent {
     }
 
     private static void copySpeciesState(Mob vanilla, Mob replacement) {
-        if (vanilla instanceof MushroomCow vanillaMooshroom && replacement instanceof MooshroomEntity mooshroom) {
+        if (replacement instanceof CaveSpiderEntity spider) {
+            spider.setJungle(vanilla.level().getBiome(vanilla.blockPosition()).is(BiomeTags.IS_JUNGLE));
+        } else if (vanilla instanceof MushroomCow vanillaMooshroom && replacement instanceof MooshroomEntity mooshroom) {
             boolean brown = vanillaMooshroom.getVariant() == MushroomCow.MushroomType.BROWN;
             mooshroom.setVariant(brown ? MooshroomVariants.BROWN : MooshroomVariants.RED);
             mooshroom.setVariant(brown ? MushroomCow.MushroomType.BROWN : MushroomCow.MushroomType.RED);

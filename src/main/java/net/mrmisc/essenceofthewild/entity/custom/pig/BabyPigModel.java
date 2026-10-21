@@ -40,34 +40,16 @@ public class BabyPigModel extends PigModel {
 	public static LayerDefinition createBodyLayer() {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
-
 		PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 26.0F, 0.0F));
-
-		PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -1.0F, -2.0F, 5.0F, 6.0F, 9.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 15).addBox(-2.5F, 5.0F, -2.0F, 5.0F, 2.0F, 9.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, -11.0F, -4.0F));
-
-		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(28, 0).addBox(-2.0F, -3.0F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(20, 26).addBox(-2.5F, -3.0F, -6.0F, 5.0F, 1.0F, 5.0F, new CubeDeformation(0.01F))
-		.texOffs(0, 26).addBox(-2.5F, -2.0F, -6.0F, 5.0F, 3.0F, 5.0F, new CubeDeformation(0.01F))
-		.texOffs(20, 33).addBox(-2.0F, 3.0F, -5.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
-		.texOffs(0, 34).addBox(-1.5F, 0.0F, -7.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -1.0F));
-
-		PartDefinition bone = head.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(8, 40).addBox(-2.0F, -3.0F, 0.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-		.texOffs(40, 14).addBox(-2.0F, -6.0F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -2.0F, -2.0F));
-
-		PartDefinition bone2 = head.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(14, 40).addBox(0.0F, -6.0F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-		.texOffs(40, 10).addBox(0.0F, -3.0F, 0.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -2.0F, -2.0F));
-
+		PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-2.5F, -1.0F, -2.0F, 5.0F, 6.0F, 9.0F, new CubeDeformation(0.0F)).texOffs(0, 15).addBox(-2.5F, 5.0F, -2.0F, 5.0F, 2.0F, 9.0F, new CubeDeformation(0.01F)), PartPose.offset(0.0F, -11.0F, -4.0F));
+		PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(28, 0).addBox(-2.0F, -3.0F, -5.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)).texOffs(20, 33).addBox(-2.0F, 3.0F, -5.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)).texOffs(0, 34).addBox(-1.5F, 0.0F, -7.0F, 3.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, -1.0F));
+		PartDefinition bone = head.addOrReplaceChild("bone", CubeListBuilder.create().texOffs(8, 40).addBox(-2.0F, -3.0F, 0.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)).texOffs(40, 14).addBox(-2.0F, -6.0F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, -2.0F, -2.0F));
+		PartDefinition bone2 = head.addOrReplaceChild("bone2", CubeListBuilder.create().texOffs(14, 40).addBox(0.0F, -6.0F, 0.0F, 2.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)).texOffs(40, 10).addBox(0.0F, -3.0F, 0.0F, 2.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, -2.0F, -2.0F));
 		PartDefinition bone4 = body.addOrReplaceChild("bone4", CubeListBuilder.create().texOffs(28, 10).addBox(0.0F, -0.5F, 0.0F, 0.0F, 8.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -0.5F, 7.0F));
-
 		PartDefinition leg1 = root.addOrReplaceChild("leg1", CubeListBuilder.create().texOffs(10, 34).addBox(-2.0F, 0.0F, 0.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(-0.001F)), PartPose.offset(-0.5F, -6.0F, 1.0F));
-
 		PartDefinition leg2 = root.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(36, 33).addBox(0.0F, 0.0F, 0.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(-0.001F)), PartPose.offset(0.5F, -6.0F, 1.0F));
-
 		PartDefinition leg3 = root.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(0, 39).addBox(-2.0F, 0.0F, -2.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(-0.001F)), PartPose.offset(-0.5F, -6.0F, -4.0F));
-
 		PartDefinition leg4 = root.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(36, 39).addBox(0.0F, 0.0F, -2.0F, 2.0F, 4.0F, 2.0F, new CubeDeformation(-0.001F)), PartPose.offset(0.5F, -6.0F, -4.0F));
-
 		return LayerDefinition.create(meshdefinition, 64, 64);
 	}
 

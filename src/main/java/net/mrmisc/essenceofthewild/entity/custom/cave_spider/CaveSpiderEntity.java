@@ -1,5 +1,12 @@
 package net.mrmisc.essenceofthewild.entity.custom.cave_spider;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.level.ServerLevelAccessor;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -38,6 +45,9 @@ public class CaveSpiderEntity extends CaveSpider implements GeoEntity {
     private static final EntityDataAccessor<Boolean> SPITTING =
             SynchedEntityData.defineId(CaveSpiderEntity.class, EntityDataSerializers.BOOLEAN);
 
+    private static final EntityDataAccessor<Boolean> JUNGLE =
+            SynchedEntityData.defineId(CaveSpiderEntity.class, EntityDataSerializers.BOOLEAN);
+
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     public CaveSpiderEntity(EntityType<? extends CaveSpider> type, Level level) {
@@ -53,6 +63,7 @@ public class CaveSpiderEntity extends CaveSpider implements GeoEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
+        this.entityData.define(JUNGLE, false);
         this.entityData.define(CHASING, false);
         this.entityData.define(SPITTING, false);
     }
@@ -73,6 +84,35 @@ public class CaveSpiderEntity extends CaveSpider implements GeoEntity {
             return state.setAndContinue(IDLE);
         }
         return state.setAndContinue(this.isChasing() ? RUN : WALK);
+    }
+
+    public boolean isJungle() {
+        return this.entityData.get(JUNGLE);
+    }
+
+    public void setJungle(boolean jungle) {
+        this.entityData.set(JUNGLE, jungle);
+    }
+
+    @Override
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+                                        @Nullable SpawnGroupData group, @Nullable CompoundTag tag) {
+        SpawnGroupData data = super.finalizeSpawn(level, difficulty, reason, group, tag);
+        this.setJungle(level.getBiome(this.blockPosition()).is(BiomeTags.IS_JUNGLE));
+        return data;
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("Jungle", this.isJungle());
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.setJungle(tag.getBoolean("Jungle"));
     }
 
     public boolean isChasing() {

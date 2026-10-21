@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class PigSaddleLayer extends RenderLayer<PigEntity, PigModel> {
     private static final ResourceLocation SADDLE_LOCATION = ResourceLocation.fromNamespaceAndPath("essenceofthewild", "textures/entity/pig/pig_saddle.png");
+    private static final ResourceLocation BIG_SADDLE_LOCATION = ResourceLocation.fromNamespaceAndPath("essenceofthewild", "textures/entity/pig/pig_big_saddle.png");
     private final PigSaddleModel model;
 
     public PigSaddleLayer(RenderLayerParent<PigEntity, PigModel> pRenderer, EntityModelSet set) {
@@ -28,7 +29,8 @@ public class PigSaddleLayer extends RenderLayer<PigEntity, PigModel> {
             this.getParentModel().copyPropertiesTo(this.model);
             this.model.prepareMobModel(pLivingEntity, pLimbSwing, pLimbSwingAmount, pPartialTick);
             this.model.setupAnim(pLivingEntity, pLimbSwing, pLimbSwingAmount, pAgeInTicks, pNetHeadYaw, pHeadPitch);
-            VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(SADDLE_LOCATION));
+            VertexConsumer vertexconsumer = pBuffer.getBuffer(RenderType.entityCutoutNoCull(pLivingEntity.getVariant().cold() || pLivingEntity.getVariant().warm()
+                    ? BIG_SADDLE_LOCATION : SADDLE_LOCATION));
             this.model.renderToBuffer(pPoseStack, vertexconsumer, pPackedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
         }

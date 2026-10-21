@@ -61,8 +61,8 @@ public class EOTWItems {
     public static RegistryObject<Item> FERRET_SPAWN_EGG = FerretContent.ITEMS.register("ferret_spawn_egg",
             () -> new ForgeSpawnEggItem(EOTWEntities.FERRET, 0xFFFFFF, 0xFFFFFF, new Item.Properties()));
     public static RegistryObject<Item> RAT_SPAWN_EGG = createSpawnEgg(EOTWEntities.RAT, 0xFFFFFF, 0xFFFFFF);
-    public static RegistryObject<Item> SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.SPIDER, 0x342D27, 0xA80E0E);
-    public static RegistryObject<Item> CAVE_SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.CAVE_SPIDER, 0x0C424E, 0xA80E0E);
+    public static RegistryObject<Item> SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.SPIDER, 0xFFFFFF, 0xFFFFFF);
+    public static RegistryObject<Item> CAVE_SPIDER_SPAWN_EGG = createSpawnEgg(EOTWEntities.CAVE_SPIDER, 0xFFFFFF, 0xFFFFFF);
 
     //tree
     public static RegistryObject<Item> VANILLA_FLOWER = ITEMS.register("vanilla_flower", ()-> new Item(new Item.Properties()));
